@@ -13,3 +13,10 @@ def create_user_by_(telegram_user: TelegramUser) -> None:
             full_name=telegram_user.full_name,
         )
     )
+
+
+def get_user_language_code_by_(user_chat_id: int) -> str | None:
+    """Returns user language code by the given user chat id."""
+    with MySession() as session:
+        user = session.query(User).filter(User.chat_id == user_chat_id).first()
+        return user.language_code if user else None
