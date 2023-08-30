@@ -5,5 +5,12 @@ __pycache__/
 
 # Local development files
 venv/
-.vscode/
 *.env
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# DBs
+*.sqlite3
+*.db
