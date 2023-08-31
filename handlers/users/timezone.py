@@ -19,7 +19,7 @@ async def get_countries(query: CallbackQuery, *args) -> None:
     await query.message.edit_text(
         text=_(
             "<b>Changing timezone.</b>\n\n"
-            "Your current timezone: <i>{timezone}</b>.\n"
+            "Your current timezone: <i>{timezone}</i>.\n"
             "You can choose a new time zone by choosing from the options below."
         ).format(timezone=user.timezone),
         reply_markup=get_countries_keyboard(),
