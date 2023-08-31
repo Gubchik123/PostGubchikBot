@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from data.countries import COUNTRIES
 from .menu import get_back_to_menu_inline_button
-from .callback_data import timezone_callback_data
+from .callback_data import timezone_callback_data, get_back_inline_button_by_
 
 
 def _get_new_callback_data(
@@ -12,15 +12,7 @@ def _get_new_callback_data(
     return timezone_callback_data.new(level=level, country=country, city=city)
 
 
-def _get_back_inline_button_by_(current_level: int) -> InlineKeyboardButton:
-    """Returns back button by the given current level."""
-    return InlineKeyboardButton(
-        text="🔙 Back",
-        callback_data=_get_new_callback_data(current_level - 1),
-    )
-
-
-def get_countries_keyboard():
+def get_countries_keyboard() -> InlineKeyboardMarkup:
     CURRENT_LEVEL = 0
 
     keyboard = InlineKeyboardMarkup(row_width=3)
@@ -38,7 +30,7 @@ def get_countries_keyboard():
     return keyboard
 
 
-def get_cities_keyboard(country: str):
+def get_cities_keyboard(country: str) -> InlineKeyboardMarkup:
     CURRENT_LEVEL = 1
 
     keyboard = InlineKeyboardMarkup(row_width=5)
@@ -52,5 +44,9 @@ def get_cities_keyboard(country: str):
                 ),
             )
         )
-    keyboard.add(_get_back_inline_button_by_(CURRENT_LEVEL))
+    keyboard.add(
+        get_back_inline_button_by_(
+            callback_data=_get_new_callback_data(CURRENT_LEVEL - 1)
+        )
+    )
     return keyboard
