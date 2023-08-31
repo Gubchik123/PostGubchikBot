@@ -34,6 +34,13 @@ class User(Base):
         lazy="dynamic",
         passive_deletes=True,
     )
+    # subscriptions = relationship(
+    #     "Subscription",
+    #     secondary="user_subscription",
+    #     backref=backref("users", lazy="joined"),
+    #     lazy="dynamic",
+    #     passive_deletes=True,
+    # )
 
 
 class Channel(Base):
@@ -50,3 +57,16 @@ class Channel(Base):
     user_id = Column(
         Integer, ForeignKey("user.chat_id", ondelete="CASCADE"), nullable=False
     )
+
+
+class Subscription(Base):
+    """Model for storing information about subscriptions."""
+
+    __tablename__ = "subscription"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(10), unique=True, nullable=False)
+    price = Column(Integer, unique=True, nullable=False)
+    max_channels = Column(Integer, unique=True, nullable=True)
+    duration_days = Column(Integer, default=30)
+    created = Column(DateTime, default=datetime.today())
