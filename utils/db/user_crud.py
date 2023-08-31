@@ -20,3 +20,11 @@ def get_user_language_code_by_(user_chat_id: int) -> str | None:
     with MySession() as session:
         user = session.query(User).filter(User.chat_id == user_chat_id).first()
         return user.language_code if user else None
+
+
+def change_user_language_by_(user_chat_id: int, language_code: str) -> None:
+    """Changes user language by the given user chat id and language code."""
+    with MySession() as session:
+        user = session.query(User).filter(User.chat_id == user_chat_id).first()
+        user.language_code = language_code
+        commit_and_refresh(session, user)
