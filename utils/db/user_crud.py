@@ -1,3 +1,4 @@
+from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
 
 from .models import User
@@ -15,16 +16,28 @@ def create_user_by_(telegram_user: TelegramUser) -> None:
     )
 
 
+def _get_user_by_(session: Session, user_chat_id: int) -> User:
+    """Returns user by the given session and user chat id."""
+    return session.query(User).filter(User.chat_id == user_chat_id).first()
+
+
+def get_user_channels_by_(user_chat_id: int) -> list[str]:
+    """Returns user channels by the given user chat id."""
+    with MySession() as session:
+        return _get_user_by_(session, user_chat_id).channels.all()
+
+
 def get_user_language_code_by_(user_chat_id: int) -> str | None:
     """Returns user language code by the given user chat id."""
     with MySession() as session:
-        user = session.query(User).filter(User.chat_id == user_chat_id).first()
+        user = _get_user_by_(session, user_chat_id)
         return user.language_code if user else None
 
 
 def change_user_language_by_(user_chat_id: int, language_code: str) -> None:
     """Changes user language by the given user chat id and language code."""
     with MySession() as session:
-        user = session.query(User).filter(User.chat_id == user_chat_id).first()
-        user.language_code = language_code
-        commit_and_refresh(session, user)
+        user = _get_user_by_(session, user_chat_id)
+        if user.language_code != language_code:
+            user.language_code = language_code
+            commit_and_refresh(session, user)
