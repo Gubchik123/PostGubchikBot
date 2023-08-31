@@ -21,7 +21,7 @@ async def get_countries(query: CallbackQuery, *args) -> None:
             "<b>Changing timezone.</b>\n\n"
             "Your current timezone: <i>{timezone}</b>.\n"
             "You can choose a new time zone by choosing from the options below."
-        ).format(timezone=user.time_zone),
+        ).format(timezone=user.timezone),
         reply_markup=get_countries_keyboard(),
     )
 

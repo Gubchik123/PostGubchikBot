@@ -25,7 +25,7 @@ class User(Base):
     language_code = Column(
         String(2), nullable=False, default=DEFAULT_LANGUAGE_CODE
     )
-    time_zone = Column(String(32), nullable=False, default=DEFAULT_TIMEZONE)
+    timezone = Column(String(32), nullable=False, default=DEFAULT_TIMEZONE)
     created = Column(DateTime, default=datetime.today())
 
     channels = relationship(

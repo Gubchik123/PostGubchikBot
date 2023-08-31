@@ -53,6 +53,6 @@ def change_user_timezone_by_(user_chat_id: int, timezone: str) -> None:
     """Changes user timezone by the given user chat id and timezone."""
     with MySession() as session:
         user = _get_user_by_(session, user_chat_id)
-        if user.time_zone != timezone:
-            user.time_zone = timezone
+        if user.timezone != timezone:
+            user.timezone = timezone
             commit_and_refresh(session, user)
