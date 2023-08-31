@@ -1,15 +1,17 @@
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandHelp
 
-from loader import dp
+from loader import dp, _
 
 
 @dp.message_handler(CommandHelp())
 async def help_command(message: types.Message):
     """Handles /help command to show list of available commands."""
-    text = (
-        "Commands list:",
-        "/start - Start the bot",
-        "/help - Get help",
+    await message.answer(
+        _(
+            "Available commands:\n"
+            "/start - Start conversation\n"
+            "/help - Get help\n"
+            "/language - Change language"
+        )
     )
-    await message.answer("\n".join(text))
