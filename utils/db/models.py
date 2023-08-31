@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 
 from .db import Base
+from data.config import DEFAULT_LANGUAGE_CODE, DEFAULT_TIMEZONE
 
 
 class User(Base):
@@ -21,8 +22,10 @@ class User(Base):
     chat_id = Column(BigInteger, primary_key=True, autoincrement=False)
     username = Column(String(32), nullable=False, unique=True)
     full_name = Column(String(110), nullable=False, unique=True)
-    language_code = Column(String(2), nullable=False, default="en")
-    time_zone = Column(String(32), nullable=False, default="Europe/Kiev")
+    language_code = Column(
+        String(2), nullable=False, default=DEFAULT_LANGUAGE_CODE
+    )
+    time_zone = Column(String(32), nullable=False, default=DEFAULT_TIMEZONE)
     created = Column(DateTime, default=datetime.today())
 
     channels = relationship(

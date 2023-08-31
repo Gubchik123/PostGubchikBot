@@ -15,3 +15,6 @@ SQLALCHEMY_DATABASE_URL = str(os.getenv("DATABASE_URL"))
 I18N_DOMAIN = "easypostbot"
 BASE_DIR = Path(__file__).parent.parent
 LOCALES_DIR = BASE_DIR / "locales"
+
+DEFAULT_LANGUAGE_CODE = "en"
+DEFAULT_TIMEZONE = "Europe/Kiev"
