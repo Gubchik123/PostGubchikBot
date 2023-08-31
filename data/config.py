@@ -18,3 +18,5 @@ LOCALES_DIR = BASE_DIR / "locales"
 
 DEFAULT_LANGUAGE_CODE = "en"
 DEFAULT_TIMEZONE = "Europe/Kiev"
+
+PAYMENT_SITE_URL = "https://example.com/transfer/quickpay/"
