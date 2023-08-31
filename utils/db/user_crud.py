@@ -21,6 +21,12 @@ def _get_user_by_(session: Session, user_chat_id: int) -> User:
     return session.query(User).filter(User.chat_id == user_chat_id).first()
 
 
+def get_user_by_(user_chat_id: int) -> User:
+    """Returns user by the given user chat id."""
+    with MySession() as session:
+        return _get_user_by_(session, user_chat_id)
+
+
 def get_user_channels_by_(user_chat_id: int) -> list[str]:
     """Returns user channels by the given user chat id."""
     with MySession() as session:
@@ -40,4 +46,13 @@ def change_user_language_by_(user_chat_id: int, language_code: str) -> None:
         user = _get_user_by_(session, user_chat_id)
         if user.language_code != language_code:
             user.language_code = language_code
+            commit_and_refresh(session, user)
+
+
+def change_user_timezone_by_(user_chat_id: int, timezone: str) -> None:
+    """Changes user timezone by the given user chat id and timezone."""
+    with MySession() as session:
+        user = _get_user_by_(session, user_chat_id)
+        if user.time_zone != timezone:
+            user.time_zone = timezone
             commit_and_refresh(session, user)
