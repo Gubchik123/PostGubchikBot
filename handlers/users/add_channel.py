@@ -4,8 +4,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 
 from loader import dp, _
-from .menu import show_menu
 from states.channel import Channel
+from .commands.menu import show_menu
 from keyboards.inline.menu import get_back_to_menu_inline_button
 from utils.db.channel_crud import create_channel_by_
 

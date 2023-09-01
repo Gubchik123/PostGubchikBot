@@ -1,7 +1,7 @@
 from aiogram import types
 
 from loader import _
-from .menu import show_menu
+from .commands.menu import show_menu
 
 
 async def greet_user(query: types.CallbackQuery):

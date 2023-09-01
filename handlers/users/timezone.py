@@ -3,7 +3,7 @@ from typing import Callable
 from aiogram.types import CallbackQuery
 
 from loader import dp, _
-from .menu import show_menu
+from .commands.menu import show_menu
 from keyboards.inline.callback_data import timezone_callback_data
 from utils.db.user_crud import get_user_by_, change_user_timezone_by_
 from keyboards.inline.timezone import (

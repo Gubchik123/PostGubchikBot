@@ -3,7 +3,7 @@ from typing import Callable
 from aiogram.types import CallbackQuery
 
 from loader import dp, _
-from .menu import show_menu
+from .commands.menu import show_menu
 from utils.db.user_crud import get_user_channels_by_
 from utils.db.channel_crud import remove_channel_by_
 from keyboards.inline.callback_data import channel_callback_data
