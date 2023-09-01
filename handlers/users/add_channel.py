@@ -37,6 +37,7 @@ async def add_channel_by_forwarded_message(
     message: Message, state: FSMContext
 ) -> None:
     """Adds channel by forwarded message."""
-    create_channel_by_(message.forward_from_chat, message.from_user.id)
+    if message.text != "/menu":
+        create_channel_by_(message.forward_from_chat, message.from_user.id)
     await state.finish()
     await show_menu(message)
