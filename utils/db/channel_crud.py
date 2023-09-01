@@ -1,7 +1,7 @@
 from aiogram.types import Chat
 
 from .models import Channel
-from .db import add_commit_and_refresh
+from .db import MySession, add_commit_and_refresh
 
 
 def create_channel_by_(chat: Chat, user_chat_id: int) -> None:
@@ -16,3 +16,10 @@ def create_channel_by_(chat: Chat, user_chat_id: int) -> None:
             user_id=user_chat_id,
         )
     )
+
+
+def remove_channel_by_(channel_title: str) -> None:
+    """Removes channel by the given channel title."""
+    with MySession() as session:
+        session.query(Channel).filter(Channel.title == channel_title).delete()
+        session.commit()
