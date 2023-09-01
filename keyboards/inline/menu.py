@@ -18,7 +18,7 @@ def get_menu_keyboard(has_channels: bool) -> InlineKeyboardMarkup:
     if has_channels:
         keyboard.add(
             InlineKeyboardButton(
-                text=_("Remove channel"), callback_data="add_channel"
+                text=_("Remove channel"), callback_data="remove_channel"
             )
         )
         keyboard.add(
