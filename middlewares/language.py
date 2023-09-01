@@ -9,8 +9,8 @@ class ACLMiddleware(I18nMiddleware):
 
     async def get_user_locale(self, action, args):
         """Returns user language code from db or from telegram profile."""
-        telegram_user = types.User.get_current()
-        return (
-            get_user_language_code_by_(telegram_user.id)
-            or telegram_user.locale
-        )
+        if telegram_user := types.User.get_current():
+            return (
+                get_user_language_code_by_(telegram_user.id)
+                or telegram_user.locale
+            )
