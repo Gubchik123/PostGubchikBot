@@ -10,7 +10,6 @@ from keyboards.inline.menu import get_back_to_menu_inline_button
 from utils.db.channel_crud import create_channel_by_
 
 
-@dp.message_handler(commands=["add"])
 @dp.callback_query_handler(text="add_channel")
 async def wait_for_forwarded_message(data: Message | CallbackQuery) -> None:
     """Asks for forwarded message to the channel and waits for it."""
