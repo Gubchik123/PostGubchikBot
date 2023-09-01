@@ -31,7 +31,10 @@ async def show_menu(
             [f"* {channel.title}\n" for channel in user_channels]
         )
         await answer_function(
-            text=_("Your channels:\n" "{channel_list_items}\n").format(
+            text=_(
+                "Your channels:\n" "{channel_list_items}\n\n"
+                "Choose one of the buttons below:"
+            ).format(
                 channel_list_items=channel_list_items
             ),
             reply_markup=get_menu_keyboard(has_channels=True),
@@ -40,7 +43,7 @@ async def show_menu(
         await answer_function(
             text=_(
                 "You currently have no channels.\n\n"
-                "Use the button below or the /add command to add it."
+                "Choose one of the buttons below:"
             ),
             reply_markup=get_menu_keyboard(has_channels=False),
         )
