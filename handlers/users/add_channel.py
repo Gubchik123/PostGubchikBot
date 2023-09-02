@@ -1,12 +1,12 @@
 from aiogram.dispatcher import FSMContext
-from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
+from aiogram.types import Message, CallbackQuery
 
 from loader import dp, _
 from states.channel import Channel
 from .commands.menu import show_menu
 from data.config import MAX_FREE_CHANNELS
 from utils.db.channel_crud import create_channel_by_
-from keyboards.inline.menu import get_back_to_menu_inline_button
+from keyboards.inline.menu import get_back_to_menu_keyboard
 from utils.db.user_crud import get_user_by_, get_user_channels_by_
 
 
@@ -17,9 +17,7 @@ async def check_if_user_can_add_channel(query: CallbackQuery) -> None:
     if not _can_user_add_channel(query.from_user.id):
         await query.message.edit_text(
             _("You have reached the limit of channels!"),
-            reply_markup=InlineKeyboardMarkup().add(
-                get_back_to_menu_inline_button()
-            ),
+            reply_markup=get_back_to_menu_keyboard(),
         )
         return
     await ask_for_forwarded_message(query)
@@ -50,9 +48,7 @@ async def ask_for_forwarded_message(query: CallbackQuery) -> None:
             "<b>Important:</b> the bot and you must be administrators"
             "in the channel from which you are forwarding the message."
         ),
-        reply_markup=InlineKeyboardMarkup().add(
-            get_back_to_menu_inline_button()
-        ),
+        reply_markup=get_back_to_menu_keyboard(),
     )
     await Channel.forwarded_message.set()
 

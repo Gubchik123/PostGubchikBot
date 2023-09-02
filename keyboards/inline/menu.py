@@ -42,3 +42,8 @@ def get_menu_keyboard(has_channels: bool) -> InlineKeyboardMarkup:
 def get_back_to_menu_inline_button() -> InlineKeyboardButton:
     """Returns back to menu inline button."""
     return InlineKeyboardButton(text=_("🔙 Back"), callback_data="menu")
+
+
+def get_back_to_menu_keyboard() -> InlineKeyboardMarkup:
+    """Returns back to menu keyboard."""
+    return InlineKeyboardMarkup().add(get_back_to_menu_inline_button())

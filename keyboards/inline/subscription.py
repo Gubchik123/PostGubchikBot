@@ -19,10 +19,6 @@ def get_subscription_text_by_(subscription: Subscription) -> str:
     return f"{translated_plan_name} - {subscription.price} ₴"
 
 
-def get_subscription_keyboard() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup().add(get_back_to_menu_inline_button())
-
-
 def _get_new_callback_data(level: int, price="None") -> str:
     """Returns new subscription callback data by the given parameters."""
     return subscription_callback_data.new(level=level, price=price)

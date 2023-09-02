@@ -6,6 +6,7 @@ from aiogram import types
 from loader import bot, dp, _
 from utils.db.models import Subscription
 from utils.db.user_crud import get_user_by_
+from keyboards.inline.menu import get_back_to_menu_keyboard
 from keyboards.inline.callback_data import subscription_callback_data
 from utils.db.subscription_crud import (
     get_all_subscriptions,
@@ -18,7 +19,6 @@ from data.config import (
 )
 from keyboards.inline.subscription import (
     get_subscription_text_by_,
-    get_subscription_keyboard,
     get_subscriptions_keyboard,
     get_invoice_keyboard,
 )
@@ -68,7 +68,7 @@ async def get_user_subscription(
             max_channels=subscription.max_channels,
             expire_date=_get_expire_date_for_(subscription),
         ),
-        reply_markup=get_subscription_keyboard(),
+        reply_markup=get_back_to_menu_keyboard(),
     )
 
 
