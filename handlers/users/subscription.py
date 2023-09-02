@@ -6,11 +6,15 @@ from aiogram import types
 from loader import bot, dp, _
 from utils.db.models import Subscription
 from utils.db.user_crud import get_user_by_
-from data.config import PAYMENTS_PROVIDER_TOKEN, PAYMENTS_IMAGE_URL
 from keyboards.inline.callback_data import subscription_callback_data
 from utils.db.subscription_crud import (
     get_all_subscriptions,
     add_subscription_for_user_with_,
+)
+from data.config import (
+    MAX_FREE_CHANNELS,
+    PAYMENTS_PROVIDER_TOKEN,
+    PAYMENTS_IMAGE_URL,
 )
 from keyboards.inline.subscription import (
     get_subscription_text_by_,
@@ -100,10 +104,13 @@ async def get_subscriptions(
     await answer_function(
         text=_(
             "☺️ <b>Subscription</b>\n\n"
-            "You can add up to 3 channels to the bot <b>for free</b>.\n\n"
+            "You can add up to {max_free_channels} channels to the bot <b>for free</b>.\n\n"
             "{subscriptions_text}"
             "<i>* All subscriptions for 30 days</i>"
-        ).format(subscriptions_text=subscriptions_text),
+        ).format(
+            max_free_channels=MAX_FREE_CHANNELS,
+            subscriptions_text=subscriptions_text,
+        ),
         reply_markup=get_subscriptions_keyboard(all_subscriptions),
     )
 

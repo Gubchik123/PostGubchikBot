@@ -4,6 +4,7 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from loader import dp, _
 from states.channel import Channel
 from .commands.menu import show_menu
+from data.config import MAX_FREE_CHANNELS
 from utils.db.channel_crud import create_channel_by_
 from keyboards.inline.menu import get_back_to_menu_inline_button
 from utils.db.user_crud import get_user_by_, get_user_channels_by_
@@ -28,7 +29,10 @@ def _can_user_add_channel(user_chat_id: int) -> bool:
     """Returns True if user can add channel and False otherwise."""
     user = get_user_by_(user_chat_id)
     user_channels_count = len(get_user_channels_by_(user_chat_id))
-    if not user.subscription_id and user_channels_count + 1 > 3:
+    if (
+        not user.subscription_id
+        and user_channels_count + 1 > MAX_FREE_CHANNELS
+    ):
         return False
     elif (
         user.subscription_id
