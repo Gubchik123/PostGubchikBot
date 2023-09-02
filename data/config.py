@@ -12,11 +12,12 @@ ADMINS = [
 ]
 SQLALCHEMY_DATABASE_URL = str(os.getenv("DATABASE_URL"))
 
+PAYMENTS_PROVIDER_TOKEN = str(os.getenv("PAYMENTS_PROVIDER_TOKEN"))
+PAYMENTS_IMAGE_URL = "https://img.freepik.com/premium-vector/online-payment-concept_118813-2685.jpg"
+
 I18N_DOMAIN = "easypostbot"
 BASE_DIR = Path(__file__).parent.parent
 LOCALES_DIR = BASE_DIR / "locales"
 
 DEFAULT_LANGUAGE_CODE = "en"
 DEFAULT_TIMEZONE = "Europe/Kiev"
-
-PAYMENT_SITE_URL = "https://example.com/transfer/quickpay/"
