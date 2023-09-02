@@ -1,7 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from loader import _
-from data.config import PAYMENT_SITE_URL
 from utils.db.models import Subscription
 from .menu import get_back_to_menu_inline_button
 from .callback_data import (
@@ -17,7 +16,11 @@ def get_subscription_text_by_(subscription: Subscription) -> str:
         "pro": _("Pro"),
         "unlimited": _("Unlimited"),
     }.get(subscription.name)
-    return f"{translated_plan_name} - {subscription.price} $"
+    return f"{translated_plan_name} - {subscription.price} ₴"
+
+
+def get_subscription_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup().add(get_back_to_menu_inline_button())
 
 
 def _get_new_callback_data(level: int, price="None") -> str:
@@ -45,19 +48,14 @@ def get_subscriptions_keyboard(
     return keyboard
 
 
-def get_subscription_link_keyboard(price: int):
-    CURRENT_LEVEL = 1
-
+def get_invoice_keyboard(price: int):
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(
         InlineKeyboardButton(
-            text=_("Pay for {price}$").format(price=price),
-            url=f"{PAYMENT_SITE_URL}?price={price}$",
+            text=_("Pay for {price} ₴").format(price=price), pay=True
         )
     )
     keyboard.add(
-        get_back_inline_button_by_(
-            callback_data=_get_new_callback_data(CURRENT_LEVEL - 1, price)
-        )
+        get_back_inline_button_by_(callback_data="back_to_subscription")
     )
     return keyboard
