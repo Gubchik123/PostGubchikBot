@@ -32,11 +32,9 @@ async def show_menu(
         )
         await answer_function(
             text=_(
-                "Your channels:\n" "{channel_list_items}\n\n"
+                "Your channels:\n{channel_list_items}\n"
                 "Choose one of the buttons below:"
-            ).format(
-                channel_list_items=channel_list_items
-            ),
+            ).format(channel_list_items=channel_list_items),
             reply_markup=get_menu_keyboard(has_channels=True),
         )
     else:
