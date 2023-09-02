@@ -34,13 +34,16 @@ class User(Base):
         lazy="dynamic",
         passive_deletes=True,
     )
-    # subscriptions = relationship(
-    #     "Subscription",
-    #     secondary="user_subscription",
-    #     backref=backref("users", lazy="joined"),
-    #     lazy="dynamic",
-    #     passive_deletes=True,
-    # )
+    subscription = relationship(
+        "Subscription",
+        backref=backref("user", lazy="joined"),
+        lazy="joined",
+        uselist=False,
+        passive_deletes=True,
+    )
+    subscription_id = Column(
+        Integer, ForeignKey("subscription.id", ondelete="SET NULL")
+    )
 
 
 class Channel(Base):
