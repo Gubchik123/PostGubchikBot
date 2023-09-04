@@ -11,7 +11,7 @@ from utils.db.subscription_crud import (
     add_subscription_for_user_with_,
 )
 from data.config import (
-    MAX_FREE_CHANNELS,
+    DEFAULT_MAX_FREE_CHANNELS,
     CURRENCY,
     PAYMENTS_PROVIDER_TOKEN,
     PAYMENTS_IMAGE_URL,
@@ -80,7 +80,6 @@ async def get_subscriptions(
 ) -> None:
     """Shows or sends subscriptions to choose from
     depending on the given data (message or callback)."""
-    # TODO: Checking if user has subscription -> displaying info about it without payment buttons
     all_subscriptions = get_all_subscriptions()
     subscriptions_text = ""
     for subscription in all_subscriptions:
@@ -102,7 +101,7 @@ async def get_subscriptions(
             "{subscriptions_text}"
             "<i>* All subscriptions for 30 days</i>"
         ).format(
-            max_free_channels=MAX_FREE_CHANNELS,
+            max_free_channels=DEFAULT_MAX_FREE_CHANNELS,
             subscriptions_text=subscriptions_text,
         ),
         reply_markup=get_subscriptions_keyboard(all_subscriptions),
