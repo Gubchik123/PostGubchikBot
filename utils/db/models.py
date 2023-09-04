@@ -32,6 +32,9 @@ class User(Base):
     )
     timezone = Column(String(32), nullable=False, default=DEFAULT_TIMEZONE)
     created = Column(DateTime, default=datetime.today())
+    # Referrals fields
+    referrals = Column(Integer, default=0)
+    balance = Column(Integer, default=0)
     # User channels
     channels = relationship(
         "Channel",
