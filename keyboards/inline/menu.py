@@ -12,6 +12,11 @@ def get_menu_keyboard(has_channels: bool) -> InlineKeyboardMarkup:
     )
     keyboard.add(
         InlineKeyboardButton(
+            text=_("👥 Referrals"), callback_data="referrals"
+        )
+    )
+    keyboard.add(
+        InlineKeyboardButton(
             text=_("Add channel"), callback_data="add_channel"
         )
     )
