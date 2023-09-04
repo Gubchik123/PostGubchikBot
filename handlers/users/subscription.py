@@ -1,10 +1,9 @@
 from typing import Callable
-from datetime import timedelta
 
 from aiogram import types
 
 from loader import bot, dp, _
-from utils.db.models import Subscription
+from utils.db.models import User
 from utils.db.user_crud import get_user_by_
 from keyboards.inline.menu import get_back_to_menu_keyboard
 from keyboards.inline.callback_data import subscription_callback_data
@@ -43,12 +42,12 @@ async def subscription(data: types.Message | types.CallbackQuery) -> None:
     if user has subscription and shows or sends subscription menu otherwise."""
     user = get_user_by_(data.from_user.id)
     await get_user_subscription(
-        data, user.subscription
+        data, user
     ) if user.subscription_id else await get_subscriptions(data)
 
 
 async def get_user_subscription(
-    data: types.Message | types.CallbackQuery, subscription: Subscription
+    data: types.Message | types.CallbackQuery, user: User
 ) -> None:
     """Shows or sends user subscription info
     depending on the given data (message or callback)."""
@@ -64,20 +63,13 @@ async def get_user_subscription(
             "You can add up to <b>{max_channels}</b> channels.\n\n"
             "Your subscription will expire on <b>{expire_date}</b>."
         ).format(
-            subscription_text=get_subscription_text_by_(subscription),
-            max_channels=subscription.max_channels,
-            expire_date=_get_expire_date_for_(subscription),
+            subscription_text=get_subscription_text_by_(user.subscription),
+            max_channels=user.subscription.max_channels,
+            expire_date=user.subscription_expire_date.strftime(
+                "%d.%m.%Y %H:%M"
+            ),
         ),
         reply_markup=get_back_to_menu_keyboard(),
-    )
-
-
-def _get_expire_date_for_(subscription: Subscription) -> str:
-    """Returns days left for the given subscription."""
-    return str(
-        (
-            subscription.created + timedelta(days=subscription.duration_days)
-        ).strftime("%d.%m.%Y %H:%M")
     )
 
 

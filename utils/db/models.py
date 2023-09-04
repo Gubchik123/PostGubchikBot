@@ -44,6 +44,7 @@ class User(Base):
     subscription_id = Column(
         Integer, ForeignKey("subscription.id", ondelete="SET NULL")
     )
+    subscription_expire_date = Column(DateTime, nullable=True)
 
 
 class Channel(Base):
