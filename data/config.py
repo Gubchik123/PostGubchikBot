@@ -11,6 +11,7 @@ ADMINS = [
     int(admin_chat_id) for admin_chat_id in str(os.getenv("ADMINS")).split(",")
 ]
 SQLALCHEMY_DATABASE_URL = str(os.getenv("DATABASE_URL"))
+SCHEDULER_JOBS_DATABASE_URL = SQLALCHEMY_DATABASE_URL
 
 PAYMENTS_PROVIDER_TOKEN = str(os.getenv("PAYMENTS_PROVIDER_TOKEN"))
 PAYMENTS_IMAGE_URL = "https://img.freepik.com/premium-vector/online-payment-concept_118813-2685.jpg"
