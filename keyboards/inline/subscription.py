@@ -56,7 +56,9 @@ def get_subscriptions_keyboard(
     return keyboard
 
 
-def get_invoice_keyboard(price: int):
+def get_invoice_keyboard(user_balance: int, price: int):
+    CURRENT_LEVEL = 1
+
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(
         InlineKeyboardButton(
@@ -66,6 +68,13 @@ def get_invoice_keyboard(price: int):
             pay=True,
         )
     )
+    if user_balance >= price:
+        keyboard.add(
+            InlineKeyboardButton(
+                text=_("Charge from balance"),
+                callback_data=_get_new_callback_data(CURRENT_LEVEL + 1, price),
+            )
+        )
     keyboard.add(
         get_back_inline_button_by_(callback_data="back_to_subscription")
     )
