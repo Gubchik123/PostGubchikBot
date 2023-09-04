@@ -4,6 +4,7 @@ from loader import scheduler
 from .user_crud import _get_user_by_
 from .models import User, Subscription
 from .db import MySession, commit_and_refresh
+from data.config import DEFAULT_SUBSCRIPTION_DAYS
 from utils.scheduler import (
     send_subscription_reminder_to_user,
     remove_user_subscription_by_,
@@ -29,7 +30,9 @@ def add_subscription_for_user_with_(
             .first()
             .id
         )
-        user.subscription_expire_date = datetime.today() + timedelta(days=30)
+        user.subscription_expire_date = datetime.today() + timedelta(
+            days=DEFAULT_SUBSCRIPTION_DAYS
+        )
         commit_and_refresh(session, user)
     if was_previous_subscription:
         _remove_all_previous_scheduler_jobs_for_user_with_(user.chat_id)

@@ -11,10 +11,11 @@ from utils.db.subscription_crud import (
     add_subscription_for_user_with_,
 )
 from data.config import (
-    DEFAULT_MAX_FREE_CHANNELS,
+    MAX_FREE_CHANNELS,
     CURRENCY,
     PAYMENTS_PROVIDER_TOKEN,
     PAYMENTS_IMAGE_URL,
+    DEFAULT_SUBSCRIPTION_DAYS,
 )
 from keyboards.inline.subscription import (
     get_subscription_text_by_,
@@ -99,10 +100,11 @@ async def get_subscriptions(
             "☺️ <b>Subscription</b>\n\n"
             "You can add up to {max_free_channels} channels to the bot <b>for free</b>.\n\n"
             "{subscriptions_text}"
-            "<i>* All subscriptions for 30 days</i>"
+            "<i>* All subscriptions for {default_subscription_days} days</i>"
         ).format(
-            max_free_channels=DEFAULT_MAX_FREE_CHANNELS,
+            max_free_channels=MAX_FREE_CHANNELS,
             subscriptions_text=subscriptions_text,
+            default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS,
         ),
         reply_markup=get_subscriptions_keyboard(all_subscriptions),
     )
@@ -115,7 +117,9 @@ async def get_invoice(query: types.CallbackQuery, price: int) -> None:
     await bot.send_invoice(
         query.message.chat.id,
         title=_("Bot subscription"),
-        description=_("Bot subscription for 30 days"),
+        description=_(
+            "Bot subscription for {default_subscription_days} days"
+        ).format(default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS),
         provider_token=PAYMENTS_PROVIDER_TOKEN,
         currency=CURRENCY,
         photo_url=PAYMENTS_IMAGE_URL,
@@ -125,7 +129,10 @@ async def get_invoice(query: types.CallbackQuery, price: int) -> None:
         is_flexible=False,
         prices=[
             types.LabeledPrice(
-                label=_("Subscription for 30 days"), amount=price * 100
+                label=_(
+                    "Subscription for {default_subscription_days} days"
+                ).format(default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS),
+                amount=price * 100,
             )
         ],
         start_parameter="one-month-subscription",
@@ -153,8 +160,12 @@ async def successful_payment(message: types.Message):
         message.chat.id,
         _(
             "Payment for <b>{total_amount}</b> {currency} is successful!\n\n"
-            "<b>Subscription for 30 days is activated!</b>"
-        ).format(total_amount=price, currency=payment_info["currency"]),
+            "<b>Subscription for {default_subscription_days} days is activated!</b>"
+        ).format(
+            total_amount=price,
+            currency=payment_info["currency"],
+            default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS,
+        ),
     )
     await back_to_subscription(message)
 

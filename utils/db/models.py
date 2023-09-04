@@ -11,7 +11,11 @@ from sqlalchemy import (
 )
 
 from .db import Base
-from data.config import DEFAULT_LANGUAGE_CODE, DEFAULT_TIMEZONE
+from data.config import (
+    DEFAULT_SUBSCRIPTION_DAYS,
+    DEFAULT_LANGUAGE_CODE,
+    DEFAULT_TIMEZONE,
+)
 
 
 class User(Base):
@@ -72,5 +76,5 @@ class Subscription(Base):
     name = Column(String(10), unique=True, nullable=False)
     price = Column(Integer, unique=True, nullable=False)
     max_channels = Column(Integer, unique=True, nullable=True)
-    duration_days = Column(Integer, default=30)
+    duration_days = Column(Integer, default=DEFAULT_SUBSCRIPTION_DAYS)
     created = Column(DateTime, default=datetime.today())
