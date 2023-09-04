@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from loader import _
+from data.config import CURRENCY_SYMBOL
 from utils.db.models import Subscription
 from .menu import get_back_to_menu_inline_button
 from .callback_data import (
@@ -16,7 +17,7 @@ def get_subscription_text_by_(subscription: Subscription) -> str:
         "pro": _("Pro"),
         "unlimited": _("Unlimited"),
     }.get(subscription.name)
-    return f"{translated_plan_name} - {subscription.price} ₴"
+    return f"{translated_plan_name} - {subscription.price} {CURRENCY_SYMBOL}"
 
 
 def _get_new_callback_data(level: int, price="None") -> str:
@@ -59,7 +60,10 @@ def get_invoice_keyboard(price: int):
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(
         InlineKeyboardButton(
-            text=_("Pay for {price} ₴").format(price=price), pay=True
+            text=_("Pay for {price} {currency_symbol}").format(
+                price=price, currency_symbol=CURRENCY_SYMBOL
+            ),
+            pay=True,
         )
     )
     keyboard.add(

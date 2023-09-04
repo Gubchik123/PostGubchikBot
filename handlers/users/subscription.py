@@ -12,6 +12,7 @@ from utils.db.subscription_crud import (
 )
 from data.config import (
     MAX_FREE_CHANNELS,
+    CURRENCY,
     PAYMENTS_PROVIDER_TOKEN,
     PAYMENTS_IMAGE_URL,
 )
@@ -117,7 +118,7 @@ async def get_invoice(query: types.CallbackQuery, price: int) -> None:
         title=_("Bot subscription"),
         description=_("Bot subscription for 30 days"),
         provider_token=PAYMENTS_PROVIDER_TOKEN,
-        currency="UAH",
+        currency=CURRENCY,
         photo_url=PAYMENTS_IMAGE_URL,
         photo_width=416,
         photo_height=234,
