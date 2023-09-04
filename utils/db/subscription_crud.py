@@ -10,11 +10,17 @@ from utils.scheduler import (
     remove_user_subscription_by_,
 )
 
+subscriptions = []
+
 
 def get_all_subscriptions() -> list[Subscription]:
     """Returns all subscriptions ordered by id."""
+    if subscriptions:
+        return subscriptions
     with MySession() as session:
-        return session.query(Subscription).all()
+        all_subscription = session.query(Subscription).all()
+    subscriptions.extend(all_subscription)
+    return all_subscription
 
 
 def add_subscription_for_user_with_(
