@@ -44,7 +44,7 @@ def change_user_language_by_(user_chat_id: int, language_code: str) -> None:
     """Changes user language by the given user chat id and language code."""
     with MySession() as session:
         user = _get_user_by_(session, user_chat_id)
-        if user.language_code != language_code:
+        if user and user.language_code != language_code:
             user.language_code = language_code
             commit_and_refresh(session, user)
 
