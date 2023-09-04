@@ -4,8 +4,7 @@ from aiogram import types
 
 from loader import bot, dp, _
 from utils.db.models import User
-from utils.db.db import MySession, commit_and_refresh
-from utils.db.user_crud import _get_user_by_, get_user_by_
+from utils.db.user_crud import get_user_by_, change_user_balance
 from keyboards.inline.callback_data import subscription_callback_data
 from utils.db.subscription_crud import (
     get_all_subscriptions,
@@ -148,11 +147,8 @@ async def charge_from_user_balance(
     query: types.CallbackQuery, price: int
 ) -> None:
     """Pays for subscription with user balance."""
-    with MySession() as session:
-        user = _get_user_by_(session, query.from_user.id)
-        user.balance -= price
-        commit_and_refresh(session, user)
-    add_subscription_for_user_with_(user.chat_id, price)
+    change_user_balance(query.from_user.id, -price)
+    add_subscription_for_user_with_(query.from_user.id, price)
     await bot.send_message(
         query.message.chat.id,
         _(

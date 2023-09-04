@@ -80,3 +80,21 @@ def change_user_timezone_by_(user_chat_id: int, timezone: str) -> None:
         if user.timezone != timezone:
             user.timezone = timezone
             commit_and_refresh(session, user)
+
+
+def reset_user_subscription_by_(user_chat_id: int) -> None:
+    """Resets user subscription by the given user chat id."""
+    with MySession() as session:
+        user = _get_user_by_(session, user_chat_id)
+        if user and user.subscription:
+            user.subscription = None
+            user.subscription_expire_date = None
+            commit_and_refresh(session, user)
+
+
+def change_user_balance(user_chat_id: int, charge_price: int) -> None:
+    """Changes user balance by the given user chat id and charge price."""
+    with MySession() as session:
+        user = _get_user_by_(session, user_chat_id)
+        user.balance += charge_price
+        commit_and_refresh(session, user)
