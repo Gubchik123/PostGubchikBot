@@ -4,7 +4,8 @@ from aiogram import types
 
 from loader import bot, dp, _
 from utils.db.models import User
-from utils.db.user_crud import get_user_by_
+from utils.db.db import MySession, commit_and_refresh
+from utils.db.user_crud import _get_user_by_, get_user_by_
 from keyboards.inline.callback_data import subscription_callback_data
 from utils.db.subscription_crud import (
     get_all_subscriptions,
@@ -137,8 +138,33 @@ async def get_invoice(query: types.CallbackQuery, price: int) -> None:
         ],
         start_parameter="one-month-subscription",
         payload="test-invoice-payload",
-        reply_markup=get_invoice_keyboard(price),
+        reply_markup=get_invoice_keyboard(
+            get_user_by_(query.from_user.id).balance, price
+        ),
     )
+
+
+async def charge_from_user_balance(
+    query: types.CallbackQuery, price: int
+) -> None:
+    """Pays for subscription with user balance."""
+    with MySession() as session:
+        user = _get_user_by_(session, query.from_user.id)
+        user.balance -= price
+        commit_and_refresh(session, user)
+    add_subscription_for_user_with_(user.chat_id, price)
+    await bot.send_message(
+        query.message.chat.id,
+        _(
+            "We have successfully charged <b>{total_amount} {currency}</b> from your balance!\n\n"
+            "<b>Subscription for {default_subscription_days} days is activated!</b>"
+        ).format(
+            total_amount=price,
+            currency=CURRENCY,
+            default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS,
+        ),
+    )
+    await back_to_subscription(query.message)
 
 
 @dp.pre_checkout_query_handler(lambda query: True)
@@ -159,7 +185,7 @@ async def successful_payment(message: types.Message):
     await bot.send_message(
         message.chat.id,
         _(
-            "Payment for <b>{total_amount}</b> {currency} is successful!\n\n"
+            "Payment for <b>{total_amount} {currency}</b> is successful!\n\n"
             "<b>Subscription for {default_subscription_days} days is activated!</b>"
         ).format(
             total_amount=price,
@@ -179,6 +205,7 @@ async def navigate(query: types.CallbackQuery, callback_data: dict) -> None:
     current_level_function: Callable = {
         "0": get_subscriptions,
         "1": get_invoice,
+        "2": charge_from_user_balance,
     }.get(current_level)
 
     await current_level_function(query, price)
