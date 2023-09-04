@@ -2,11 +2,40 @@ from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
 
 from .models import User
+from data.config import DEFAULT_REFERRAL_BONUS
 from .db import MySession, commit_and_refresh, add_commit_and_refresh
 
 
-def create_user_by_(telegram_user: TelegramUser) -> None:
+def _get_user_by_(session: Session, user_chat_id: int) -> User:
+    """Returns user by the given session and user chat id."""
+    return session.query(User).filter(User.chat_id == user_chat_id).first()
+
+
+def _is_valid_referral_(message_args: str, invited_user_chat_id: int) -> bool:
+    """Checks if referral is valid
+    by the given message args and invited user chat id."""
+    if len(message_args) not in (9, 10) and not message_args.isdigit():
+        return False
+    user_who_invite_chat_id = int(message_args)
+    if user_who_invite_chat_id == invited_user_chat_id:
+        return False
+    return True
+
+
+def _add_referral_by_(user_who_invite_chat_id: int) -> None:
+    """Adds referral by the given invited user chat id and message args."""
+    with MySession() as session:
+        user_who_invite = _get_user_by_(session, user_who_invite_chat_id)
+        if user_who_invite:
+            user_who_invite.referrals += 1
+            user_who_invite.balance += DEFAULT_REFERRAL_BONUS
+            commit_and_refresh(session, user_who_invite)
+
+
+def create_user_by_(telegram_user: TelegramUser, message_args: str) -> None:
     """Creates user in database by the given telegram user."""
+    if _is_valid_referral_(message_args, telegram_user.id):
+        _add_referral_by_(int(message_args))
     add_commit_and_refresh(
         User(
             chat_id=telegram_user.id,
@@ -14,11 +43,6 @@ def create_user_by_(telegram_user: TelegramUser) -> None:
             full_name=telegram_user.full_name,
         )
     )
-
-
-def _get_user_by_(session: Session, user_chat_id: int) -> User:
-    """Returns user by the given session and user chat id."""
-    return session.query(User).filter(User.chat_id == user_chat_id).first()
 
 
 def get_user_by_(user_chat_id: int) -> User:
