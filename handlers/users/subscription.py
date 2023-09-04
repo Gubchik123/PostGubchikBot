@@ -11,10 +11,10 @@ from utils.db.subscription_crud import (
     add_subscription_for_user_with_,
 )
 from data.config import (
-    MAX_FREE_CHANNELS,
     CURRENCY,
     PAYMENTS_PROVIDER_TOKEN,
     PAYMENTS_IMAGE_URL,
+    DEFAULT_MAX_FREE_CHANNELS,
     DEFAULT_SUBSCRIPTION_DAYS,
 )
 from keyboards.inline.subscription import (
@@ -98,11 +98,11 @@ async def get_subscriptions(
     await answer_function(
         text=_(
             "☺️ <b>Subscription</b>\n\n"
-            "You can add up to {max_free_channels} channels to the bot <b>for free</b>.\n\n"
+            "You can add up to {DEFAULT_max_free_channels} channels to the bot <b>for free</b>.\n\n"
             "{subscriptions_text}"
             "<i>* All subscriptions for {default_subscription_days} days</i>"
         ).format(
-            max_free_channels=MAX_FREE_CHANNELS,
+            DEFAULT_max_free_channels=DEFAULT_MAX_FREE_CHANNELS,
             subscriptions_text=subscriptions_text,
             default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS,
         ),
