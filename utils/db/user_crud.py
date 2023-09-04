@@ -1,9 +1,13 @@
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
 
 from .models import User
 from data.config import DEFAULT_REFERRAL_BONUS
 from .db import MySession, commit_and_refresh, add_commit_and_refresh
+
+
+users = {}
 
 
 def _get_user_by_(session: Session, user_chat_id: int) -> User:
@@ -47,8 +51,13 @@ def create_user_by_(telegram_user: TelegramUser, message_args: str) -> None:
 
 def get_user_by_(user_chat_id: int) -> User:
     """Returns user by the given user chat id."""
-    with MySession() as session:
-        return _get_user_by_(session, user_chat_id)
+    try:
+        return users[user_chat_id]
+    except KeyError:
+        with MySession() as session:
+            user = _get_user_by_(session, user_chat_id)
+        users[user_chat_id] = user
+        return user
 
 
 def get_user_channels_by_(user_chat_id: int) -> list[str]:
@@ -59,42 +68,54 @@ def get_user_channels_by_(user_chat_id: int) -> list[str]:
 
 def get_user_language_code_by_(user_chat_id: int) -> str | None:
     """Returns user language code by the given user chat id."""
-    with MySession() as session:
-        user = _get_user_by_(session, user_chat_id)
-        return user.language_code if user else None
+    user = get_user_by_(user_chat_id)
+    return user.language_code if user else None
 
 
 def change_user_language_by_(user_chat_id: int, language_code: str) -> None:
     """Changes user language by the given user chat id and language code."""
     with MySession() as session:
-        user = _get_user_by_(session, user_chat_id)
-        if user and user.language_code != language_code:
-            user.language_code = language_code
-            commit_and_refresh(session, user)
+        session.execute(
+            update(User)
+            .where(User.chat_id == user_chat_id)
+            .values(language_code=language_code)
+        )
+        session.commit()
+    users[user_chat_id].language_code = language_code
 
 
 def change_user_timezone_by_(user_chat_id: int, timezone: str) -> None:
     """Changes user timezone by the given user chat id and timezone."""
     with MySession() as session:
-        user = _get_user_by_(session, user_chat_id)
-        if user.timezone != timezone:
-            user.timezone = timezone
-            commit_and_refresh(session, user)
+        session.execute(
+            update(User)
+            .where(User.chat_id == user_chat_id)
+            .values(timezone=timezone)
+        )
+        session.commit()
+    users[user_chat_id].timezone = timezone
 
 
 def reset_user_subscription_by_(user_chat_id: int) -> None:
     """Resets user subscription by the given user chat id."""
     with MySession() as session:
-        user = _get_user_by_(session, user_chat_id)
-        if user and user.subscription:
-            user.subscription = None
-            user.subscription_expire_date = None
-            commit_and_refresh(session, user)
+        session.execute(
+            update(User)
+            .where(User.chat_id == user_chat_id)
+            .values(subscription_id=None, subscription_expire_date=None)
+        )
+        session.commit()
+    users[user_chat_id].subscription = None
+    users[user_chat_id].subscription_expire_date = None
 
 
 def change_user_balance(user_chat_id: int, charge_price: int) -> None:
     """Changes user balance by the given user chat id and charge price."""
     with MySession() as session:
-        user = _get_user_by_(session, user_chat_id)
-        user.balance += charge_price
-        commit_and_refresh(session, user)
+        session.execute(
+            update(User)
+            .where(User.chat_id == user_chat_id)
+            .values(balance=User.balance + charge_price)
+        )
+        session.commit()
+    users[user_chat_id].balance += charge_price
