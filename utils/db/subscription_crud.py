@@ -22,16 +22,35 @@ def add_subscription_for_user_with_(
     """Adds subscription for user with the given chat id."""
     with MySession() as session:
         user = _get_user_by_(session, chat_id)
+        was_previous_subscription = user.subscription_id
         user.subscription_id = (
             session.query(Subscription)
             .filter(Subscription.price == subscription_price)
             .first()
             .id
         )
-        user.subscription_expire_date = datetime.today() + timedelta(minutes=6)
+        user.subscription_expire_date = datetime.today() + timedelta(days=30)
         commit_and_refresh(session, user)
+    if was_previous_subscription:
+        _remove_all_previous_scheduler_jobs_for_user_with_(user.chat_id)
     _add_scheduler_jobs_to_remind_user_about_subscription_expire_date(user)
     _add_scheduler_job_to_remove_user_subscription(user)
+
+
+def _remove_all_previous_scheduler_jobs_for_user_with_(chat_id: int) -> None:
+    """Removes all previous scheduler jobs for user with the given chat id."""
+    for day in (5, 3, 2, 1):
+        _try_to_remove_scheduler_job_with_id_(f"{chat_id}_{day}_days")
+    _try_to_remove_scheduler_job_with_id_(f"{chat_id}_2_hours")
+    _try_to_remove_scheduler_job_with_id_(f"{chat_id}_remove_subscription")
+
+
+def _try_to_remove_scheduler_job_with_id_(id: str) -> None:
+    """Tries to remove scheduler job with the given id."""
+    try:
+        scheduler.remove_job(id)
+    except:
+        pass
 
 
 def _add_scheduler_jobs_to_remind_user_about_subscription_expire_date(
