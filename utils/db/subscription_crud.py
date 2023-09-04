@@ -94,5 +94,8 @@ def _add_scheduler_job_to_remove_user_subscription(user: User) -> None:
         trigger="date",
         id=f"{user.chat_id}_remove_subscription",
         run_date=user.subscription_expire_date,
-        kwargs={"user_chat_id": user.chat_id},
+        kwargs={
+            "user_chat_id": user.chat_id,
+            "user_language_code": user.language_code,
+        },
     )
