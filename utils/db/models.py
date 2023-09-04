@@ -22,22 +22,24 @@ class User(Base):
     """Model for storing information about Telegram users."""
 
     __tablename__ = "user"
-
+    # Fields from telegram user
     chat_id = Column(BigInteger, primary_key=True, autoincrement=False)
-    username = Column(String(32), nullable=False, unique=True)
+    username = Column(String(32), nullable=True, unique=True)
     full_name = Column(String(110), nullable=False, unique=True)
+    # Settings fields
     language_code = Column(
         String(2), nullable=False, default=DEFAULT_LANGUAGE_CODE
     )
     timezone = Column(String(32), nullable=False, default=DEFAULT_TIMEZONE)
     created = Column(DateTime, default=datetime.today())
-
+    # User channels
     channels = relationship(
         "Channel",
         backref=backref("user", lazy="joined"),
         lazy="dynamic",
         passive_deletes=True,
     )
+    # Subscription fields
     subscription = relationship(
         "Subscription",
         backref=backref("user", lazy="joined"),
