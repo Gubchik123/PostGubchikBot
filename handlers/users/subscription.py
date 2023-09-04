@@ -5,7 +5,6 @@ from aiogram import types
 from loader import bot, dp, _
 from utils.db.models import User
 from utils.db.user_crud import get_user_by_
-from keyboards.inline.menu import get_back_to_menu_keyboard
 from keyboards.inline.callback_data import subscription_callback_data
 from utils.db.subscription_crud import (
     get_all_subscriptions,
@@ -18,6 +17,7 @@ from data.config import (
 )
 from keyboards.inline.subscription import (
     get_subscription_text_by_,
+    get_subscription_keyboard,
     get_subscriptions_keyboard,
     get_invoice_keyboard,
 )
@@ -69,10 +69,11 @@ async def get_user_subscription(
                 "%d.%m.%Y %H:%M"
             ),
         ),
-        reply_markup=get_back_to_menu_keyboard(),
+        reply_markup=get_subscription_keyboard(),
     )
 
 
+@dp.callback_query_handler(text="subscriptions")
 async def get_subscriptions(
     data: types.Message | types.CallbackQuery, *args
 ) -> None:
@@ -142,6 +143,8 @@ async def pre_checkout_query(pre_checkout_q: types.PreCheckoutQuery):
 @dp.message_handler(content_types=types.ContentType.SUCCESSFUL_PAYMENT)
 async def successful_payment(message: types.Message):
     """Handles successful payment."""
+    await bot.send_message(message.chat.id, _("Processing..."))
+
     payment_info = message.successful_payment.to_python()
     price = payment_info["total_amount"] // 100
 

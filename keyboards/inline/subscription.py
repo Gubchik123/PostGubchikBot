@@ -24,6 +24,17 @@ def _get_new_callback_data(level: int, price="None") -> str:
     return subscription_callback_data.new(level=level, price=price)
 
 
+def get_subscription_keyboard() -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    keyboard.add(
+        InlineKeyboardButton(
+            text=_("Update subscription"), callback_data="subscriptions"
+        )
+    )
+    keyboard.add(get_back_to_menu_inline_button())
+    return keyboard
+
+
 def get_subscriptions_keyboard(
     all_subscriptions: list[Subscription],
 ) -> InlineKeyboardMarkup:
