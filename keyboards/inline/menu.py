@@ -4,34 +4,32 @@ from loader import _
 
 
 def get_menu_keyboard(has_channels: bool) -> InlineKeyboardMarkup:
-    keyboard = InlineKeyboardMarkup(row_width=1)
-    keyboard.add(
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    keyboard.insert(
         InlineKeyboardButton(
             text=_("⭐️ Subscription"), callback_data="subscription"
         )
     )
-    keyboard.add(
-        InlineKeyboardButton(
-            text=_("👥 Referrals"), callback_data="referrals"
-        )
+    keyboard.insert(
+        InlineKeyboardButton(text=_("👥 Referrals"), callback_data="referrals")
     )
-    keyboard.add(
+    keyboard.insert(
         InlineKeyboardButton(
             text=_("Add channel"), callback_data="add_channel"
         )
     )
     if has_channels:
-        keyboard.add(
+        keyboard.insert(
             InlineKeyboardButton(
                 text=_("Remove channel"), callback_data="remove_channel"
             )
         )
-        keyboard.add(
+        keyboard.insert(
             InlineKeyboardButton(
                 text=_("Create post"), callback_data="create_post"
             )
         )
-        keyboard.add(
+        keyboard.insert(
             InlineKeyboardButton(
                 text=_("Posts in queue"), callback_data="posts_in_queue"
             )
