@@ -105,6 +105,8 @@ async def publish_post(query: CallbackQuery, **kwargs) -> None:
             await post_content.send_to_(channel.chat_id)
     await query.message.answer(_("Published!"))
     post_content.clear()
+    # ! Workaround for getting user channels in the menu handler
+    query.message.from_user.id = query.from_user.id
     await show_menu(query.message)
 
 
