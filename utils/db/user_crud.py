@@ -2,7 +2,7 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
 
-from .models import User
+from .models import User, Channel
 from data.config import DEFAULT_REFERRAL_BONUS
 from .db import MySession, commit_and_refresh, add_commit_and_refresh
 
@@ -61,7 +61,7 @@ def get_user_by_(user_chat_id: int) -> User:
         return user
 
 
-def get_user_channels_by_(user_chat_id: int) -> list[str]:
+def get_user_channels_by_(user_chat_id: int) -> list[Channel]:
     """Returns user channels by the given user chat id."""
     try:
         return channels[user_chat_id]
