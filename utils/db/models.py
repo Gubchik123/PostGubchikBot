@@ -1,4 +1,5 @@
 from datetime import datetime
+from pytz import timezone as tz
 
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
@@ -31,7 +32,7 @@ class User(Base):
         String(2), nullable=False, default=DEFAULT_LANGUAGE_CODE
     )
     timezone = Column(String(32), nullable=False, default=DEFAULT_TIMEZONE)
-    created = Column(DateTime, default=datetime.today())
+    created = Column(DateTime, default=datetime.now(tz(DEFAULT_TIMEZONE)))
     # Referrals fields
     referrals = Column(Integer, default=0)
     balance = Column(Integer, default=0)
@@ -82,4 +83,4 @@ class Subscription(Base):
     price = Column(Integer, unique=True, nullable=False)
     max_channels = Column(Integer, unique=True, nullable=True)
     duration_days = Column(Integer, default=DEFAULT_SUBSCRIPTION_DAYS)
-    created = Column(DateTime, default=datetime.today())
+    created = Column(DateTime, default=datetime.now(tz(DEFAULT_TIMEZONE)))

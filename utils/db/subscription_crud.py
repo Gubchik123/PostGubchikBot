@@ -1,3 +1,4 @@
+from pytz import timezone
 from datetime import datetime, timedelta
 
 from sqlalchemy import update
@@ -50,9 +51,9 @@ def add_subscription_for_user_with_(
             .first()
             .id
         )
-        user.subscription_expire_date = datetime.today() + timedelta(
-            days=DEFAULT_SUBSCRIPTION_DAYS
-        )
+        user.subscription_expire_date = datetime.now(
+            timezone(user.timezone)
+        ) + timedelta(days=DEFAULT_SUBSCRIPTION_DAYS)
         commit_and_refresh(session, user)
     if was_previous_subscription:
         _remove_all_previous_scheduler_jobs_for_user_with_(user.chat_id)
