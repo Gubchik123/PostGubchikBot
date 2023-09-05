@@ -6,6 +6,10 @@ timezone_callback_data = CallbackData("timezone", "level", "country", "city")
 
 subscription_callback_data = CallbackData("subscription", "level", "price")
 
+admin_subscription_callback_data = CallbackData(
+    "admin_subscription", "level", "price"
+)
+
 channel_callback_data = CallbackData("channel", "level", "channel_title")
 
 
