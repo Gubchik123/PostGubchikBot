@@ -28,11 +28,11 @@ async def show_menu(
     )
     if has_channels:
         channel_list_items = "\n".join(
-            [f"* {channel.title}\n" for channel in user_channels]
+            [f"* {channel.title}" for channel in user_channels]
         )
         await answer_function(
             text=_(
-                "Your channels:\n{channel_list_items}\n"
+                "Your channels:\n{channel_list_items}\n\n"
                 "Choose one of the buttons below:"
             ).format(channel_list_items=channel_list_items),
             reply_markup=get_menu_keyboard(has_channels=True),
