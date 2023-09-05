@@ -53,7 +53,9 @@ async def ask_for_forwarded_message(query: CallbackQuery) -> None:
     await Channel.forwarded_message.set()
 
 
-@dp.message_handler(state=Channel.forwarded_message)
+@dp.message_handler(
+    lambda message: message.forward_from_chat, state=Channel.forwarded_message
+)
 async def add_channel_by_forwarded_message(
     message: Message, state: FSMContext
 ) -> None:
