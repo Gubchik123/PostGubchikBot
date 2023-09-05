@@ -8,14 +8,14 @@ from loader import dp, _
 from filters.admin import IsAdmin
 from data.config import CURRENCY_SYMBOL
 from states.subscription import Subscription
-from keyboards.inline.callback_data import admin_subscription_callback_data
-from keyboards.inline.admin_subscription import (
-    get_subscriptions_keyboard,
-    get_subscription_keyboard,
-)
+from keyboards.inline.admin_subscription import get_subscriptions_keyboard
 from utils.db.subscription_crud import (
     get_all_subscriptions,
     change_subscription_price_on_,
+)
+from keyboards.inline.callback_data import (
+    admin_subscription_callback_data,
+    get_keyboard_with_back_inline_button_by_,
 )
 
 previous_price = None
@@ -49,7 +49,9 @@ async def ask_for_new_price(query: CallbackQuery, price: int) -> None:
             "Enter new subscription price"
             " (current price is {price} {currency_symbol})"
         ).format(price=price, currency_symbol=CURRENCY_SYMBOL),
-        reply_markup=get_subscription_keyboard(),
+        reply_markup=get_keyboard_with_back_inline_button_by_(
+            callback_data="admin_subscription"
+        ),
     )
     await Subscription.price.set()
 

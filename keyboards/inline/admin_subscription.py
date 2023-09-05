@@ -32,9 +32,3 @@ def get_subscriptions_keyboard(
         )
     keyboard.add(get_back_to_menu_inline_button())
     return keyboard
-
-
-def get_subscription_keyboard() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup().add(
-        get_back_inline_button_by_(callback_data="admin_subscription")
-    )
