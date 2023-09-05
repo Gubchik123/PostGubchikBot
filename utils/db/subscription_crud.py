@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from sqlalchemy import update
+
 from loader import scheduler
 from .user_crud import _get_user_by_
 from .models import User, Subscription
@@ -21,6 +23,18 @@ def get_all_subscriptions() -> list[Subscription]:
         all_subscription = session.query(Subscription).all()
     subscriptions.extend(all_subscription)
     return all_subscription
+
+
+def change_subscription_price_on_(new_price: int, previous_price: int) -> None:
+    """Changes subscription price on the given new price."""
+    with MySession() as session:
+        session.execute(
+            update(Subscription)
+            .where(Subscription.price == previous_price)
+            .values(price=new_price)
+        )
+        session.commit()
+    subscriptions.clear()
 
 
 def add_subscription_for_user_with_(
