@@ -6,3 +6,4 @@ class Post(StatesGroup):
 
     content = State()
     time = State()
+    deletion_time = State()
