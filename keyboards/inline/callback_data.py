@@ -14,6 +14,10 @@ channel_callback_data = CallbackData("channel", "level", "channel_title")
 
 post_callback_data = CallbackData("post", "level", "channel_title")
 
+post_content_callback_data = CallbackData(
+    "post_content", "level", "content_index"
+)
+
 
 def get_back_inline_button_by_(callback_data: str) -> InlineKeyboardButton:
     """Returns back button by the given callback data."""
