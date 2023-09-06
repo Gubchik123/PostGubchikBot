@@ -5,3 +5,4 @@ class Post(StatesGroup):
     """States for post creation."""
 
     content = State()
+    time = State()
