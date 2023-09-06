@@ -52,6 +52,12 @@ def get_pre_publish_keyboard() -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup()
     keyboard.add(
         InlineKeyboardButton(
+            text=_("Publish but set a deletion timer"),
+            callback_data=_get_new_callback_data("ask_for_deletion_time"),
+        )
+    )
+    keyboard.add(
+        InlineKeyboardButton(
             text=_("Publish"),
             callback_data=_get_new_callback_data("publish_post"),
         )
@@ -63,4 +69,21 @@ def get_pre_publish_keyboard() -> InlineKeyboardMarkup:
         )
     )
     keyboard.add(get_back_to_menu_inline_button(_("Cancel")))
+    return keyboard
+
+
+def get_deletion_hours_keyboard() -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup(row_width=3)
+    for hour in (1, 3, 6, 9, 12, 15, 18, 21, 24):
+        keyboard.insert(
+            InlineKeyboardButton(
+                text=str(hour),
+                callback_data=_get_new_callback_data(
+                    "publish_post_with_deletion", str(hour)
+                ),
+            )
+        )
+    keyboard.add(
+        get_back_inline_button_by_(callback_data="time_to_publish_post")
+    )
     return keyboard
