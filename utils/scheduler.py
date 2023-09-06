@@ -46,6 +46,12 @@ async def remove_user_subscription_by_(
     )
 
 
+async def delete_post(channel_chat_id: int, message_ids: list[int]) -> None:
+    """Deletes post by the given channel chat id and message ids."""
+    for message_id in message_ids:
+        await bot.delete_message(channel_chat_id, message_id)
+
+
 async def publish_user_post(
     author_chat_id: int,
     author_language_code: str,
