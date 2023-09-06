@@ -1,5 +1,6 @@
 from loader import bot
-from utils.db.user_crud import reset_user_subscription_by_
+from .post_content import PostContent
+from .db.user_crud import get_user_channels_by_, reset_user_subscription_by_
 
 
 async def send_subscription_reminder_to_user(
@@ -43,3 +44,32 @@ async def remove_user_subscription_by_(
             else "Your subscription has expired!"
         ),
     )
+
+
+async def publish_user_post(
+    author_chat_id: int,
+    author_language_code: str,
+    post_content: PostContent,
+    selected_channels: list[str],
+) -> None:
+    """Publishes user post to the selected channels."""
+    await bot.send_message(
+        author_chat_id,
+        text=(
+            "Публикую отложенный пост в выбранные каналы..."
+            if author_language_code == "ru"
+            else "Publishing a scheduled post to the selected channels..."
+        ),
+    )
+    for channel in get_user_channels_by_(author_chat_id):
+        if channel.title in selected_channels:
+            await post_content.send_to_(channel.chat_id)
+    await bot.send_message(
+        author_chat_id,
+        text=(
+            "Опубликовано в каналах: {selected_channels}"
+            if author_language_code == "ru"
+            else "Published in channels: {selected_channels}"
+        ).format(selected_channels=", ".join(selected_channels)),
+    )
+    post_content.clear()
