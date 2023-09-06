@@ -10,6 +10,7 @@ from loader import dp, scheduler, _
 from .commands.menu import show_menu
 from utils.post_content import PostContent
 from utils.scheduler import delete_post, publish_user_post
+from keyboards.default.post import get_post_creation_keyboard
 from utils.db.user_crud import get_user_by_, get_user_channels_by_
 from keyboards.inline.post import (
     get_channels_keyboard,
@@ -73,21 +74,17 @@ async def select_all_channels(query: CallbackQuery, *args) -> None:
 async def ask_for_post_content(query: CallbackQuery, *args) -> None:
     """Asks for post content and waits (state) for it."""
     post_content.clear()
-    await query.message.edit_text(
+    await query.message.edit_text(text="🚀")
+    await query.message.answer(
         text=_(
-            "You selected: {selected_channels}\n\n"
-            "Send me post content (text, photo, video, gif...)\n\n"
-            "To finish, send or click /stop\n"
-            "To cancel, send or click /menu"
+            "You selected the {selected_channels} channel(s) to create a post\n\n"
+            "Send me post content (text, photo, video, gif...)"
         ).format(selected_channels=", ".join(selected_channels)),
-        reply_markup=get_keyboard_with_back_inline_button_by_(
-            callback_data="create_post"
-        ),
+        reply_markup=get_post_creation_keyboard(),
     )
     await Post.content.set()
 
 
-@dp.message_handler(commands=["stop"], state=Post.content)
 @dp.callback_query_handler(text="time_to_publish_post", state="*")
 async def ask_about_time_to_publish_post(
     data: Message | CallbackQuery, state: FSMContext

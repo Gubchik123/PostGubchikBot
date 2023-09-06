@@ -1,18 +1,21 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, ContentType
 
-from loader import dp
-from .post import Post, post_content, show_menu
+from loader import dp, _
+from .post import Post, post_content, show_menu, ask_about_time_to_publish_post
 
 
 @dp.message_handler(content_types=ContentType.TEXT, state=Post.content)
 async def add_text_to_post(message: Message, state: FSMContext) -> None:
     """Adds text to the post content."""
-    if message.text == "/menu":
+    if message.text == _("Cancel"):
         post_content.clear()
         await state.finish()
         await show_menu(message)
-    post_content.add("message", message.text)
+    elif message.text == _("Next"):
+        await ask_about_time_to_publish_post(message, state)
+    else:
+        post_content.add("message", message.text)
 
 
 @dp.message_handler(content_types=ContentType.AUDIO, state=Post.content)
