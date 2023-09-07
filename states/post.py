@@ -7,4 +7,5 @@ class Post(StatesGroup):
     content = State()
     url_buttons = State()
     time = State()
+    new_time = State()
     deletion_time = State()
