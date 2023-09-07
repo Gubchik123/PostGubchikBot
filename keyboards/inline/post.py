@@ -43,6 +43,11 @@ def get_channels_keyboard(
             callback_data=_get_new_callback_data("select_all_channels", "all"),
         )
     )
+    keyboard.add(
+        InlineKeyboardButton(
+            text=_("Scheduled posts"), callback_data="edit_post"
+        )
+    )
     keyboard.add(get_back_to_menu_inline_button())
     return keyboard
 
