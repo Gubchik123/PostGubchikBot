@@ -17,7 +17,7 @@ def create_channel_by_(chat: Chat, user_chat_id: int) -> None:
             user_id=user_chat_id,
         )
     )
-    del channels[user_chat_id]
+    channels.pop(user_chat_id)
 
 
 def remove_channel_by_(channel_title: str) -> None:
