@@ -8,7 +8,7 @@ from states.post import Post
 from loader import dp, scheduler, _
 from utils.scheduler import delete_post
 from utils.db.user_crud import get_user_channels_by_
-from keyboards.inline.post import get_deletion_hours_keyboard
+from keyboards.inline.post.general import get_deletion_hours_keyboard
 
 from ..commands.menu import show_menu
 from .constants import post_content, selected_channels

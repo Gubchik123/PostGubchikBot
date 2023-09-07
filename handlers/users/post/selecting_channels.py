@@ -6,8 +6,8 @@ from aiogram.types import CallbackQuery
 from loader import dp, _
 from states.post import Post
 from utils.db.user_crud import get_user_channels_by_
-from keyboards.inline.post import get_channels_keyboard
 from keyboards.default.post import get_post_creation_keyboard
+from keyboards.inline.post.general import get_channels_keyboard
 
 from .constants import post_content, selected_channels
 

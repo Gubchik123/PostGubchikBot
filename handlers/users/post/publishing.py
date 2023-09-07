@@ -5,7 +5,7 @@ from aiogram.types import Message, CallbackQuery
 
 from loader import dp, _
 from utils.db.user_crud import get_user_channels_by_
-from keyboards.inline.post import get_pre_publish_keyboard
+from keyboards.inline.post.general import get_pre_publish_keyboard
 
 from ..commands.menu import show_menu
 from .constants import post_content, selected_channels
