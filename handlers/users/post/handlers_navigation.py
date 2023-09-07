@@ -7,7 +7,6 @@ from keyboards.inline.callback_data import post_callback_data
 
 from .selecting_channels import (
     select_or_remove_channel,
-    select_all_channels,
     ask_for_post_content,
 )
 from .publishing_with_deletion import (
@@ -23,7 +22,6 @@ async def navigate(query: CallbackQuery, callback_data: dict) -> None:
     """Catches all other post callback data to navigate."""
     current_level_function: Callable = {
         "select_or_remove_channel": select_or_remove_channel,
-        "select_all_channels": select_all_channels,
         "ask_for_post_content": ask_for_post_content,
         "ask_for_deletion_time": ask_for_deletion_time,
         "publish_post_with_deletion": publish_post_with_deletion,
