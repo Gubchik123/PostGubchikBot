@@ -11,7 +11,7 @@ from keyboards.inline.callback_data import (
     post_editing_callback_data,
     get_keyboard_with_back_inline_button_by_,
 )
-from keyboards.inline.post_editing import (
+from keyboards.inline.post.editing import (
     get_user_posts_keyboard,
     get_user_post_keyboard,
     get_confirmation_keyboard,
