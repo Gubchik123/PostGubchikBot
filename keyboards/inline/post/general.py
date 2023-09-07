@@ -38,6 +38,13 @@ def get_channels_keyboard(
                 callback_data=_get_new_callback_data("ask_for_post_content"),
             )
         )
+    if len(selected_channels) > 1:
+        keyboard.add(
+            InlineKeyboardButton(
+                text=_("Create group"),
+                callback_data=_get_new_callback_data("create_group"),
+            )
+        )
     keyboard.add(
         InlineKeyboardButton(
             text=_("Select all"),
