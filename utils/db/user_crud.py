@@ -2,13 +2,14 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
 
-from .models import User, Channel
+from .models import User, Channel, Group
 from data.config import DEFAULT_REFERRAL_BONUS
 from .db import MySession, commit_and_refresh, add_commit_and_refresh
 
 
 users = {}
 channels = {}
+groups = {}
 
 
 def _get_user_by_(session: Session, user_chat_id: int) -> User:
@@ -70,6 +71,17 @@ def get_user_channels_by_(user_chat_id: int) -> list[Channel]:
             user_channels = _get_user_by_(session, user_chat_id).channels.all()
         channels[user_chat_id] = user_channels
         return user_channels
+
+
+def get_user_groups_by_(user_chat_id: int) -> list[Group]:
+    """Returns user groups by the given user chat id."""
+    try:
+        return groups[user_chat_id]
+    except KeyError:
+        with MySession() as session:
+            user_groups = _get_user_by_(session, user_chat_id).groups.all()
+        groups[user_chat_id] = user_groups
+        return user_groups
 
 
 def get_user_language_code_by_(user_chat_id: int) -> str | None:
