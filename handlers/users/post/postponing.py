@@ -1,3 +1,5 @@
+import string
+import random
 from datetime import datetime
 
 from aiogram.dispatcher import FSMContext
@@ -35,14 +37,12 @@ async def postpone_post_by_time(message: Message, state: FSMContext) -> None:
     """Postpones the post by the given time."""
     await state.finish()
     hour, minute = message.text.split(":")
-    _schedule_job_to_publish_user_post(
+    post_id = _schedule_job_to_publish_user_post(
         user_chat_id=message.from_user.id,
         run_date=datetime.today().replace(hour=int(hour), minute=int(minute)),
     )
     await message.answer(
-        text=_("Post is scheduled for today at {time}").format(
-            time=message.text
-        ),
+        text=_get_postpone_success_message_by_(post_id, message.text)
     )
     await show_menu(message)
 
@@ -55,12 +55,12 @@ async def postpone_post_by_date_and_time(
 ) -> None:
     """Postpones the post by the given date and time."""
     await state.finish()
-    _schedule_job_to_publish_user_post(
+    post_id = _schedule_job_to_publish_user_post(
         user_chat_id=message.from_user.id,
         run_date=datetime.strptime(message.text, "%d.%m.%Y %H:%M"),
     )
     await message.answer(
-        text=_("Post is scheduled for {date}!").format(date=message.text),
+        text=_get_postpone_success_message_by_(post_id, message.text)
     )
     await show_menu(message)
 
@@ -71,25 +71,48 @@ async def send_message_about_wrong_date_and_time(message: Message) -> None:
     await message.answer(
         text=_(
             "Wrong date and (or) time format. Try again!\n"
-            "Time format example - 13:09\n"
-            "Date and time format example - 15.08.2023 13:40"
+            "Format example - 15.08.2023 13:40"
         )
     )
 
 
 def _schedule_job_to_publish_user_post(
     user_chat_id: int, run_date: datetime
-) -> None:
-    """Schedules job to publish user post on the given date."""
+) -> str:
+    """Schedules job to publish user post
+    on the given date and return generated post id."""
     user = get_user_by_(user_chat_id)
+    id = _generate_random_id()
     scheduler.add_job(
         publish_user_post,
         "date",
         run_date=run_date,
+        id=f"{user_chat_id}_post_{id}",
         kwargs={
             "author_chat_id": user.chat_id,
             "author_language_code": user.language_code,
             "post_content": post_content,
             "selected_channels": selected_channels,
         },
+    )
+    scheduler.print_jobs()
+    return id
+
+
+def _generate_random_id(length: int = 12) -> str:
+    """Generates random id with ascii letters and digits and returns it."""
+    characters = string.ascii_letters + string.digits
+    return "".join(random.choices(characters, k=length))
+
+
+def _get_postpone_success_message_by_(post_id: str, date: str) -> str:
+    """Returns postpone success message by the given post id and date."""
+    return _(
+        "🚀 Post is scheduled! #{post_id}\n\n"
+        "Selected channels: {selected_channels}\n\n"
+        "Publication time: {date}"
+    ).format(
+        post_id=post_id,
+        selected_channels=", ".join(selected_channels),
+        date=date,
     )
