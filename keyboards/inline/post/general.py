@@ -41,7 +41,9 @@ def get_channels_keyboard(
     keyboard.add(
         InlineKeyboardButton(
             text=_("Select all"),
-            callback_data=_get_new_callback_data("select_all_channels", "all"),
+            callback_data=_get_new_callback_data(
+                "select_or_remove_channel", "all"
+            ),
         )
     )
     keyboard.add(

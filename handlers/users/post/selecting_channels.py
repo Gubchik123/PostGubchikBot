@@ -33,26 +33,19 @@ async def select_or_remove_channel(
 ) -> None:
     """Selects or removes the channel
     by the given channel title and updates the keyboard."""
-    selected_channels.remove(
-        channel_title
-    ) if channel_title in selected_channels else selected_channels.append(
-        channel_title
-    )
     user_channels = get_user_channels_by_(query.from_user.id)
-    if len(user_channels) == len(selected_channels):
-        await ask_for_post_content(query)
-        return
+    if channel_title == "all":
+        selected_channels.clear()
+        selected_channels.extend([channel.title for channel in user_channels])
+    else:
+        selected_channels.remove(
+            channel_title
+        ) if channel_title in selected_channels else selected_channels.append(
+            channel_title
+        )
     await query.message.edit_reply_markup(
         reply_markup=get_channels_keyboard(user_channels, selected_channels)
     )
-
-
-async def select_all_channels(query: CallbackQuery, *args) -> None:
-    """Selects all channels and updates the keyboard."""
-    selected_channels.clear()
-    for channel in get_user_channels_by_(query.from_user.id):
-        selected_channels.append(channel.title)
-    await ask_for_post_content(query)
 
 
 async def ask_for_post_content(query: CallbackQuery, *args) -> None:
