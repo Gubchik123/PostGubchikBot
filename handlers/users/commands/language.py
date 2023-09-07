@@ -1,9 +1,9 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Command
 
-from loader import dp
+from loader import dp, _
+from .menu import show_menu
 from utils.db.user_crud import change_user_language_by_
-from handlers.users.callback_handlers import greet_user
 from keyboards.inline.language import get_language_inline_keyboard
 
 
@@ -30,3 +30,11 @@ async def set_language_en_callback_handler(query: types.CallbackQuery):
     change_user_language_by_(query.from_user.id, "en")
     await query.answer("Language changed to English")
     await greet_user(query)
+
+
+async def greet_user(query: types.CallbackQuery):
+    """Greets user after from /language command."""
+    await query.answer(
+        _("Hello, {name}!").format(name=query.from_user.full_name)
+    )
+    await show_menu(query)
