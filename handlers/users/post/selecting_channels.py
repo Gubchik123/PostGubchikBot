@@ -1,29 +1,39 @@
-from typing import Optional
+from typing import Optional, Callable
 
 from aiogram.dispatcher import FSMContext
-from aiogram.types import CallbackQuery
+from aiogram.types import Message, CallbackQuery
 
 from loader import dp, _
 from states.post import Post
+from states.group import Group
+from utils.db.group_crud import create_group_by_
 from utils.db.user_crud import get_user_channels_by_
 from keyboards.default.post import get_post_creation_keyboard
 from keyboards.inline.post.general import get_channels_keyboard
+from keyboards.inline.callback_data import (
+    get_keyboard_with_back_inline_button_by_,
+)
 
 from .constants import post_content, selected_channels
 
 
 @dp.callback_query_handler(text="create_post", state="*")
 async def get_channels(
-    query: CallbackQuery, state: Optional[FSMContext] = None
+    data: Message | CallbackQuery, state: Optional[FSMContext] = None
 ) -> None:
     """Sends a message with inline keyboard to select a channel."""
     if state:
         await state.finish()
     selected_channels.clear()
-    await query.message.edit_text(
+    answer_function: Callable = (
+        data.message.edit_text
+        if isinstance(data, CallbackQuery)
+        else data.answer
+    )
+    await answer_function(
         text=_("Select the channel(s) you want to post to:"),
         reply_markup=get_channels_keyboard(
-            get_user_channels_by_(query.from_user.id), selected_channels
+            get_user_channels_by_(data.from_user.id), selected_channels
         ),
     )
 
@@ -46,6 +56,28 @@ async def select_or_remove_channel(
     await query.message.edit_reply_markup(
         reply_markup=get_channels_keyboard(user_channels, selected_channels)
     )
+
+
+async def ask_for_group_name(query: CallbackQuery, *args) -> None:
+    """Asks for channel name and waits (state) for it."""
+    await query.message.edit_text(
+        text=_("Send me group name:"),
+        reply_markup=get_keyboard_with_back_inline_button_by_("create_post"),
+    )
+    await Group.name.set()
+
+
+@dp.message_handler(state=Group.name)
+async def create_group(message: Message, state: FSMContext) -> None:
+    """Creates a group by user input and selected channels."""
+    await state.finish()
+    create_group_by_(
+        user_chat_id=message.from_user.id,
+        group_name=message.text,
+        group_target_menu="post creation",
+        selected_channel_titles=selected_channels,
+    )
+    await get_channels(message)
 
 
 async def ask_for_post_content(query: CallbackQuery, *args) -> None:
