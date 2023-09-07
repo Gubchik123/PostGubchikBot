@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from loader import _
-from utils.db.models import Channel
+from utils.db.models import Channel, Group
 
 from ..menu import get_back_to_menu_inline_button
 from ..callback_data import (
@@ -16,7 +16,9 @@ def _get_new_callback_data(level: str, channel_title="None") -> str:
 
 
 def get_channels_keyboard(
-    all_channels: list[Channel], selected_channels: list[str]
+    all_channels: list[Channel],
+    all_groups: list[Group],
+    selected_channels: list[str],
 ) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup(row_width=2)
 
@@ -31,18 +33,12 @@ def get_channels_keyboard(
                 ),
             )
         )
-    if selected_channels:
-        keyboard.add(
+    keyboard.row()
+    for group in all_groups:
+        keyboard.insert(
             InlineKeyboardButton(
-                text=_("Next"),
-                callback_data=_get_new_callback_data("ask_for_post_content"),
-            )
-        )
-    if len(selected_channels) > 1:
-        keyboard.add(
-            InlineKeyboardButton(
-                text=_("Create group"),
-                callback_data=_get_new_callback_data("create_group"),
+                text=f"Group: {group.name}",
+                callback_data=f"group:{group.name}",
             )
         )
     keyboard.add(
@@ -53,11 +49,26 @@ def get_channels_keyboard(
             ),
         )
     )
-    keyboard.add(
-        InlineKeyboardButton(
-            text=_("Scheduled posts"), callback_data="edit_post"
+    if selected_channels:
+        keyboard.add(
+            InlineKeyboardButton(
+                text=_("Next"),
+                callback_data=_get_new_callback_data("ask_for_post_content"),
+            )
         )
-    )
+        if len(selected_channels) > 1:
+            keyboard.insert(
+                InlineKeyboardButton(
+                    text=_("Create group"),
+                    callback_data=_get_new_callback_data("create_group"),
+                )
+            )
+    else:
+        keyboard.add(
+            InlineKeyboardButton(
+                text=_("Scheduled posts"), callback_data="edit_post"
+            )
+        )
     keyboard.add(get_back_to_menu_inline_button())
     return keyboard
 
