@@ -6,7 +6,7 @@ from aiogram.types import ContentType, Message, CallbackQuery
 from loader import dp, _
 from states.post import Post
 from keyboards.inline.callback_data import post_content_callback_data
-from keyboards.inline.post_content import (
+from keyboards.inline.post.content import (
     get_url_buttons_from_,
     get_post_content_keyboard,
     get_back_to_post_content_keyboard,
