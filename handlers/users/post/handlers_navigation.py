@@ -1,0 +1,34 @@
+from typing import Callable
+
+from aiogram.types import CallbackQuery
+
+from loader import dp
+from keyboards.inline.callback_data import post_callback_data
+
+from .selecting_channels import (
+    select_or_remove_channel,
+    select_all_channels,
+    ask_for_post_content,
+)
+from .publishing_with_deletion import (
+    ask_for_deletion_time,
+    publish_post_with_deletion,
+)
+from .publishing import publish_post
+from .postponing import postpone_post
+
+
+@dp.callback_query_handler(post_callback_data.filter(), state="*")
+async def navigate(query: CallbackQuery, callback_data: dict) -> None:
+    """Catches all other post callback data to navigate."""
+    current_level_function: Callable = {
+        "select_or_remove_channel": select_or_remove_channel,
+        "select_all_channels": select_all_channels,
+        "ask_for_post_content": ask_for_post_content,
+        "ask_for_deletion_time": ask_for_deletion_time,
+        "publish_post_with_deletion": publish_post_with_deletion,
+        "publish_post": publish_post,
+        "postpone_post": postpone_post,
+    }.get(callback_data.get("level"))
+
+    await current_level_function(query, callback_data.get("channel_title"))
