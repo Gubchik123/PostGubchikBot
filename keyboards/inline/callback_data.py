@@ -18,6 +18,8 @@ post_content_callback_data = CallbackData(
     "post_content", "level", "content_index"
 )
 
+post_editing_callback_data = CallbackData("post_editing", "level", "post_id")
+
 
 def get_back_inline_button_by_(callback_data: str) -> InlineKeyboardButton:
     """Returns back button by the given callback data."""
