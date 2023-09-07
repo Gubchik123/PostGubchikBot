@@ -3,6 +3,7 @@ from pytz import timezone as tz
 
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
+    Table,
     Column,
     Integer,
     BigInteger,
@@ -43,6 +44,13 @@ class User(Base):
         lazy="dynamic",
         passive_deletes=True,
     )
+    # User groups
+    groups = relationship(
+        "Group",
+        backref=backref("user", lazy="joined"),
+        lazy="dynamic",
+        passive_deletes=True,
+    )
     # Subscription fields
     subscription = relationship(
         "Subscription",
@@ -55,6 +63,28 @@ class User(Base):
         Integer, ForeignKey("subscription.id", ondelete="SET NULL")
     )
     subscription_expire_date = Column(DateTime, nullable=True)
+
+
+class Subscription(Base):
+    """Model for storing information about subscriptions."""
+
+    __tablename__ = "subscription"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(10), unique=True, nullable=False)
+    price = Column(Integer, unique=True, nullable=False)
+    max_channels = Column(Integer, unique=True, nullable=True)
+    duration_days = Column(Integer, default=DEFAULT_SUBSCRIPTION_DAYS)
+    created = Column(DateTime, default=datetime.now(tz(DEFAULT_TIMEZONE)))
+
+
+# Table for many-to-many relationship between channels and groups
+channel_groups = Table(
+    "channel_groups",
+    Base.metadata,
+    Column("channel_id", Integer, ForeignKey("channel.chat_id")),
+    Column("group_id", Integer, ForeignKey("group.id")),
+)
 
 
 class Channel(Base):
@@ -71,16 +101,25 @@ class Channel(Base):
     user_id = Column(
         Integer, ForeignKey("user.chat_id", ondelete="CASCADE"), nullable=False
     )
+    groups = relationship(
+        "Group", secondary=channel_groups, back_populates="channels"
+    )
 
 
-class Subscription(Base):
-    """Model for storing information about subscriptions."""
+class Group(Base):
+    """Model for storing information about channel groups."""
 
-    __tablename__ = "subscription"
+    __tablename__ = "group"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(10), unique=True, nullable=False)
-    price = Column(Integer, unique=True, nullable=False)
-    max_channels = Column(Integer, unique=True, nullable=True)
-    duration_days = Column(Integer, default=DEFAULT_SUBSCRIPTION_DAYS)
-    created = Column(DateTime, default=datetime.now(tz(DEFAULT_TIMEZONE)))
+    name = Column(String, unique=True, nullable=False)
+    target_menu = Column(
+        String(13), nullable=False
+    )  # "post creation" or "post in queue"
+
+    user_id = Column(
+        Integer, ForeignKey("user.chat_id", ondelete="CASCADE"), nullable=False
+    )
+    channels = relationship(
+        "Channel", secondary=channel_groups, back_populates="groups"
+    )
