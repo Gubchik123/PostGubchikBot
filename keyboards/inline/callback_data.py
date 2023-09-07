@@ -12,6 +12,8 @@ admin_subscription_callback_data = CallbackData(
 
 channel_callback_data = CallbackData("channel", "level", "channel_title")
 
+group_callback_data = CallbackData("group", "group_name")
+
 post_callback_data = CallbackData("post", "level", "channel_title")
 
 post_content_callback_data = CallbackData(
