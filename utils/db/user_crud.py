@@ -87,7 +87,8 @@ def change_user_language_by_(user_chat_id: int, language_code: str) -> None:
             .values(language_code=language_code)
         )
         session.commit()
-    users[user_chat_id].language_code = language_code
+    if users[user_chat_id]:
+        users[user_chat_id].language_code = language_code
 
 
 def change_user_timezone_by_(user_chat_id: int, timezone: str) -> None:
