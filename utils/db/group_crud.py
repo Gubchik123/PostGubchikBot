@@ -23,3 +23,15 @@ def create_group_by_(
         )
         session.add(group)
         session.commit()
+
+
+def get_group_channel_titles_by_(group_name: str) -> tuple[str]:
+    """Returns group channel titles by the given group name."""
+    with MySession() as session:
+        return tuple(
+            channel.title
+            for channel in session.query(Group)
+            .filter(Group.name == group_name)
+            .first()
+            .channels
+        )
