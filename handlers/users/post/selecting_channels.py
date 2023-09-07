@@ -6,11 +6,12 @@ from aiogram.types import Message, CallbackQuery
 from loader import dp, _
 from states.post import Post
 from states.group import Group
-from utils.db.group_crud import create_group_by_
-from utils.db.user_crud import get_user_channels_by_
 from keyboards.default.post import get_post_creation_keyboard
 from keyboards.inline.post.general import get_channels_keyboard
+from utils.db.user_crud import get_user_channels_by_, get_user_groups_by_
+from utils.db.group_crud import create_group_by_, get_group_channel_titles_by_
 from keyboards.inline.callback_data import (
+    group_callback_data,
     get_keyboard_with_back_inline_button_by_,
 )
 
@@ -33,7 +34,9 @@ async def get_channels(
     await answer_function(
         text=_("Select the channel(s) you want to post to:"),
         reply_markup=get_channels_keyboard(
-            get_user_channels_by_(data.from_user.id), selected_channels
+            get_user_channels_by_(data.from_user.id),
+            get_user_groups_by_(data.from_user.id),
+            selected_channels,
         ),
     )
 
@@ -54,8 +57,25 @@ async def select_or_remove_channel(
             channel_title
         )
     await query.message.edit_reply_markup(
-        reply_markup=get_channels_keyboard(user_channels, selected_channels)
+        reply_markup=get_channels_keyboard(
+            user_channels,
+            get_user_groups_by_(query.from_user.id),
+            selected_channels,
+        )
     )
+
+
+@dp.callback_query_handler(group_callback_data.filter())
+async def select_group_channels(
+    query: CallbackQuery, callback_data: dict
+) -> None:
+    """Selects group channels by the group from the given callback data."""
+    selected_channels.clear()
+    selected_channels.extend(
+        get_group_channel_titles_by_(callback_data["group_name"])
+    )
+    await query.answer()
+    await ask_for_post_content(query)
 
 
 async def ask_for_group_name(query: CallbackQuery, *args) -> None:
