@@ -63,14 +63,23 @@ async def remove_user_subscription_by_(
 ) -> None:
     """Removes user subscription by the given user chat id."""
     reset_user_subscription_by_(user_chat_id)
+    user_scheduled_post_jobs = get_user_scheduled_post_jobs_by_(user_chat_id)
+    if user_scheduled_post_jobs:
+        _pause_(user_scheduled_post_jobs)
     await bot.send_message(
         user_chat_id,
         text=(
-            "Твоя подписка закончилась!"
+            "Твоя подписка закончилась! Все отложенные посты остановлены!"
             if user_language_code == "ru"
-            else "Your subscription has expired!"
+            else "Your subscription has expired! All scheduled posts are paused!"
         ),
     )
+
+
+def _pause_(user_scheduled_post_jobs: list[Job]) -> None:
+    """Pauses all user scheduled post jobs."""
+    for job in user_scheduled_post_jobs:
+        job.pause()
 
 
 async def delete_post(channel_chat_id: int, message_ids: list[int]) -> None:
