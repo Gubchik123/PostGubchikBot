@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters import Command
 
 from loader import dp, _
 from .menu import show_menu
-from utils.db.user_crud import change_user_language_by_
+from utils.db.crud.user import change_user_language_by_
 from keyboards.inline.language import get_language_inline_keyboard
 
 

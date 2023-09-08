@@ -3,7 +3,7 @@ from apscheduler.job import Job
 from loader import bot, scheduler
 
 from .post_content import PostContent
-from .db.user_crud import get_user_channels_by_, reset_user_subscription_by_
+from .db.crud.user import get_user_channels_by_, reset_user_subscription_by_
 
 
 scheduled_post_jobs = {}

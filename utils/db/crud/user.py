@@ -2,9 +2,10 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
 
-from .models import User, Channel, Group
 from data.config import DEFAULT_REFERRAL_BONUS
-from .db import MySession, commit_and_refresh, add_commit_and_refresh
+
+from ..models import User, Channel, Group
+from ..db import MySession, commit_and_refresh, add_commit_and_refresh
 
 
 users = {}

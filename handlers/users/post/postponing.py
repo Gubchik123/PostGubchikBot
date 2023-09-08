@@ -7,7 +7,7 @@ from aiogram.types import Message, CallbackQuery
 
 from states.post import Post
 from loader import dp, scheduler, _
-from utils.db.user_crud import get_user_by_
+from utils.db.crud.user import get_user_by_
 from utils.scheduler import publish_user_post
 from keyboards.inline.callback_data import (
     get_keyboard_with_back_inline_button_by_,

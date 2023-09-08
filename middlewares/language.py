@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.contrib.middlewares.i18n import I18nMiddleware
 
-from utils.db.user_crud import get_user_language_code_by_
+from utils.db.crud.user import get_user_language_code_by_
 
 
 class ACLMiddleware(I18nMiddleware):

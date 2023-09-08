@@ -6,7 +6,7 @@ from aiogram.types import Message, CallbackQuery
 
 from loader import dp, _
 from keyboards.inline.menu import get_menu_keyboard
-from utils.db.user_crud import get_user_channels_by_
+from utils.db.crud.user import get_user_channels_by_
 
 
 @dp.message_handler(Command("menu"))

@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery
 
 from loader import bot, dp, _
-from utils.db.user_crud import get_user_by_
+from utils.db.crud.user import get_user_by_
 from keyboards.inline.menu import get_back_to_menu_keyboard
 from data.config import CURRENCY_SYMBOL, DEFAULT_REFERRAL_BONUS
 

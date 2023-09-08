@@ -4,7 +4,7 @@ from aiogram import types
 
 from loader import bot, dp, _
 from utils.db.models import User
-from utils.db.user_crud import get_user_by_, change_user_balance
+from utils.db.crud.user import get_user_by_, change_user_balance
 from keyboards.inline.callback_data import subscription_callback_data
 from utils.db.subscription_crud import (
     get_all_subscriptions,

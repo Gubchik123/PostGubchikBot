@@ -7,7 +7,7 @@ from aiogram.types import Message, CallbackQuery
 from states.post import Post
 from loader import dp, scheduler, _
 from utils.scheduler import delete_post
-from utils.db.user_crud import get_user_channels_by_
+from utils.db.crud.user import get_user_channels_by_
 from keyboards.inline.post.general import get_deletion_hours_keyboard
 
 from ..commands.menu import show_menu

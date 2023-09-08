@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 
 from loader import dp, _
-from utils.db.user_crud import get_user_by_, create_user_by_
+from utils.db.crud.user import get_user_by_, create_user_by_
 from .language import language_command
 
 
