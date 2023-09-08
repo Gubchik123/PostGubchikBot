@@ -1,5 +1,5 @@
-from .db import MySession
-from .models import Channel, Group
+from ..db import MySession
+from ..models import Channel, Group
 
 
 def create_group_by_(

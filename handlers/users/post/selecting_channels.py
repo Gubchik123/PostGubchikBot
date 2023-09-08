@@ -9,7 +9,7 @@ from states.group import Group
 from keyboards.default.post import get_post_creation_keyboard
 from keyboards.inline.post.general import get_channels_keyboard
 from utils.db.crud.user import get_user_channels_by_, get_user_groups_by_
-from utils.db.group_crud import create_group_by_, get_group_channel_titles_by_
+from utils.db.crud.group import create_group_by_, get_group_channel_titles_by_
 from keyboards.inline.callback_data import (
     group_callback_data,
     get_keyboard_with_back_inline_button_by_,
