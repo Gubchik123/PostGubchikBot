@@ -1,3 +1,4 @@
+from .user import groups
 from ..db import MySession
 from ..models import Channel, Group
 
@@ -23,6 +24,7 @@ def create_group_by_(
         )
         session.add(group)
         session.commit()
+        groups[group_target_menu].pop(user_chat_id)
 
 
 def get_group_channel_titles_by_(group_name: str) -> tuple[str]:
