@@ -11,6 +11,7 @@ class PostAlbum:
     def clear(self) -> None:
         """Clears the post album."""
         self.album = []
+        self.media_type = None
 
     def get_album(self) -> MediaGroup:
         """Returns the album (MediaGroup)."""
@@ -18,4 +19,6 @@ class PostAlbum:
 
     def add(self, input_media: InputMedia) -> None:
         """Adds the input media to the post album."""
+        if not self.media_type:
+            self.media_type = input_media.type
         self.album.append(input_media)
