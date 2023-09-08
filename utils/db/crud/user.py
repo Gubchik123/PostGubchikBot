@@ -10,7 +10,10 @@ from ..db import MySession, commit_and_refresh, add_commit_and_refresh
 
 users = {}
 channels = {}
-groups = {}
+groups = {
+    "post creation": {},
+    "post in queue": {},
+}
 
 
 def _get_user_by_(session: Session, user_chat_id: int) -> User:
@@ -74,14 +77,21 @@ def get_user_channels_by_(user_chat_id: int) -> list[Channel]:
         return user_channels
 
 
-def get_user_groups_by_(user_chat_id: int) -> list[Group]:
-    """Returns user groups by the given user chat id."""
+def get_user_groups_by_(user_chat_id: int, target_menu: str) -> list[Group]:
+    """Returns user groups by the given user chat id and target menu."""
     try:
-        return groups[user_chat_id]
+        return groups[target_menu][user_chat_id]
     except KeyError:
         with MySession() as session:
-            user_groups = _get_user_by_(session, user_chat_id).groups.all()
-        groups[user_chat_id] = user_groups
+            user_groups = (
+                session.query(Group)
+                .filter(
+                    Group.user_id == user_chat_id,
+                    Group.target_menu == target_menu,
+                )
+                .all()
+            )
+        groups[target_menu][user_chat_id] = user_groups
         return user_groups
 
 
