@@ -12,9 +12,9 @@ from utils.scheduler import (
     remove_user_subscription_by_,
 )
 
-from .user_crud import _get_user_by_
-from .models import User, Subscription
-from .db import MySession, commit_and_refresh
+from .user import _get_user_by_
+from ..models import User, Subscription
+from ..db import MySession, commit_and_refresh
 
 subscriptions = []
 

@@ -9,7 +9,7 @@ from filters.admin import IsAdmin
 from data.config import CURRENCY_SYMBOL
 from states.subscription import Subscription
 from keyboards.inline.admin_subscription import get_subscriptions_keyboard
-from utils.db.subscription_crud import (
+from utils.db.crud.subscription import (
     get_all_subscriptions,
     change_subscription_price_on_,
 )
