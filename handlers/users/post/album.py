@@ -3,7 +3,7 @@ from aiogram.dispatcher import FSMContext
 
 from loader import dp, _
 from states.post import Post
-from utils.post_album import PostAlbum
+from utils.post.album import PostAlbum
 
 from ..commands.menu import show_menu
 from .constants import post_content
