@@ -2,16 +2,19 @@ from pytz import timezone
 from datetime import datetime, timedelta
 
 from sqlalchemy import update
+from apscheduler.job import Job
 
 from loader import scheduler
-from .user_crud import _get_user_by_
-from .models import User, Subscription
-from .db import MySession, commit_and_refresh
 from data.config import DEFAULT_SUBSCRIPTION_DAYS
 from utils.scheduler import (
     send_subscription_reminder_to_user,
+    get_user_scheduled_post_jobs_by_,
     remove_user_subscription_by_,
 )
+
+from .user_crud import _get_user_by_
+from .models import User, Subscription
+from .db import MySession, commit_and_refresh
 
 subscriptions = []
 
@@ -57,6 +60,9 @@ def add_subscription_for_user_with_(
         commit_and_refresh(session, user)
     if was_previous_subscription:
         _remove_all_previous_scheduler_jobs_for_user_with_(user.chat_id)
+    user_scheduled_post_jobs = get_user_scheduled_post_jobs_by_(user.chat_id)
+    if user_scheduled_post_jobs:
+        _resume_(user_scheduled_post_jobs)
     _add_scheduler_jobs_to_remind_user_about_subscription_expire_date(user)
     _add_scheduler_job_to_remove_user_subscription(user)
 
@@ -75,6 +81,12 @@ def _try_to_remove_scheduler_job_with_id_(id: str) -> None:
         scheduler.remove_job(id)
     except:
         pass
+
+
+def _resume_(user_scheduled_post_jobs: list[Job]) -> None:
+    """Resumes all paused user scheduled post jobs."""
+    for user_scheduled_post_job in user_scheduled_post_jobs:
+        user_scheduled_post_job.resume()
 
 
 def _add_scheduler_jobs_to_remind_user_about_subscription_expire_date(
