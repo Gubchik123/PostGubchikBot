@@ -4,7 +4,7 @@ from aiogram.types import CallbackQuery
 
 from loader import dp, _
 from utils.db.crud.user import get_user_channels_by_
-from utils.db.channel_crud import remove_channel_by_
+from utils.db.crud.channel import remove_channel_by_
 from keyboards.inline.callback_data import channel_callback_data
 from keyboards.inline.channel import (
     get_channels_keyboard,

@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery
 from loader import dp, _
 from states.channel import Channel
 from data.config import DEFAULT_MAX_FREE_CHANNELS
-from utils.db.channel_crud import create_channel_by_
+from utils.db.crud.channel import create_channel_by_
 from keyboards.inline.menu import get_back_to_menu_keyboard
 from utils.db.crud.user import get_user_by_, get_user_channels_by_
 

@@ -1,8 +1,8 @@
 from aiogram.types import Chat
 
-from .models import Channel
-from .user_crud import channels
-from .db import MySession, add_commit_and_refresh
+from .user import channels
+from ..models import Channel
+from ..db import MySession, add_commit_and_refresh
 
 
 def create_channel_by_(chat: Chat, user_chat_id: int) -> None:
