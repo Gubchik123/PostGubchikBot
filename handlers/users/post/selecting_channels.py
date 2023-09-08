@@ -7,14 +7,18 @@ from loader import dp, _
 from states.post import Post
 from states.group import Group
 from keyboards.default.post import get_post_creation_keyboard
-from keyboards.inline.post.general import get_channels_keyboard
 from utils.db.crud.user import get_user_channels_by_, get_user_groups_by_
 from utils.db.crud.group import create_group_by_, get_group_channel_titles_by_
+from keyboards.inline.post.general import (
+    get_channels_keyboard,
+    get_post_album_keyboard,
+)
 from keyboards.inline.callback_data import (
     group_callback_data,
     get_keyboard_with_back_inline_button_by_,
 )
 
+from .album import post_album
 from .constants import post_content, selected_channels
 
 
@@ -103,12 +107,27 @@ async def create_group(message: Message, state: FSMContext) -> None:
 async def ask_for_post_content(query: CallbackQuery, *args) -> None:
     """Asks for post content and waits (state) for it."""
     post_content.clear()
-    await query.message.edit_text(text="🚀")
     await query.message.answer(
+        text="🚀", reply_markup=get_post_creation_keyboard()
+    )
+    await query.message.edit_text(
         text=_(
             "You selected the {selected_channels} channel(s) to create a post\n\n"
             "Send me post content (text, photo, video, gif...)"
         ).format(selected_channels=", ".join(selected_channels)),
-        reply_markup=get_post_creation_keyboard(),
+        reply_markup=get_post_album_keyboard(),
     )
     await Post.content.set()
+
+
+async def ask_for_post_album(query: CallbackQuery, *args) -> None:
+    """Asks for post album and waits (state) for it."""
+    post_album.clear()
+    await query.message.edit_text(
+        text=_(
+            "You selected the {selected_channels} channel(s) to create a post\n\n"
+            "Send me post album (animation, document, audio, photo and video)\n\n"
+            "<b>Important: album must contain content of the same type (e.g. only photos)</b>"
+        ).format(selected_channels=", ".join(selected_channels))
+    )
+    await Post.album.set()

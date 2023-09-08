@@ -9,6 +9,7 @@ from .selecting_channels import (
     select_or_remove_channel,
     ask_for_group_name,
     ask_for_post_content,
+    ask_for_post_album,
 )
 from .publishing_with_deletion import (
     ask_for_deletion_time,
@@ -25,6 +26,7 @@ async def navigate(query: CallbackQuery, callback_data: dict) -> None:
         "select_or_remove_channel": select_or_remove_channel,
         "create_group": ask_for_group_name,
         "ask_for_post_content": ask_for_post_content,
+        "ask_for_post_album": ask_for_post_album,
         "ask_for_deletion_time": ask_for_deletion_time,
         "publish_post_with_deletion": publish_post_with_deletion,
         "publish_post": publish_post,
