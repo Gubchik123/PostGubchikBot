@@ -5,6 +5,7 @@ class Post(StatesGroup):
     """States for post creation."""
 
     content = State()
+    album = State()
     url_buttons = State()
     time = State()
     new_time = State()
