@@ -2,7 +2,7 @@ from apscheduler.job import Job
 
 from loader import bot, scheduler
 
-from .post_content import PostContent
+from .post.content import PostContent
 from .db.crud.user import get_user_channels_by_, reset_user_subscription_by_
 
 
