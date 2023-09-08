@@ -73,6 +73,15 @@ def get_channels_keyboard(
     return keyboard
 
 
+def get_post_album_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup().add(
+        InlineKeyboardButton(
+            text=_("Create an album"),
+            callback_data=_get_new_callback_data("ask_for_post_album"),
+        )
+    )
+
+
 def get_pre_publish_keyboard() -> InlineKeyboardMarkup:
     """Returns pre publish keyboard."""
     keyboard = InlineKeyboardMarkup()
