@@ -23,9 +23,7 @@ class PostContent:
         """Sends the post content to the given chat."""
         for content in self.content:
             if content["type"] == "album":
-                await bot.send_media_group(
-                    chat_id, media=content["content"]
-                )
+                await bot.send_media_group(chat_id, media=content["content"])
                 break
             send_function: Callable = getattr(bot, f"send_{content['type']}")
             message = await send_function(

@@ -1,4 +1,4 @@
-from utils.post_content import PostContent
+from utils.post.content import PostContent
 
 
 selected_channels = []
