@@ -1,4 +1,4 @@
-from . import selecting_channels
+from . import channels
 from . import content
 from . import album
 from . import publishing_with_deletion

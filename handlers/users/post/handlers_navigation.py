@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 from loader import dp
 from keyboards.inline.callback_data import post_callback_data
 
-from .selecting_channels import (
+from .channels import (
     select_or_remove_channel,
     ask_for_group_name,
     ask_for_post_content,

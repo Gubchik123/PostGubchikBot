@@ -22,7 +22,7 @@ from keyboards.inline.post.editing import (
     get_confirmation_keyboard,
 )
 
-from .selecting_channels import get_channels
+from .channels import get_channels
 from .postponing import send_message_about_wrong_date_and_time
 
 
