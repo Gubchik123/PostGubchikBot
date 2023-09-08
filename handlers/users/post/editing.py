@@ -7,6 +7,11 @@ from aiogram.types import Message, CallbackQuery
 
 from states.post import Post
 from loader import dp, scheduler, _
+from utils.scheduler import (
+    scheduled_post_jobs,
+    get_user_scheduled_post_job_by_,
+    get_user_scheduled_post_jobs_by_,
+)
 from keyboards.inline.callback_data import (
     post_editing_callback_data,
     get_keyboard_with_back_inline_button_by_,
@@ -22,14 +27,13 @@ from .postponing import send_message_about_wrong_date_and_time
 
 
 current_post_id = None
-scheduled_post_jobs = {}
 
 
 @dp.callback_query_handler(text="edit_post")
 async def get_scheduled_user_posts(query: CallbackQuery) -> None:
     """Sends scheduled user posts to choose from to edit them."""
     user_chat_id = query.from_user.id
-    user_scheduled_post_jobs = _get_user_scheduled_post_jobs_by_(user_chat_id)
+    user_scheduled_post_jobs = get_user_scheduled_post_jobs_by_(user_chat_id)
     if not user_scheduled_post_jobs:
         await query.answer(
             text=_("You don't have any scheduled posts yet :("),
@@ -42,25 +46,11 @@ async def get_scheduled_user_posts(query: CallbackQuery) -> None:
     )
 
 
-def _get_user_scheduled_post_jobs_by_(user_chat_id: int) -> tuple[Job]:
-    """Returns user posts by the given user chat id."""
-    try:
-        return scheduled_post_jobs[user_chat_id]
-    except KeyError:
-        user_scheduled_post_jobs = tuple(
-            job
-            for job in scheduler.get_jobs()
-            if job.kwargs.get("author_chat_id") == user_chat_id
-        )
-        scheduled_post_jobs[user_chat_id] = user_scheduled_post_jobs
-        return user_scheduled_post_jobs
-
-
 async def get_user_post(data: Message | CallbackQuery, post_id: str) -> None:
     """
     Shows or sends post info depending on the given data (message or query).
     """
-    user_scheduled_post_job = _get_user_scheduled_post_job_by_(
+    user_scheduled_post_job = get_user_scheduled_post_job_by_(
         post_id, data.from_user.id
     )
     answer_function: Callable = (
@@ -81,11 +71,6 @@ async def get_user_post(data: Message | CallbackQuery, post_id: str) -> None:
         ),
         reply_markup=get_user_post_keyboard(post_id),
     )
-
-
-def _get_user_scheduled_post_job_by_(post_id: str, user_chat_id: int) -> Job:
-    """Returns user post job by the given post id and user chat id."""
-    return scheduler.get_job(f"{user_chat_id}_post_{post_id}")
 
 
 async def ask_for_new_publication_time(

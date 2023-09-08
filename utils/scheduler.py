@@ -1,6 +1,12 @@
-from loader import bot
+from apscheduler.job import Job
+
+from loader import bot, scheduler
+
 from .post_content import PostContent
 from .db.user_crud import get_user_channels_by_, reset_user_subscription_by_
+
+
+scheduled_post_jobs = {}
 
 
 async def send_subscription_reminder_to_user(
@@ -29,6 +35,27 @@ async def send_subscription_reminder_to_user(
             else f"Your subscription will expire in {period_left} {period_plural_name}!"
         ),
     )
+
+
+def get_user_scheduled_post_jobs_by_(user_chat_id: int) -> tuple[Job]:
+    """Returns user scheduled post jobs by the given user chat id."""
+    try:
+        return scheduled_post_jobs[user_chat_id]
+    except KeyError:
+        user_scheduled_post_jobs = tuple(
+            job
+            for job in scheduler.get_jobs()
+            if job.kwargs.get("author_chat_id") == user_chat_id
+        )
+        scheduled_post_jobs[user_chat_id] = user_scheduled_post_jobs
+        return user_scheduled_post_jobs
+
+
+def get_user_scheduled_post_job_by_(post_id: str, user_chat_id: int) -> Job:
+    """
+    Returns user scheduled post job by the given post id and user chat id.
+    """
+    return scheduler.get_job(f"{user_chat_id}_post_{post_id}")
 
 
 async def remove_user_subscription_by_(
