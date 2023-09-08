@@ -9,6 +9,7 @@ class PostContent:
     def __init__(self) -> None:
         """Initializes the post empty content."""
         self.clear()
+        self.target_menu = ""
 
     def clear(self) -> None:
         """Clears the post content."""

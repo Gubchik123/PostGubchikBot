@@ -19,7 +19,7 @@ from keyboards.inline.callback_data import (
 )
 
 from .album import post_album
-from .constants import target_menu, post_content, selected_channels
+from .constants import post_content, selected_channels
 
 
 @dp.callback_query_handler(text="create_post", state="*")
@@ -29,8 +29,7 @@ async def get_channels(
     state: Optional[FSMContext] = None,
 ) -> None:
     """Sends a message with inline keyboard to select a channel."""
-    global target_menu
-    target_menu = target
+    post_content.target_menu = target
     if state:
         await state.finish()
     selected_channels.clear()
@@ -43,7 +42,7 @@ async def get_channels(
         text=_("Select the channel(s) you want to post to:"),
         reply_markup=get_channels_keyboard(
             get_user_channels_by_(data.from_user.id),
-            get_user_groups_by_(data.from_user.id, target_menu),
+            get_user_groups_by_(data.from_user.id, post_content.target_menu),
             selected_channels,
         ),
     )
@@ -67,7 +66,7 @@ async def select_or_remove_channel(
     await query.message.edit_reply_markup(
         reply_markup=get_channels_keyboard(
             user_channels,
-            get_user_groups_by_(query.from_user.id, target_menu),
+            get_user_groups_by_(query.from_user.id, post_content.target_menu),
             selected_channels,
         )
     )
@@ -102,10 +101,10 @@ async def create_group(message: Message, state: FSMContext) -> None:
     create_group_by_(
         user_chat_id=message.from_user.id,
         group_name=message.text,
-        group_target_menu=target_menu,
+        group_target_menu=post_content.target_menu,
         selected_channel_titles=selected_channels,
     )
-    await get_channels(message, target_menu)
+    await get_channels(message, post_content.target_menu)
 
 
 async def ask_for_post_content(query: CallbackQuery, *args) -> None:
@@ -128,7 +127,7 @@ def _get_asking_message_depending_on_target_menu() -> str:
             "You selected the {selected_channels} channel(s) to create a post\n\n"
             "Send me post content (text, photo, video, gif...)"
         ).format(selected_channels=", ".join(selected_channels))
-        if target_menu == "post creation"
+        if post_content.target_menu == "post creation"
         else _(
             "You selected the {selected_channels} channel(s) to create posts in queue\n\n"
             "Send posts that should be added to the queue.\n\n"
