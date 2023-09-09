@@ -23,7 +23,7 @@ from data.config import (
 class User(Base):
     """Model for storing information about Telegram users."""
 
-    __tablename__ = "user"
+    __tablename__ = "users"
     # Fields from telegram user
     chat_id = Column(BigInteger, primary_key=True, autoincrement=False)
     username = Column(String(32), nullable=True, unique=True)
@@ -60,7 +60,7 @@ class User(Base):
         passive_deletes=True,
     )
     subscription_id = Column(
-        Integer, ForeignKey("subscription.id", ondelete="SET NULL")
+        Integer, ForeignKey("subscriptions.id", ondelete="SET NULL")
     )
     subscription_expire_date = Column(DateTime, nullable=True)
 
@@ -68,7 +68,7 @@ class User(Base):
 class Subscription(Base):
     """Model for storing information about subscriptions."""
 
-    __tablename__ = "subscription"
+    __tablename__ = "subscriptions"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(10), unique=True, nullable=False)
@@ -82,15 +82,15 @@ class Subscription(Base):
 channel_groups = Table(
     "channel_groups",
     Base.metadata,
-    Column("channel_id", Integer, ForeignKey("channel.chat_id")),
-    Column("group_id", Integer, ForeignKey("group.id")),
+    Column("channel_id", Integer, ForeignKey("channels.chat_id")),
+    Column("group_id", Integer, ForeignKey("groups.id")),
 )
 
 
 class Channel(Base):
     """Model for storing information about Telegram channels."""
 
-    __tablename__ = "channel"
+    __tablename__ = "channels"
 
     chat_id = Column(BigInteger, primary_key=True, autoincrement=False)
     title = Column(String(128), nullable=True)
@@ -99,7 +99,9 @@ class Channel(Base):
     description = Column(String(255), nullable=True)
 
     user_id = Column(
-        Integer, ForeignKey("user.chat_id", ondelete="CASCADE"), nullable=False
+        Integer,
+        ForeignKey("users.chat_id", ondelete="CASCADE"),
+        nullable=False,
     )
     groups = relationship(
         "Group", secondary=channel_groups, back_populates="channels"
@@ -109,7 +111,7 @@ class Channel(Base):
 class Group(Base):
     """Model for storing information about channel groups."""
 
-    __tablename__ = "group"
+    __tablename__ = "groups"
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)
@@ -118,7 +120,9 @@ class Group(Base):
     )  # "post creation" or "post in queue"
 
     user_id = Column(
-        Integer, ForeignKey("user.chat_id", ondelete="CASCADE"), nullable=False
+        Integer,
+        ForeignKey("users.chat_id", ondelete="CASCADE"),
+        nullable=False,
     )
     channels = relationship(
         "Channel", secondary=channel_groups, back_populates="groups"
