@@ -255,12 +255,9 @@ def _postpone_posts_in_queue(
         _schedule_job_to_publish_user_post_in_queue(
             user_chat_id, user_language_code, post, current_datetime
         )
-        if posts_count < 5:
-            publishing_times += f"{count + 1} - {current_datetime.strftime('%d.%m.%Y %H:%M')}\n"
-        elif count == posts_count - 3:
-            publishing_times += "...\n"
-        elif count in (0, 1, 2, posts_count - 2, posts_count - 1):
-            publishing_times += f"{count + 1} - {current_datetime.strftime('%d.%m.%Y %H:%M')}\n"
+        publishing_times += _get_publishing_time_for_adding_to_message_by_(
+            count, posts_count, current_datetime
+        )
         # Check if the current time is after the end time for today
         if (
             current_datetime.hour + 1 > times[-1].hour
@@ -303,6 +300,20 @@ def _schedule_job_to_publish_user_post_in_queue(
             "selected_channels": selected_channels,
         },
     )
+
+
+def _get_publishing_time_for_adding_to_message_by_(
+    count: int, posts_count: int, current_datetime: datetime
+) -> bool:
+    """Returns publishing time for adding to message 
+    by checking the given count and posts count."""
+    if posts_count < 5:
+        return f"{count + 1} - {current_datetime.strftime('%d.%m.%Y %H:%M')}\n"
+    elif count == posts_count - 3:
+        return "...\n"
+    elif count in (0, 1, 2, posts_count - 2, posts_count - 1):
+        return f"{count + 1} - {current_datetime.strftime('%d.%m.%Y %H:%M')}\n"
+    return ""
 
 
 @dp.callback_query_handler(posts_in_queue_callback_data.filter(), state="*")
