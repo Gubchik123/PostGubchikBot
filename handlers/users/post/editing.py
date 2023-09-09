@@ -1,3 +1,4 @@
+from pytz import timezone
 from datetime import datetime
 from typing import Callable, Optional
 
@@ -6,12 +7,7 @@ from aiogram.types import Message, CallbackQuery
 
 from states.post import Post
 from loader import dp, scheduler, _
-from utils.scheduler import (
-    get_user_scheduled_post_job_by_,
-    get_user_scheduled_post_in_queue_job_by_,
-    get_user_scheduled_post_jobs_by_,
-    get_user_scheduled_post_in_queue_jobs_by_,
-)
+from utils.db.crud.user import get_user_by_
 from keyboards.inline.callback_data import (
     post_editing_callback_data,
     get_keyboard_with_back_inline_button_by_,
@@ -19,7 +15,14 @@ from keyboards.inline.callback_data import (
 from keyboards.inline.post.editing import (
     get_user_posts_keyboard,
     get_user_post_keyboard,
-    get_confirmation_keyboard,
+    get_confirmation_publishing_keyboard,
+    get_confirmation_removing_keyboard,
+)
+from utils.scheduler import (
+    get_user_scheduled_post_job_by_,
+    get_user_scheduled_post_in_queue_job_by_,
+    get_user_scheduled_post_jobs_by_,
+    get_user_scheduled_post_in_queue_jobs_by_,
 )
 
 from .postponing import send_message_about_wrong_date_and_time
@@ -89,6 +92,36 @@ async def get_user_post(
     )
 
 
+async def confirm_post_publishing(
+    query: CallbackQuery, post_type: str, post_id: str
+) -> None:
+    """Sends post publishing confirmation message."""
+    await query.message.edit_text(
+        text=_(
+            "Are you sure you want to publish this post (#{post_id}) now?"
+        ).format(post_id=post_id),
+        reply_markup=get_confirmation_publishing_keyboard(post_id, post_type),
+    )
+
+
+async def publish_now(
+    query: CallbackQuery, post_type: str, post_id: str
+) -> None:
+    """Publishes post now and sends success message."""
+    user = get_user_by_(query.from_user.id)
+    scheduler.reschedule_job(
+        job_id=_get_job_id_based_on_(
+            user.chat_id, post_type, post_id
+        ),
+        trigger="date",
+        run_date=datetime.now(timezone(user.timezone)),
+    )
+    await query.answer(
+        text=_("Post #{post_id} has been published!").format(post_id=post_id)
+    )
+    await get_scheduled_user_posts(query)
+
+
 async def ask_for_new_publication_time(
     query: CallbackQuery, post_type: str, post_id: str
 ) -> None:
@@ -148,7 +181,7 @@ async def confirm_post_removing(
         text=_(
             "Are you sure you want to remove this post (#{post_id})?"
         ).format(post_id=post_id),
-        reply_markup=get_confirmation_keyboard(post_id, post_type),
+        reply_markup=get_confirmation_removing_keyboard(post_id, post_type),
     )
 
 
@@ -191,6 +224,8 @@ async def navigate(
     current_level_function: Callable = {
         "get_posts": get_scheduled_user_posts,
         "get_post": get_user_post,
+        "confirm_publishing": confirm_post_publishing,
+        "publish_now": publish_now,
         "change_time": ask_for_new_publication_time,
         "confirm_removing": confirm_post_removing,
         "remove_post": remove_post,
