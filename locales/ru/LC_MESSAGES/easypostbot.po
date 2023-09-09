@@ -1,0 +1,754 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-09-09 16:11+0300\n"
+"PO-Revision-Date: 2023-09-09 16:12+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: handlers/admins/subscription.py:38
+msgid "Choose subscription to change:"
+msgstr "Выберите подписку для изменения:"
+
+#: handlers/admins/subscription.py:48
+msgid "Enter new subscription price (current price is {price} {currency_symbol})"
+msgstr "Введите новую цену подписки (текущая цена {price} {currency_symbol})"
+
+#: handlers/admins/subscription.py:69
+msgid "Subscription price has been changed from {previous_price} to {new_price}!"
+msgstr "Цена подписки изменена с {previous_price} на {new_price}!"
+
+#: handlers/users/referrals.py:15
+msgid ""
+"👥 <b>Referral statistics</b>\n"
+"\n"
+"You balance: <b>{balance} {currency_symbol}</b>\n"
+"Referrals: <b>{referrals}</b>\n"
+"\n"
+"Your referral link:\n"
+"<code>{referral_link}</code>\n"
+"\n"
+"Invite your friends to the botand get <b>{referral_bonus} "
+"{currency_symbol}</b> for each referral."
+msgstr ""
+"👥 <b>Реферальная статистика</b>\n"
+"\n"
+"Ваш баланс: <b>{balance} {currency_symbol}</b>\n"
+"Рефералы: <b>{referrals}</b>\n"
+"\n"
+"Ваша реферальная ссылка:\n"
+"<code>{referral_link}</code>\n"
+"\n"
+"Приглашайте друзей в бота и получайте <b>{referral_bonus} "
+"{currency_symbol}</b> за каждого реферала."
+
+#: handlers/users/subscription.py:62
+msgid ""
+"☺️ <b>Subscription</b>\n"
+"\n"
+"You have <b>{subscription_text}</b> subscription.\n"
+"You can add up to <b>{max_channels}</b> channels.\n"
+"\n"
+"Your subscription will expire on <b>{expire_date}</b>."
+msgstr ""
+"☺️ <b>Подписка</b>\n"
+"\n"
+"У вас <b>{subscription_text}</b> подписка.\n"
+"Вы можете добавить до <b>{max_channels}</b> каналов.\n"
+"\n"
+"Ваша подписка истекает <b>{expire_date}</b>."
+
+#: handlers/users/subscription.py:87
+msgid ""
+"{subscription_text}\n"
+"<i>Maximum channels: {max_channels}</i>\n"
+"\n"
+msgstr ""
+"{subscription_text}\n"
+"<i>Максимальное количество каналов: {max_channels}</i>\n"
+"\n"
+
+#: handlers/users/subscription.py:99
+msgid ""
+"☺️ <b>Subscription</b>\n"
+"\n"
+"You can add up to {DEFAULT_max_free_channels} channels to the bot <b>for "
+"free</b>.\n"
+"\n"
+"{subscriptions_text}<i>* All subscriptions for "
+"{default_subscription_days} days</i>"
+msgstr ""
+"☺️ <b>Подписка</b>\n"
+"\n"
+"Вы можете добавить до {DEFAULT_max_free_channels} каналов в бот <b>бесплатно"
+"</b>.\n"
+"\n"
+"{subscriptions_text}<i>* Все подписки на {default_subscription_days} "
+"дней</i>"
+
+#: handlers/users/subscription.py:116
+msgid "Test payment!"
+msgstr "Тестовый платеж!"
+
+#: handlers/users/subscription.py:119
+msgid "Bot subscription"
+msgstr "Подписка на бота"
+
+#: handlers/users/subscription.py:120
+msgid "Bot subscription for {default_subscription_days} days"
+msgstr "Подписка на бота на {default_subscription_days} дней"
+
+#: handlers/users/subscription.py:132
+msgid "Subscription for {default_subscription_days} days"
+msgstr "Подписка на {default_subscription_days} дней"
+
+#: handlers/users/subscription.py:154
+msgid ""
+"We have successfully charged <b>{total_amount} {currency}</b> from your "
+"balance!\n"
+"\n"
+"<b>Subscription for {default_subscription_days} days is activated!</b>"
+msgstr ""
+"Мы успешно списали <b>{total_amount} {currency}</b> с вашего баланса!\n"
+"\n"
+"<b>Подписка на {default_subscription_days} дней активирована!</b>"
+
+#: handlers/users/post/in_queue.py:229 handlers/users/subscription.py:175
+msgid "Processing..."
+msgstr "Обработка..."
+
+#: handlers/users/subscription.py:183
+msgid ""
+"Payment for <b>{total_amount} {currency}</b> is successful!\n"
+"\n"
+"<b>Subscription for {default_subscription_days} days is activated!</b>"
+msgstr ""
+"Оплата <b>{total_amount} {currency}</b> прошла успешно!\n"
+"\n"
+"<b>Подписка на {default_subscription_days} дней активирована!</b>"
+
+#: handlers/users/timezone.py:20
+msgid ""
+"<b>Changing timezone.</b>\n"
+"\n"
+"Your current timezone: <i>{timezone}</i>.\n"
+"You can choose a new time zone by choosing from the options below."
+msgstr ""
+"<b>Изменение часового пояса.</b>\n"
+"\n"
+"Ваш текущий часовой пояс: <i>{timezone}</i>.\n"
+"Вы можете выбрать новый часовой пояс, выбрав один из вариантов ниже."
+
+#: handlers/users/timezone.py:34
+msgid "Choose a city in {country}:"
+msgstr "Выберите город в {country}:"
+
+#: handlers/users/timezone.py:46
+msgid "Timezone successfully changed to {timezone}!"
+msgstr "Часовой пояс успешно изменен на {timezone}!"
+
+#: handlers/users/channel/adding.py:20
+msgid "You have reached the limit of channels!"
+msgstr "Вы достигли лимита каналов!"
+
+#: handlers/users/channel/adding.py:47
+msgid ""
+"Forward a message here from the channel you want to add.\n"
+"\n"
+"<b>Important:</b> the bot and you must be administratorsin the channel "
+"from which you are forwarding the message."
+msgstr ""
+"Перешлите сюда сообщение из канала, который хотите добавить.\n"
+"\n"
+"<b>Важно:</b> бот и вы должны быть администраторами в канале, из которого "
+"вы пересылаете сообщение."
+
+#: handlers/users/channel/removing.py:22
+msgid "Choose channel to remove:"
+msgstr "Выберите канал, который хотите удалить:"
+
+#: handlers/users/channel/removing.py:32
+msgid "Are you sure you want to remove the '{channel_title}'?"
+msgstr "Вы уверены, что хотите удалить '{channel_title}'?"
+
+#: handlers/users/channel/removing.py:45
+msgid "Channel '{}' removed."
+msgstr "Канал '{}' удален."
+
+#: handlers/users/commands/help.py:11
+msgid ""
+"Available commands:\n"
+"/start - Start working with the bot\n"
+"/help - Send of basic usage rules\n"
+"/language - Change the language of the bot\n"
+"/menu - Send main menu\n"
+msgstr ""
+"Доступные команды:\n"
+"/start - Начало работы з ботом\n"
+"/help - Отображение основных правил использования\n"
+"/language - Изменения языка бота\n"
+"/menu - Отправить главное меню\n"
+
+#: handlers/users/commands/language.py:42
+msgid "Hello, {name}!"
+msgstr "Привет, {name}!"
+
+#: handlers/users/commands/menu.py:34
+msgid ""
+"Your channels:\n"
+"{channel_list_items}\n"
+"\n"
+"Choose one of the buttons below:"
+msgstr ""
+"Ваши каналы:\n"
+"{channel_list_items}\n"
+"\n"
+"Выберите одну из кнопок ниже:"
+
+#: handlers/users/commands/menu.py:42
+msgid ""
+"You currently have no channels.\n"
+"\n"
+"Choose one of the buttons below:"
+msgstr ""
+"У вас пока нет каналов.\n"
+"\n"
+"Выберите одну из кнопок ниже:"
+
+#: handlers/users/post/album.py:19 handlers/users/post/content.py:27
+#: keyboards/default/post.py:10 keyboards/inline/post/general.py:104
+msgid "Cancel"
+msgstr "Отмена"
+
+#: handlers/users/post/album.py:23 handlers/users/post/content.py:32
+#: handlers/users/post/content.py:37 keyboards/default/post.py:9
+#: keyboards/inline/post/general.py:56 keyboards/inline/post/in_queue.py:55
+msgid "Next"
+msgstr "Далее"
+
+#: handlers/users/post/album.py:38
+msgid "You can't add animation into this album!"
+msgstr "Вы не можете добавить анимацию в этот альбом!"
+
+#: handlers/users/post/album.py:49
+msgid "You can't add document into this album!"
+msgstr "Вы не можете добавить документ в этот альбом!"
+
+#: handlers/users/post/album.py:58
+msgid "You can't add audio into this album!"
+msgstr "Вы не можете добавить аудио в этот альбом!"
+
+#: handlers/users/post/album.py:67
+msgid "You can't add photo into this album!"
+msgstr "Вы не можете добавить фото в этот альбом!"
+
+#: handlers/users/post/album.py:76
+msgid "You can't add video into this album!"
+msgstr "Вы не можете добавить видео в этот альбом!"
+
+#: handlers/users/post/channels.py:42
+msgid "Select the channel(s) you want to post to:"
+msgstr "Выберите канал(ы), в который(ые) хотите опубликовать пост:"
+
+#: handlers/users/post/channels.py:93
+msgid "Send me group name:"
+msgstr "Отправьте мне название группы:"
+
+#: handlers/users/post/channels.py:130
+msgid ""
+"You selected the {selected_channels} channel(s) to create a post\n"
+"\n"
+"Send me post content (text, photo, video, gif...)"
+msgstr ""
+"Вы выбрали {selected_channels} канал(ы) для создания поста\n"
+"\n"
+"Отправьте мне контент поста (текст, фото, видео, gif...)"
+
+#: handlers/users/post/channels.py:135
+msgid ""
+"You selected the {selected_channels} channel(s) to create posts in queue\n"
+"\n"
+"Send posts that should be added to the queue.\n"
+"\n"
+"<b>Once finished, click the 'Next' button to save your posts.</b>\n"
+"\n"
+"<i>When adding a large number of posts, wait until all the media files "
+"are loaded and only then click the 'Next' button.</i>"
+msgstr ""
+"Вы выбрали {selected_channels} канал(ы) для создания постов в очереди\n"
+"\n"
+"Отправьте посты, которые должны быть добавлены в очередь.\n"
+"\n"
+"<b>После завершения нажмите кнопку 'Далее', чтобы сохранить ваши посты.</b>"
+"\n"
+"<i>При добавлении большого количества постов, дождитесь загрузки всех "
+"медиа-файлов и только после этого нажимайте кнопку 'Далее'.</i>"
+
+#: handlers/users/post/channels.py:149
+msgid ""
+"You selected the {selected_channels} channel(s) to create a post\n"
+"\n"
+"Send me post album (animation, document, audio, photo and video)\n"
+"\n"
+"<b>Important: album must contain content of the same type (e.g. only "
+"photos)</b>"
+msgstr ""
+"Вы выбрали {selected_channels} канал(ы) для создания поста\n"
+"\n"
+"Отправьте мне альбом поста (анимация, документ, аудио, фото и видео)\n"
+"\n"
+"<b>Важно: альбом должен содержать контент одного типа (например, только "
+"фото)</b>"
+
+#: handlers/users/post/content.py:120
+msgid "Content is added ✅"
+msgstr "Контент добавлен ✅"
+
+#: handlers/users/post/content.py:132
+msgid ""
+"Send me list of URL buttons in one message. Please, follow this format:\n"
+"\n"
+"Button text 1 - <code>https://example1.com</code>\n"
+"Button text 2 - <code>https://example2.com</code>\n"
+"\n"
+"Use separator '|' to add up to 3 buttons to one row.\n"
+"\n"
+"Example:\n"
+"\n"
+"Button text 1 - <code>https://example1.com</code> | Button text 2 - "
+"<code>https://example2.com</code>\n"
+"Button text 3 - <code>https://example3.com</code> | Button text 4 - "
+"<code>https://example4.com</code>\n"
+"\n"
+"Click the back button to cancel and return to content adding."
+msgstr ""
+"Отправьте мне список URL-кнопок в одном сообщении. Пожалуйста, следуйте "
+"этому формату:\n"
+"\n"
+"Текст кнопки 1 - <code>https://example1.com</code>\n"
+"Текст кнопки 2 - <code>https://example2.com</code>\n"
+"\n"
+"Используйте разделитель '|' для добавления до 3 кнопок в одну строку.\n"
+"\n"
+"Пример:\n"
+"\n"
+"Текст кнопки 1 - <code>https://example1.com</code> | Текст кнопки 2 - "
+"<code>https://example2.com</code>\n"
+"Текст кнопки 3 - <code>https://example3.com</code> | Текст кнопки 4 - "
+"<code>https://example4.com</code>\n"
+"\n"
+"Нажмите кнопку '🔙 Back', чтобы отменить и вернуться к добавлению контента."
+
+#: handlers/users/post/content.py:159
+msgid ""
+"URL buttons are added ✅\n"
+"You can continue sending post content."
+msgstr ""
+"URL-кнопки добавлены ✅\n"
+"Вы можете продолжить отправку контента поста."
+
+#: handlers/users/post/content.py:196
+msgid "Content is removed ❌"
+msgstr "Контент удален ❌"
+
+#: handlers/users/post/editing.py:46
+msgid "You don't have any scheduled posts yet :("
+msgstr "У вас еще нет запланированных постов :("
+
+#: handlers/users/post/editing.py:51
+msgid "Select a post to edit it:"
+msgstr "Выберите пост, который хотите отредактировать:"
+
+#: handlers/users/post/editing.py:81
+msgid ""
+"Scheduled post #{post_id}\n"
+"Publication time: {run_date}\n"
+"\n"
+"You can choose an action for this post:"
+msgstr ""
+"Отложенный пост #{post_id}\n"
+"Время публикации: {run_date}\n"
+"\n"
+"Вы можете выбрать действие для этого поста:"
+
+#: handlers/users/post/editing.py:100
+msgid "Are you sure you want to publish this post (#{post_id}) now?"
+msgstr "Вы уверены, что хотите опубликовать этот пост (#{post_id}) сейчас?"
+
+#: handlers/users/post/editing.py:118
+msgid "Post #{post_id} has been published!"
+msgstr "Пост #{post_id} опубликован!"
+
+#: handlers/users/post/editing.py:133
+msgid ""
+"<b>Enter a new time for the scheduled post</b>\n"
+"\n"
+"Format example - 15.08.2023 13:40"
+msgstr ""
+"<b>Введите новое время для запланированного поста</b>\n"
+"\n"
+"Пример формата - 15.08.2023 13:40"
+
+#: handlers/users/post/editing.py:160
+msgid ""
+"😌 The publication time of the post has been changed successfully!\n"
+"\n"
+"New publication time: {run_date}"
+msgstr ""
+"😌 Время публикации поста успешно изменено!\n"
+"\n"
+"Новое время публикации: {run_date}"
+
+#: handlers/users/post/editing.py:179
+msgid "Are you sure you want to remove this post (#{post_id})?"
+msgstr "Вы уверены, что хотите удалить этот пост (#{post_id})?"
+
+#: handlers/users/post/editing.py:195
+msgid "Post #{post_id} has been removed!"
+msgstr "Пост #{post_id} удален!"
+
+#: handlers/users/post/in_queue.py:41
+msgid "Select what you want to add to all posts in the queue:"
+msgstr "Выберите, что вы хотите добавить ко всем постам в очереди:"
+
+#: handlers/users/post/in_queue.py:50 handlers/users/post/in_queue.py:57
+#: handlers/users/post/in_queue.py:64 handlers/users/post/in_queue.py:71
+#: handlers/users/post/in_queue.py:78 handlers/users/post/in_queue.py:85
+#: handlers/users/post/in_queue.py:90 handlers/users/post/in_queue.py:95
+msgid "Soon..."
+msgstr "Скоро..."
+
+#: handlers/users/post/in_queue.py:108
+msgid ""
+"Send the date from which to start posting messages in the format: "
+"DD.MM.YYYY (15.08.2023)"
+msgstr ""
+"Отправьте дату, с которой начать публикацию сообщений в формате: "
+"ДД.ММ.ГГГГ (15.08.2023)"
+
+#: handlers/users/post/in_queue.py:127
+msgid ""
+"Wrong date! Try again!\n"
+"\n"
+"Format example: 15.08.2023"
+msgstr ""
+"Неправильная дата! Попробуйте еще раз!\n"
+"\n"
+"Пример формата: 15.08.2023"
+
+#: handlers/users/post/in_queue.py:143
+msgid ""
+"Enter the time between which posts should be published (for example "
+"09:20-21:20)\n"
+"Or send the time in this format:\n"
+"12:00\n"
+"12:40\n"
+"15:00\n"
+"\n"
+"<b>Date</b>: {date}\n"
+"<b>Channel(s)</b>: {channels}\n"
+msgstr ""
+"Введите время, между которым должны быть опубликованы посты (например "
+"09:20-21:20)\n"
+"Или отправьте время в этом формате:\n"
+"12:00\n"
+"12:40\n"
+"15:00\n"
+"\n"
+"<b>Дата</b>: {date}\n"
+"<b>Канал(ы)</b>: {channels}"
+
+#: handlers/users/post/in_queue.py:179
+msgid ""
+"Wrong time! Try again!\n"
+"\n"
+"Format example: 09:20-21:20\n"
+"Or send the time in this format:\n"
+"12:00\n"
+"12:40\n"
+"15:00"
+msgstr ""
+"Неправильное время! Попробуйте еще раз!\n"
+"\n"
+"Пример формата: 09:20-21:20\n"
+"Или отправьте время в этом формате:\n"
+"12:00\n"
+"12:40\n"
+"15:00"
+
+#: handlers/users/post/in_queue.py:198
+msgid ""
+"Send the interval between posts in minutes (for example: 15)\n"
+"\n"
+"<b>Date</b>: {date}\n"
+"<b>Time</b>: {time}\n"
+"<b>Channel(s)</b>: {channels}\n"
+msgstr ""
+"Отправьте интервал между постами в минутах (например: 15)\n"
+"\n"
+"<b>Дата</b>: {date}\n"
+"<b>Время</b>: {time}\n"
+"<b>Канал(ы)</b>: {channels}"
+
+#: handlers/users/post/in_queue.py:223
+msgid ""
+"Wrong interval! Try again!\n"
+"\n"
+"Format example: 15"
+msgstr ""
+"Неправильный интервал! Попробуйте еще раз!\n"
+"\n"
+"Пример формата: 15"
+
+#: handlers/users/post/in_queue.py:235
+msgid ""
+"🚀 {posts_count} posts are scheduled successfully!\n"
+"\n"
+"Channel(s): {channels}\n"
+"\n"
+"Publishing times:\n"
+"{publishing_times}"
+msgstr ""
+"🚀 {posts_count} постов успешно запланировано!\n"
+"\n"
+"Канал(ы): {channels}\n"
+"\n"
+"Время публикации:\n"
+"{publishing_times}"
+
+#: handlers/users/post/postponing.py:23
+msgid ""
+"Send me the time to publish the post <b>today</b>.\n"
+"Send date and time to schedule post publishing for any other day.\n"
+"\n"
+"Format example (today): 15.08.2023 13:40"
+msgstr ""
+"Отправьте мне время для публикации поста <b>сегодня</b>.\n"
+"Отправьте дату и время для планирования публикации поста на любой другой день.\n"
+"\n"
+"Пример формата (сегодня): 15.08.2023 13:40"
+
+#: handlers/users/post/postponing.py:72
+msgid ""
+"Wrong date and (or) time format. Try again!\n"
+"Format example - 15.08.2023 13:40"
+msgstr ""
+"Неправильный формат даты и (или) времени. Попробуйте еще раз!\n"
+"Пример формата - 15.08.2023 13:40"
+
+#: handlers/users/post/postponing.py:109
+msgid ""
+"🚀 Post is scheduled! #{post_id}\n"
+"\n"
+"Selected channels: {selected_channels}\n"
+"\n"
+"Publication time: {date}"
+msgstr ""
+"🚀 Пост запланирован! #{post_id}\n"
+"\n"
+"Выбранные каналы: {selected_channels}\n"
+"\n"
+"Время публикации: {date}"
+
+#: handlers/users/post/publishing.py:27
+msgid ""
+"Post content is ready to publish into: {selected_channels}\n"
+"\n"
+"Do you want to publish it now or later?"
+msgstr ""
+"Контент поста готов к публикации в: {selected_channels}\n"
+"\n"
+"Вы хотите опубликовать его сейчас или позже?"
+
+#: handlers/users/post/publishing.py:37
+#: handlers/users/post/publishing_with_deletion.py:53
+msgid "Publishing..."
+msgstr "Публикация..."
+
+#: handlers/users/post/publishing.py:41
+msgid "Published!"
+msgstr "Опубликовано!"
+
+#: handlers/users/post/publishing_with_deletion.py:21
+msgid ""
+"You can set a self-destruct timer for the post.\n"
+"\n"
+"Select or send the number of hours after which you want to delete the "
+"post.\n"
+msgstr ""
+"Вы можете установить таймер самоуничтожения для поста.\n"
+"\n"
+"Выберите или отправьте количество часов, через которое вы хотите удалить "
+"пост.\n"
+
+#: handlers/users/post/publishing_with_deletion.py:62
+msgid ""
+"Published!\n"
+"\n"
+"Post will be deleted in {hour} hours and {minute} minutes."
+msgstr ""
+"Опубликовано!\n"
+"\n"
+"Пост будет удален через {hour} часов и {minute} минут."
+
+#: keyboards/inline/channel.py:44 keyboards/inline/post/editing.py:70
+#: keyboards/inline/post/editing.py:108
+msgid "Remove"
+msgstr "Удалить"
+
+#: keyboards/inline/menu.py:13
+msgid "⭐️ Subscription"
+msgstr "⭐️ Подписка"
+
+#: keyboards/inline/menu.py:17
+msgid "👥 Referrals"
+msgstr "👥 Рефералы"
+
+#: keyboards/inline/menu.py:21
+msgid "Add channel"
+msgstr "Добавить канал"
+
+#: keyboards/inline/menu.py:27
+msgid "Remove channel"
+msgstr "Удалить канал"
+
+#: keyboards/inline/menu.py:32
+msgid "Create post"
+msgstr "Создать пост"
+
+#: keyboards/inline/menu.py:37 keyboards/inline/post/editing.py:42
+msgid "Posts in queue"
+msgstr "Посты в очереди"
+
+#: keyboards/inline/menu.py:42
+msgid "Change timezone"
+msgstr "Изменить часовой пояс"
+
+#: keyboards/inline/menu.py:53
+msgid "🔙 Back"
+msgstr "🔙 Назад"
+
+#: keyboards/inline/subscription.py:16
+msgid "Start"
+msgstr "Старт"
+
+#: keyboards/inline/subscription.py:17
+msgid "Pro"
+msgstr "Профи"
+
+#: keyboards/inline/subscription.py:18
+msgid "Unlimited"
+msgstr "Безлим"
+
+#: keyboards/inline/subscription.py:32
+msgid "Update subscription"
+msgstr "Обновить подписку"
+
+#: keyboards/inline/subscription.py:66
+msgid "Pay for {price} {currency_symbol}"
+msgstr "Оплатить {price} {currency_symbol}"
+
+#: keyboards/inline/subscription.py:75
+msgid "Charge from balance"
+msgstr "Списать с баланса"
+
+#: keyboards/inline/post/content.py:23 keyboards/inline/post/in_queue.py:25
+msgid "Add URL buttons"
+msgstr "Добавить URL-кнопки"
+
+#: keyboards/inline/post/content.py:37 keyboards/inline/post/in_queue.py:37
+msgid "Disable web page preview"
+msgstr "Отключить предпросмотр веб-страницы"
+
+#: keyboards/inline/post/content.py:46 keyboards/inline/post/in_queue.py:41
+msgid "Disable notification"
+msgstr "Отключить уведомление"
+
+#: keyboards/inline/post/content.py:52
+msgid "Remove content"
+msgstr "Удалить контент"
+
+#: keyboards/inline/post/editing.py:30
+msgid "Publication time: {run_date} [{post_id}]"
+msgstr "Время публикации: {run_date} [{post_id}]"
+
+#: keyboards/inline/post/editing.py:58 keyboards/inline/post/editing.py:89
+msgid "Publish now"
+msgstr "Опубликовать сейчас"
+
+#: keyboards/inline/post/editing.py:64
+msgid "Change publication time"
+msgstr "Изменить время публикации"
+
+#: keyboards/inline/post/general.py:47
+msgid "Select all"
+msgstr "Выбрать все"
+
+#: keyboards/inline/post/general.py:63
+msgid "Create group"
+msgstr "Создать группу"
+
+#: keyboards/inline/post/general.py:70
+msgid "Scheduled posts"
+msgstr "Отложенные посты"
+
+#: keyboards/inline/post/general.py:81
+msgid "Create an album"
+msgstr "Создать альбом"
+
+#: keyboards/inline/post/general.py:93
+msgid "Publish but set a deletion timer"
+msgstr "Задать таймер удаления"
+
+#: keyboards/inline/post/general.py:97
+msgid "Publish"
+msgstr "Опубликовать"
+
+#: keyboards/inline/post/general.py:101
+msgid "Postpone"
+msgstr "Отложить"
+
+#: keyboards/inline/post/in_queue.py:21
+msgid "Add a signature"
+msgstr "Добавить подпись"
+
+#: keyboards/inline/post/in_queue.py:29
+msgid "Add watermark"
+msgstr "Добавить водяной знак"
+
+#: keyboards/inline/post/in_queue.py:33
+msgid "Remove author text"
+msgstr "Удалить текст автора"
+
+#: keyboards/inline/post/in_queue.py:45
+msgid "Send as album"
+msgstr "Отправить как альбом"
+
+#: keyboards/inline/post/in_queue.py:51
+msgid "Shuffle posts"
+msgstr "Перемешать посты"
+
+#: keyboards/inline/post/in_queue.py:66
+msgid "Today"
+msgstr "Сегодня"
+
+#: keyboards/inline/post/in_queue.py:74
+msgid "Tomorrow"
+msgstr "Завтра"
+
+#: keyboards/inline/post/in_queue.py:85
+msgid "After tomorrow"
+msgstr "Послезавтра"
