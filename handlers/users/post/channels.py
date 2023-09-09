@@ -115,7 +115,9 @@ async def ask_for_post_content(query: CallbackQuery, *args) -> None:
     )
     await query.message.edit_text(
         text=_get_asking_message_depending_on_target_menu(),
-        reply_markup=get_post_album_keyboard(),
+        reply_markup=get_post_album_keyboard()
+        if post_content.target_menu == "post creation"
+        else None,
     )
     await Post.content.set()
 

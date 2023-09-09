@@ -12,9 +12,10 @@ from keyboards.inline.post.content import (
     get_back_to_post_content_keyboard,
 )
 
-from ..commands.menu import show_menu
 from .constants import post_content
+from ..commands.menu import show_menu
 from .publishing import ask_about_time_to_publish_post
+from .in_queue import ask_for_what_to_add_to_posts_in_queue
 
 
 current_content_index = None
@@ -27,8 +28,17 @@ async def add_text_to_post(message: Message, state: FSMContext) -> None:
         post_content.clear()
         await state.finish()
         await show_menu(message)
-    elif message.text == _("Next"):
+    elif (
+        message.text == _("Next")
+        and post_content.target_menu == "post creation"
+    ):
         await ask_about_time_to_publish_post(message, state)
+    elif (
+        message.text == _("Next")
+        and post_content.target_menu == "post in queue"
+    ):
+        await state.finish()
+        await ask_for_what_to_add_to_posts_in_queue(message)
     else:
         content_item = post_content.add("message", message.text)
         await send_corrective_reply_to_(message, content_item)
