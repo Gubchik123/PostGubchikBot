@@ -11,6 +11,15 @@ class PostContent:
         self.clear()
         self.target_menu = ""
 
+    def __iter__(self):
+        """Iterates over the post content and yields its items."""
+        for content in self.content:
+            yield content
+
+    def __len__(self) -> int:
+        """Returns the length of the post content."""
+        return len(self.content)
+
     def clear(self) -> None:
         """Clears the post content."""
         self.content = []
