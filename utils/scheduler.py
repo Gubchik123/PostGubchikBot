@@ -115,3 +115,19 @@ async def publish_user_post(
         ).format(selected_channels=", ".join(selected_channels)),
     )
     post_content.clear()
+
+
+async def publish_user_post_in_queue(
+    author_chat_id: int,
+    author_language_code: str,
+    post_content_item: dict,
+    selected_channels: list[str],
+) -> None:
+    """Publishes user post in queue."""
+    post_content = PostContent.from_(post_content_item)
+    await publish_user_post(
+        author_chat_id,
+        author_language_code,
+        post_content,
+        selected_channels,
+    )
