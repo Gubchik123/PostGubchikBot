@@ -10,8 +10,9 @@ async def help_command(message: types.Message):
     await message.answer(
         _(
             "Available commands:\n"
-            "/start - Start conversation\n"
-            "/help - Get help\n"
-            "/language - Change language"
+            "/start - Start working with the bot\n"
+            "/help - Send of basic usage rules\n"
+            "/language - Change the language of the bot\n"
+            "/menu - Send main menu\n"
         )
     )
