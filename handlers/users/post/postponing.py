@@ -82,7 +82,7 @@ def _schedule_job_to_publish_user_post(
     """Schedules job to publish user post
     on the given date and return generated post id."""
     user = get_user_by_(user_chat_id)
-    id = _generate_random_id()
+    id = generate_random_id()
     scheduler.add_job(
         publish_user_post,
         "date",
@@ -95,11 +95,10 @@ def _schedule_job_to_publish_user_post(
             "selected_channels": selected_channels,
         },
     )
-    scheduler.print_jobs()
     return id
 
 
-def _generate_random_id(length: int = 12) -> str:
+def generate_random_id(length: int = 12) -> str:
     """Generates random id with ascii letters and digits and returns it."""
     characters = string.ascii_letters + string.digits
     return "".join(random.choices(characters, k=length))
