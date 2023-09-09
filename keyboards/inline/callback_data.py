@@ -22,7 +22,9 @@ post_content_callback_data = CallbackData(
 
 posts_in_queue_callback_data = CallbackData("posts_in_queue", "level", "date")
 
-post_editing_callback_data = CallbackData("post_editing", "level", "post_id")
+post_editing_callback_data = CallbackData(
+    "post_editing", "level", "post_type", "post_id"
+)
 
 
 def get_back_inline_button_by_(callback_data: str) -> InlineKeyboardButton:
