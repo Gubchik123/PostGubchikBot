@@ -52,6 +52,14 @@ def get_user_post_keyboard(
     keyboard = InlineKeyboardMarkup()
     keyboard.add(
         InlineKeyboardButton(
+            text=_("Publish now"),
+            callback_data=_get_new_callback_data(
+                "confirm_publishing", post_type, post_id
+            ),
+        )
+    )
+    keyboard.add(
+        InlineKeyboardButton(
             text=_("Change publication time"),
             callback_data=_get_new_callback_data(
                 "change_time", post_type, post_id
@@ -76,7 +84,29 @@ def get_user_post_keyboard(
     return keyboard
 
 
-def get_confirmation_keyboard(
+def get_confirmation_publishing_keyboard(
+    post_id: str, post_type: str = "None"
+) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    keyboard.insert(
+        InlineKeyboardButton(
+            text=_("Publish now"),
+            callback_data=_get_new_callback_data(
+                "publish_now", post_type, post_id
+            ),
+        )
+    )
+    keyboard.insert(
+        get_back_inline_button_by_(
+            callback_data=_get_new_callback_data(
+                "get_post", post_type, post_id
+            )
+        )
+    )
+    return keyboard
+
+
+def get_confirmation_removing_keyboard(
     post_id: str, post_type: str = "None"
 ) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup(row_width=2)
