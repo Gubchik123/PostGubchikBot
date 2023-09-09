@@ -1,14 +1,12 @@
 from datetime import datetime
 from typing import Callable, Optional
 
-from apscheduler.job import Job
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from states.post import Post
 from loader import dp, scheduler, _
 from utils.scheduler import (
-    scheduled_post_jobs,
     get_user_scheduled_post_job_by_,
     get_user_scheduled_post_jobs_by_,
 )
@@ -135,8 +133,9 @@ async def remove_post(query: CallbackQuery, post_id: str) -> None:
     """Removes post and sends success message."""
     user_chat_id = query.from_user.id
     scheduler.remove_job(f"{user_chat_id}_post_{post_id}")
-    user_scheduled_post_jobs_count = len(scheduled_post_jobs[user_chat_id])
-    scheduled_post_jobs.pop(user_chat_id)
+    user_scheduled_post_jobs_count = len(
+        get_user_scheduled_post_jobs_by_(user_chat_id)
+    )
     await query.answer(
         text=_("Post #{post_id} has been removed!").format(post_id=post_id)
     )

@@ -6,9 +6,6 @@ from .post.content import PostContent
 from .db.crud.user import get_user_channels_by_, reset_user_subscription_by_
 
 
-scheduled_post_jobs = {}
-
-
 async def send_subscription_reminder_to_user(
     user_chat_id: int,
     user_language_code: str,
@@ -39,16 +36,11 @@ async def send_subscription_reminder_to_user(
 
 def get_user_scheduled_post_jobs_by_(user_chat_id: int) -> tuple[Job]:
     """Returns user scheduled post jobs by the given user chat id."""
-    try:
-        return scheduled_post_jobs[user_chat_id]
-    except KeyError:
-        user_scheduled_post_jobs = tuple(
-            job
-            for job in scheduler.get_jobs()
-            if job.kwargs.get("author_chat_id") == user_chat_id
-        )
-        scheduled_post_jobs[user_chat_id] = user_scheduled_post_jobs
-        return user_scheduled_post_jobs
+    return tuple(
+        job
+        for job in scheduler.get_jobs()
+        if job.id.startswith(f"{user_chat_id}_post_")
+    )
 
 
 def get_user_scheduled_post_job_by_(post_id: str, user_chat_id: int) -> Job:
