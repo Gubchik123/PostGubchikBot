@@ -6,6 +6,7 @@ from loader import _
 
 
 def get_menu_keyboard(has_channels: bool) -> InlineKeyboardMarkup:
+    """Returns menu navigation keyboard."""
     keyboard = InlineKeyboardMarkup(row_width=2)
     keyboard.insert(
         InlineKeyboardButton(

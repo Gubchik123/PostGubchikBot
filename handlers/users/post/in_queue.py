@@ -296,6 +296,7 @@ def _schedule_job_to_publish_user_post_in_queue(
     post_content_item: dict,
     run_date: datetime,
 ) -> None:
+    """Schedules job to publish user post in queue on the given date."""
     scheduler.add_job(
         publish_user_post_in_queue,
         "date",

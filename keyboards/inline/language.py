@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def get_language_inline_keyboard() -> InlineKeyboardMarkup:
-    """Returns InlineKeyboardMarkup with language buttons."""
+    """Returns inline keyboard with language buttons."""
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [

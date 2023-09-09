@@ -21,6 +21,7 @@ def _get_new_callback_data(
 def get_user_posts_keyboard(
     user_scheduled_post_jobs: tuple[Job], post_type: str = "None"
 ) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with user posts and back button."""
     keyboard = InlineKeyboardMarkup(row_width=1)
     for job in user_scheduled_post_jobs:
         post_id = job.id.split("_")[-1]  # <user_chat_id>_post_<post_id>
@@ -49,6 +50,9 @@ def get_user_posts_keyboard(
 def get_user_post_keyboard(
     post_id: str, post_type: str = "None"
 ) -> InlineKeyboardMarkup:
+    """
+    Returns inline keyboard with action buttons for user post and back button.
+    """
     return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Publish now"),
@@ -79,6 +83,7 @@ def get_user_post_keyboard(
 def get_confirmation_publishing_keyboard(
     post_id: str, post_type: str = "None"
 ) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with confirmation and back button."""
     return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Publish now"),
@@ -97,6 +102,7 @@ def get_confirmation_publishing_keyboard(
 def get_confirmation_removing_keyboard(
     post_id: str, post_type: str = "None"
 ) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with confirmation and back button."""
     return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Remove"),

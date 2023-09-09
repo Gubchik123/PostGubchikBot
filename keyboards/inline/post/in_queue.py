@@ -14,6 +14,8 @@ def _get_new_callback_data(level: str, date: str = "None") -> str:
 
 
 def get_posts_in_queue_keyboard() -> InlineKeyboardMarkup:
+    """Returns inline keyboard
+    with action buttons for posts in queue and back button."""
     return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Add a signature"),
@@ -57,6 +59,7 @@ def get_posts_in_queue_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_date_keyboard() -> InlineKeyboardMarkup:
+    """Returns inline keyboard with dates and back button."""
     keyboard = InlineKeyboardMarkup()
     keyboard.insert(
         InlineKeyboardButton(
@@ -97,6 +100,7 @@ def get_date_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_time_keyboard() -> InlineKeyboardMarkup:
+    """Returns inline keyboard with time back button."""
     return InlineKeyboardMarkup().add(
         get_back_inline_button_by_(
             _get_new_callback_data("ask_for_start_date")
@@ -105,6 +109,7 @@ def get_time_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_interval_keyboard(date: str) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with interval back button."""
     return InlineKeyboardMarkup().add(
         get_back_inline_button_by_(
             _get_new_callback_data("ask_for_time", date)

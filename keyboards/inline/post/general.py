@@ -20,6 +20,7 @@ def get_channels_keyboard(
     all_groups: list[Group],
     selected_channels: list[str],
 ) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with channels, groups and back button."""
     keyboard = InlineKeyboardMarkup(row_width=2)
 
     for channel in all_channels:
@@ -74,6 +75,7 @@ def get_channels_keyboard(
 
 
 def get_post_album_keyboard() -> InlineKeyboardMarkup:
+    """Returns inline keyboard with create album button."""
     return InlineKeyboardMarkup().add(
         InlineKeyboardButton(
             text=_("Create an album"),
@@ -83,7 +85,9 @@ def get_post_album_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_pre_publish_keyboard() -> InlineKeyboardMarkup:
-    """Returns pre publish keyboard."""
+    """
+    Returns inline keyboard with action buttons for post and cancel button.
+    """
     return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Publish but set a deletion timer"),
@@ -102,6 +106,7 @@ def get_pre_publish_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_deletion_hours_keyboard() -> InlineKeyboardMarkup:
+    """Returns inline keyboard with deletion hour buttons and back button."""
     keyboard = InlineKeyboardMarkup(row_width=3)
     for hour in (1, 3, 6, 9, 12, 15, 18, 21, 24):
         keyboard.insert(

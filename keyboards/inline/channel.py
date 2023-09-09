@@ -17,6 +17,7 @@ def _get_new_callback_data(level: int, channel_title="None") -> str:
 def get_channels_keyboard(
     all_channels: list[Channel],
 ) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with channels and back button."""
     CURRENT_LEVEL = 0
 
     keyboard = InlineKeyboardMarkup(row_width=1)
@@ -35,20 +36,17 @@ def get_channels_keyboard(
 
 
 def get_confirmation_keyboard(channel_title: str):
+    """Returns inline keyboard with confirmation and back button."""
     CURRENT_LEVEL = 1
 
-    keyboard = InlineKeyboardMarkup(row_width=2)
-    keyboard.insert(
+    return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Remove"),
             callback_data=_get_new_callback_data(
                 CURRENT_LEVEL + 1, channel_title
             ),
-        )
-    )
-    keyboard.insert(
+        ),
         get_back_inline_button_by_(
             callback_data=_get_new_callback_data(CURRENT_LEVEL - 1)
-        )
+        ),
     )
-    return keyboard

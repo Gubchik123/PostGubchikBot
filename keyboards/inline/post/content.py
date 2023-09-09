@@ -16,6 +16,7 @@ def _get_new_callback_data(level: str, content_index: int = 0) -> str:
 
 
 def get_post_content_keyboard(content_item: dict) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with post content buttons by the given item."""
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(
         InlineKeyboardButton(
@@ -71,7 +72,9 @@ def get_back_to_post_content_keyboard(
 
 
 def get_url_buttons_from_(user_message_text: str) -> InlineKeyboardMarkup:
-    """Returns url buttons from the given user message text."""
+    """
+    Returns inline keyboard with url buttons from the given user message text.
+    """
     keyboard = InlineKeyboardMarkup()
     for row in user_message_text.split("\n"):
         buttons = []

@@ -13,6 +13,7 @@ def _get_new_callback_data(
 
 
 def get_countries_keyboard() -> InlineKeyboardMarkup:
+    """Returns inline keyboard with countries and back button."""
     CURRENT_LEVEL = 0
 
     keyboard = InlineKeyboardMarkup(row_width=3)
@@ -31,6 +32,7 @@ def get_countries_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_cities_keyboard(country: str) -> InlineKeyboardMarkup:
+    """Returns inline keyboard with cities and back button."""
     CURRENT_LEVEL = 1
 
     keyboard = InlineKeyboardMarkup(row_width=5)
