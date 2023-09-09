@@ -1,6 +1,7 @@
 from . import channels
 from . import content
 from . import album
+from . import in_queue
 from . import publishing_with_deletion
 from . import publishing
 from . import postponing
