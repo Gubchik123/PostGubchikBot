@@ -20,6 +20,13 @@ class PostContent:
         """Returns the length of the post content."""
         return len(self.content)
 
+    @classmethod
+    def from_(cls, post_content_item: dict):
+        """Returns the post content from the given post content item."""
+        post_content = cls()
+        post_content.content.append(post_content_item)
+        return post_content
+
     def clear(self) -> None:
         """Clears the post content."""
         self.content = []
