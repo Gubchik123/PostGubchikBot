@@ -40,6 +40,16 @@ def get_user_scheduled_post_jobs_by_(user_chat_id: int) -> tuple[Job]:
         job
         for job in scheduler.get_jobs()
         if job.id.startswith(f"{user_chat_id}_post_")
+        and "in_queue" not in job.id
+    )
+
+
+def get_user_scheduled_post_in_queue_jobs_by_(user_chat_id: int) -> tuple[Job]:
+    """Returns user scheduled post in queue jobs by the given user chat id."""
+    return tuple(
+        job
+        for job in scheduler.get_jobs()
+        if job.id.startswith(f"{user_chat_id}_post_in_queue_")
     )
 
 
@@ -48,6 +58,14 @@ def get_user_scheduled_post_job_by_(post_id: str, user_chat_id: int) -> Job:
     Returns user scheduled post job by the given post id and user chat id.
     """
     return scheduler.get_job(f"{user_chat_id}_post_{post_id}")
+
+
+def get_user_scheduled_post_in_queue_job_by_(
+    post_id: str, user_chat_id: int
+) -> Job:
+    """Returns user scheduled post in queue job
+    by the given post id and user chat id."""
+    return scheduler.get_job(f"{user_chat_id}_post_in_queue_{post_id}")
 
 
 async def remove_user_subscription_by_(
