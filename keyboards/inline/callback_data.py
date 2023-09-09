@@ -20,6 +20,8 @@ post_content_callback_data = CallbackData(
     "post_content", "level", "content_index"
 )
 
+posts_in_queue_callback_data = CallbackData("posts_in_queue", "level", "date")
+
 post_editing_callback_data = CallbackData("post_editing", "level", "post_id")
 
 
