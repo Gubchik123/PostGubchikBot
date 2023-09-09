@@ -84,27 +84,21 @@ def get_post_album_keyboard() -> InlineKeyboardMarkup:
 
 def get_pre_publish_keyboard() -> InlineKeyboardMarkup:
     """Returns pre publish keyboard."""
-    keyboard = InlineKeyboardMarkup()
-    keyboard.add(
+    return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Publish but set a deletion timer"),
             callback_data=_get_new_callback_data("ask_for_deletion_time"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Publish"),
             callback_data=_get_new_callback_data("publish_post"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Postpone"),
             callback_data=_get_new_callback_data("postpone_post"),
-        )
+        ),
+        get_back_to_menu_inline_button(_("Cancel")),
     )
-    keyboard.add(get_back_to_menu_inline_button(_("Cancel")))
-    return keyboard
 
 
 def get_deletion_hours_keyboard() -> InlineKeyboardMarkup:

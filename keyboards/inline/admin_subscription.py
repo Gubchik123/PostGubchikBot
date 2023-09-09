@@ -3,10 +3,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils.db.models import Subscription
 from .menu import get_back_to_menu_inline_button
 from .subscription import get_subscription_text_by_
-from .callback_data import (
-    admin_subscription_callback_data,
-    get_back_inline_button_by_,
-)
+from .callback_data import admin_subscription_callback_data
 
 
 def _get_new_callback_data(level: int, price="None") -> str:

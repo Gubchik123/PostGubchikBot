@@ -47,8 +47,6 @@ def get_post_content_keyboard(content_item: dict) -> InlineKeyboardMarkup:
                 "disable_notification", content_item["index"]
             ),
         ),
-    )
-    keyboard.add(
         InlineKeyboardButton(
             text=_("Remove content"),
             callback_data=_get_new_callback_data(

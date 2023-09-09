@@ -8,74 +8,52 @@ from keyboards.inline.callback_data import (
 )
 
 
-def _get_new_callback_data(
-    level: str, date: str = "None"
-) -> str:
+def _get_new_callback_data(level: str, date: str = "None") -> str:
     """Returns new posts in queue callback data by the given parameters."""
-    return posts_in_queue_callback_data.new(
-        level=level, date=date
-    )
+    return posts_in_queue_callback_data.new(level=level, date=date)
 
 
 def get_posts_in_queue_keyboard() -> InlineKeyboardMarkup:
-    keyboard = InlineKeyboardMarkup()
-    keyboard.add(
+    return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
             text=_("Add a signature"),
             callback_data=_get_new_callback_data("add_signature"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Add URL buttons"),
             callback_data=_get_new_callback_data("add_url_buttons"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Add watermark"),
             callback_data=_get_new_callback_data("add_watermark"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Remove author text"),
             callback_data=_get_new_callback_data("remove_author_text"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Disable web page preview"),
             callback_data=_get_new_callback_data("disable_web_page_preview"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Disable notification"),
             callback_data=_get_new_callback_data("disable_notification"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Send as album"),
             callback_data=_get_new_callback_data(
                 "send_posts_in_queue_as_album"
             ),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Shuffle posts"),
             callback_data=_get_new_callback_data("shuffle"),
-        )
-    )
-    keyboard.add(
+        ),
         InlineKeyboardButton(
             text=_("Next"),
             callback_data=_get_new_callback_data("ask_for_start_date"),
-        )
+        ),
     )
-    return keyboard
 
 
 def get_date_keyboard() -> InlineKeyboardMarkup:
