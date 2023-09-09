@@ -12,7 +12,7 @@ from utils.scheduler import (
     remove_user_subscription_by_,
 )
 
-from .user import _get_user_by_
+from .user import users, _get_user_by_
 from ..models import User, Subscription
 from ..db import MySession, commit_and_refresh
 
@@ -48,15 +48,21 @@ def add_subscription_for_user_with_(
     with MySession() as session:
         user = _get_user_by_(session, chat_id)
         was_previous_subscription = user.subscription_id
-        user.subscription_id = (
+        subscription = users[user.chat_id].subscription = (
             session.query(Subscription)
             .filter(Subscription.price == subscription_price)
             .first()
-            .id
         )
-        user.subscription_expire_date = datetime.now(
+        user.subscription_id = users[
+            user.chat_id
+        ].subscription_id = subscription.id
+        user.subscription_expire_date = users[
+            user.chat_id
+        ].subscription_expire_date = datetime.now(
             timezone(user.timezone)
-        ) + timedelta(days=DEFAULT_SUBSCRIPTION_DAYS)
+        ) + timedelta(
+            days=DEFAULT_SUBSCRIPTION_DAYS
+        )
         commit_and_refresh(session, user)
     if was_previous_subscription:
         _remove_all_previous_scheduler_jobs_for_user_with_(user.chat_id)

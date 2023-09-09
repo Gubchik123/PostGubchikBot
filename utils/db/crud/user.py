@@ -136,6 +136,7 @@ def reset_user_subscription_by_(user_chat_id: int) -> None:
         )
         session.commit()
     users[user_chat_id].subscription = None
+    users[user_chat_id].subscription_id = None
     users[user_chat_id].subscription_expire_date = None
 
 
