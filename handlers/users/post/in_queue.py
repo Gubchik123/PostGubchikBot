@@ -325,7 +325,7 @@ def _get_publishing_time_for_adding_to_message_by_(
 
 
 @dp.callback_query_handler(posts_in_queue_callback_data.filter(), state="*")
-async def navigate(
+async def navigate_all_other_posts_in_queue_callback_data(
     callback_query: CallbackQuery,
     callback_data: dict,
     state: Optional[FSMContext] = None,

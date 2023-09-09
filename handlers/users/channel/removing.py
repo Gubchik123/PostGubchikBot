@@ -48,7 +48,9 @@ async def remove_channel(
 
 
 @dp.callback_query_handler(channel_callback_data.filter())
-async def navigate(callback_query: CallbackQuery, callback_data: dict) -> None:
+async def navigate_all_other_channel_callback_data(
+    callback_query: CallbackQuery, callback_data: dict
+) -> None:
     """Catches all other channel callback data to navigate."""
     current_level = callback_data.get("level")
     channel_title = callback_data.get("channel_title")

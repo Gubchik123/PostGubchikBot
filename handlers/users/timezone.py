@@ -51,7 +51,9 @@ async def change_timezone(
 
 
 @dp.callback_query_handler(timezone_callback_data.filter())
-async def navigate(callback_query: CallbackQuery, callback_data: dict) -> None:
+async def navigate_all_other_timezone_callback_data(
+    callback_query: CallbackQuery, callback_data: dict
+) -> None:
     """Catches all other timezone callback data to navigate."""
 
     current_level = callback_data.get("level")

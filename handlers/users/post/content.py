@@ -199,7 +199,7 @@ async def remove_content(
 @dp.callback_query_handler(
     post_content_callback_data.filter(), state=(Post.content, Post.url_buttons)
 )
-async def navigate(
+async def navigate_all_other_post_content_callback_data(
     callback_query: CallbackQuery, callback_data: dict, state: FSMContext
 ) -> None:
     """Catches all other post callback data to navigate."""
@@ -220,5 +220,5 @@ async def navigate(
     }.get(callback_data.get("level"))
 
     await current_level_function(
-        query, int(callback_data.get("content_index"))
+        callback_query, int(callback_data.get("content_index"))
     )

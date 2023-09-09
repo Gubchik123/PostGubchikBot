@@ -193,7 +193,7 @@ async def successful_payment(message: types.Message):
 
 
 @dp.callback_query_handler(subscription_callback_data.filter())
-async def navigate(
+async def navigate_all_other_subscription_callback_data(
     callback_query: types.CallbackQuery, callback_data: dict
 ) -> None:
     """Catches all other subscription callback data to navigate."""
