@@ -15,20 +15,20 @@ from ..commands.menu import show_menu
 
 
 @dp.callback_query_handler(text="remove_channel")
-async def get_channels(query: CallbackQuery, *args) -> None:
+async def get_channels(callback_query: CallbackQuery, *args) -> None:
     """Shows channels to choose from to remove."""
-    channels = get_user_channels_by_(query.from_user.id)
-    await query.message.edit_text(
+    channels = get_user_channels_by_(callback_query.from_user.id)
+    await callback_query.message.edit_text(
         text=_("Choose channel to remove:"),
         reply_markup=get_channels_keyboard(channels),
     )
 
 
 async def confirm_channel_removal(
-    query: CallbackQuery, channel_title: str
+    callback_query: CallbackQuery, channel_title: str
 ) -> None:
     """Confirms channel removal."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "Are you sure you want to remove the '{channel_title}'?"
         ).format(channel_title=channel_title),
@@ -36,15 +36,19 @@ async def confirm_channel_removal(
     )
 
 
-async def remove_channel(query: CallbackQuery, channeL_title: str) -> None:
+async def remove_channel(
+    callback_query: CallbackQuery, channeL_title: str
+) -> None:
     """Removes channel."""
     remove_channel_by_(channeL_title)
-    await query.answer(text=_("Channel '{}' removed.").format(channeL_title))
-    await show_menu(query)
+    await callback_query.answer(
+        text=_("Channel '{}' removed.").format(channeL_title)
+    )
+    await show_menu(callback_query)
 
 
 @dp.callback_query_handler(channel_callback_data.filter())
-async def navigate(query: CallbackQuery, callback_data: dict) -> None:
+async def navigate(callback_query: CallbackQuery, callback_data: dict) -> None:
     """Catches all other channel callback data to navigate."""
     current_level = callback_data.get("level")
     channel_title = callback_data.get("channel_title")
@@ -55,4 +59,4 @@ async def navigate(query: CallbackQuery, callback_data: dict) -> None:
         "2": remove_channel,
     }.get(current_level)
 
-    await current_level_function(query, channel_title)
+    await current_level_function(callback_query, channel_title)

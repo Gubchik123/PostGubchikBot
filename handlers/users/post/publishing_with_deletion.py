@@ -15,9 +15,9 @@ from .constants import post_content, selected_channels
 from .postponing import send_message_about_wrong_date_and_time
 
 
-async def ask_for_deletion_time(query: CallbackQuery, *args) -> None:
+async def ask_for_deletion_time(callback_query: CallbackQuery, *args) -> None:
     """Asks for deletion time and waits (state) for it."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "You can set a self-destruct timer for the post.\n\n"
             "Select or send the number of hours after which you want to delete the post.\n"

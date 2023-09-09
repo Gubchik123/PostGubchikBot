@@ -12,16 +12,16 @@ from ..commands.menu import show_menu
 
 
 @dp.callback_query_handler(text="add_channel")
-async def check_if_user_can_add_channel(query: CallbackQuery) -> None:
+async def check_if_user_can_add_channel(callback_query: CallbackQuery) -> None:
     """Checks if user can add channel
     and shows the next instructions if True and message otherwise."""
-    if not _can_user_add_channel(query.from_user.id):
-        await query.message.edit_text(
+    if not _can_user_add_channel(callback_query.from_user.id):
+        await callback_query.message.edit_text(
             _("You have reached the limit of channels!"),
             reply_markup=get_back_to_menu_keyboard(),
         )
         return
-    await ask_for_forwarded_message(query)
+    await ask_for_forwarded_message(callback_query)
 
 
 def _can_user_add_channel(user_chat_id: int) -> bool:
@@ -41,9 +41,9 @@ def _can_user_add_channel(user_chat_id: int) -> bool:
     return True
 
 
-async def ask_for_forwarded_message(query: CallbackQuery) -> None:
+async def ask_for_forwarded_message(callback_query: CallbackQuery) -> None:
     """Asks for forwarded message to the channel and waits (state) for it."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         _(
             "Forward a message here from the channel you want to add.\n\n"
             "<b>Important:</b> the bot and you must be administrators"

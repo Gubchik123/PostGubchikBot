@@ -7,11 +7,11 @@ from data.config import CURRENCY_SYMBOL, DEFAULT_REFERRAL_BONUS
 
 
 @dp.callback_query_handler(text="referrals")
-async def show_referrals(query: CallbackQuery) -> None:
+async def show_referrals(callback_query: CallbackQuery) -> None:
     """Shows referrals info."""
-    user = get_user_by_(query.from_user.id)
+    user = get_user_by_(callback_query.from_user.id)
     bot_ = await bot.get_me()
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "👥 <b>Referral statistics</b>\n\n"
             "You balance: <b>{balance} {currency_symbol}</b>\n"

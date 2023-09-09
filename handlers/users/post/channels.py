@@ -49,11 +49,11 @@ async def get_channels(
 
 
 async def select_or_remove_channel(
-    query: CallbackQuery, channel_title: str
+    callback_query: CallbackQuery, channel_title: str
 ) -> None:
     """Selects or removes the channel
     by the given channel title and updates the keyboard."""
-    user_channels = get_user_channels_by_(query.from_user.id)
+    user_channels = get_user_channels_by_(callback_query.from_user.id)
     if channel_title == "all":
         selected_channels.clear()
         selected_channels.extend([channel.title for channel in user_channels])
@@ -63,10 +63,12 @@ async def select_or_remove_channel(
         ) if channel_title in selected_channels else selected_channels.append(
             channel_title
         )
-    await query.message.edit_reply_markup(
+    await callback_query.message.edit_reply_markup(
         reply_markup=get_channels_keyboard(
             user_channels,
-            get_user_groups_by_(query.from_user.id, post_content.target_menu),
+            get_user_groups_by_(
+                callback_query.from_user.id, post_content.target_menu
+            ),
             selected_channels,
         )
     )
@@ -74,20 +76,20 @@ async def select_or_remove_channel(
 
 @dp.callback_query_handler(group_callback_data.filter())
 async def select_group_channels(
-    query: CallbackQuery, callback_data: dict
+    callback_query: CallbackQuery, callback_data: dict
 ) -> None:
     """Selects group channels by the group from the given callback data."""
     selected_channels.clear()
     selected_channels.extend(
         get_group_channel_titles_by_(callback_data["group_name"])
     )
-    await query.answer()
-    await ask_for_post_content(query)
+    await callback_query.answer()
+    await ask_for_post_content(callback_query)
 
 
-async def ask_for_group_name(query: CallbackQuery, *args) -> None:
+async def ask_for_group_name(callback_query: CallbackQuery, *args) -> None:
     """Asks for channel name and waits (state) for it."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_("Send me group name:"),
         reply_markup=get_keyboard_with_back_inline_button_by_("create_post"),
     )
@@ -107,13 +109,13 @@ async def create_group(message: Message, state: FSMContext) -> None:
     await get_channels(message, post_content.target_menu)
 
 
-async def ask_for_post_content(query: CallbackQuery, *args) -> None:
+async def ask_for_post_content(callback_query: CallbackQuery, *args) -> None:
     """Asks for post content and waits (state) for it."""
     post_content.clear()
-    await query.message.answer(
+    await callback_query.message.answer(
         text="🚀", reply_markup=get_post_creation_keyboard()
     )
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_get_asking_message_depending_on_target_menu(),
         reply_markup=get_post_album_keyboard()
         if post_content.target_menu == "post creation"
@@ -140,10 +142,10 @@ def _get_asking_message_depending_on_target_menu() -> str:
     )
 
 
-async def ask_for_post_album(query: CallbackQuery, *args) -> None:
+async def ask_for_post_album(callback_query: CallbackQuery, *args) -> None:
     """Asks for post album and waits (state) for it."""
     post_album.clear()
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "You selected the {selected_channels} channel(s) to create a post\n\n"
             "Send me post album (animation, document, audio, photo and video)\n\n"

@@ -23,9 +23,9 @@ from .constants import selected_channels, post_content
 
 
 @dp.callback_query_handler(text="posts_in_queue")
-async def get_channels_(query: CallbackQuery) -> None:
+async def get_channels_(callback_query: CallbackQuery) -> None:
     """Sends a message with inline keyboard to select a channel."""
-    await get_channels(query, target="post in queue")
+    await get_channels(callback_query, target="post in queue")
 
 
 async def ask_for_what_to_add_to_posts_in_queue(
@@ -43,48 +43,56 @@ async def ask_for_what_to_add_to_posts_in_queue(
     )
 
 
-async def add_signature_to_posts_in_queue(query: CallbackQuery) -> None:
+async def add_signature_to_posts_in_queue(
+    callback_query: CallbackQuery,
+) -> None:
     """Adds signature to posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
-async def add_url_buttons_to_posts_in_queue(query: CallbackQuery) -> None:
+async def add_url_buttons_to_posts_in_queue(
+    callback_query: CallbackQuery,
+) -> None:
     """Adds url buttons to posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
-async def add_watermark_to_posts_in_queue(query: CallbackQuery) -> None:
+async def add_watermark_to_posts_in_queue(
+    callback_query: CallbackQuery,
+) -> None:
     """Adds watermark to posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
-async def remove_author_text_from_posts_in_queue(query: CallbackQuery) -> None:
+async def remove_author_text_from_posts_in_queue(
+    callback_query: CallbackQuery,
+) -> None:
     """Removes author text from posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
 async def disable_web_page_preview_for_posts_in_queue(
-    query: CallbackQuery,
+    callback_query: CallbackQuery,
 ) -> None:
     """Disables web page preview for posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
 async def disable_notification_for_posts_in_queue(
-    query: CallbackQuery,
+    callback_query: CallbackQuery,
 ) -> None:
     """Disables notification for posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
-async def send_posts_in_queue_as_album(query: CallbackQuery) -> None:
+async def send_posts_in_queue_as_album(callback_query: CallbackQuery) -> None:
     """Sends posts in queue as album."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
-async def shuffle_posts_in_queue(query: CallbackQuery) -> None:
+async def shuffle_posts_in_queue(callback_query: CallbackQuery) -> None:
     """Shuffles posts in queue."""
-    await query.answer(_("Soon..."))
+    await callback_query.answer(_("Soon..."))
 
 
 start_date = ""
@@ -93,10 +101,10 @@ interval = ""
 
 
 async def ask_for_start_date_to_send_posts_in_queue(
-    query: CallbackQuery,
+    callback_query: CallbackQuery,
 ) -> None:
     """Asks for start date to send posts-in-queue."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "Send the date from which to start posting messages "
             "in the format: DD.MM.YYYY (15.08.2023)"
@@ -305,7 +313,7 @@ def _schedule_job_to_publish_user_post_in_queue(
 def _get_publishing_time_for_adding_to_message_by_(
     count: int, posts_count: int, current_datetime: datetime
 ) -> bool:
-    """Returns publishing time for adding to message 
+    """Returns publishing time for adding to message
     by checking the given count and posts count."""
     if posts_count < 5:
         return f"{count + 1} - {current_datetime.strftime('%d.%m.%Y %H:%M')}\n"
@@ -318,7 +326,7 @@ def _get_publishing_time_for_adding_to_message_by_(
 
 @dp.callback_query_handler(posts_in_queue_callback_data.filter(), state="*")
 async def navigate(
-    query: CallbackQuery,
+    callback_query: CallbackQuery,
     callback_data: dict,
     state: Optional[FSMContext] = None,
 ) -> None:
@@ -343,6 +351,6 @@ async def navigate(
     }.get(callback_data.get("level"))
 
     try:
-        await current_level_function(query)
+        await current_level_function(callback_query)
     except TypeError:
-        await current_level_function(query, callback_data.get("date"))
+        await current_level_function(callback_query, callback_data.get("date"))

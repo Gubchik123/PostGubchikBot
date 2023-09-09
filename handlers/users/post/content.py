@@ -123,12 +123,12 @@ async def send_corrective_reply_to_(
 
 
 async def ask_for_url_buttons(
-    query: CallbackQuery, content_index: int
+    callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Asks for URL buttons and waits (state) for them."""
     global current_content_index
     current_content_index = content_index
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "Send me list of URL buttons in one message. "
             "Please, follow this format:\n\n"
@@ -165,40 +165,42 @@ async def add_url_buttons(message: Message, state: FSMContext):
 
 
 async def disable_web_page_preview(
-    query: CallbackQuery, content_index: int
+    callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Disables web page preview for the content with the given index."""
     content_item = post_content.update_kwargs(
         content_index, "disable_web_page_preview"
     )
-    await query.message.edit_reply_markup(
+    await callback_query.message.edit_reply_markup(
         get_post_content_keyboard(content_item)
     )
 
 
 async def disable_notification(
-    query: CallbackQuery, content_index: int
+    callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Disables notification for the content with the given index."""
     content_item = post_content.update_kwargs(
         content_index, "disable_notification"
     )
-    await query.message.edit_reply_markup(
+    await callback_query.message.edit_reply_markup(
         get_post_content_keyboard(content_item)
     )
 
 
-async def remove_content(query: CallbackQuery, content_index: int) -> None:
+async def remove_content(
+    callback_query: CallbackQuery, content_index: int
+) -> None:
     """Removes the content with the given index."""
     post_content.remove_by_(content_index)
-    await query.message.edit_text(_("Content is removed ❌"))
+    await callback_query.message.edit_text(_("Content is removed ❌"))
 
 
 @dp.callback_query_handler(
     post_content_callback_data.filter(), state=(Post.content, Post.url_buttons)
 )
 async def navigate(
-    query: CallbackQuery, callback_data: dict, state: FSMContext
+    callback_query: CallbackQuery, callback_data: dict, state: FSMContext
 ) -> None:
     """Catches all other post callback data to navigate."""
     if (

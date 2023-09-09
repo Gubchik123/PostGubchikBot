@@ -40,11 +40,11 @@ async def show_subscriptions(
     )
 
 
-async def ask_for_new_price(query: CallbackQuery, price: int) -> None:
+async def ask_for_new_price(callback_query: CallbackQuery, price: int) -> None:
     """Asks admin for new subscription price."""
     global previous_price
     previous_price = price
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         _(
             "Enter new subscription price"
             " (current price is {price} {currency_symbol})"
@@ -76,7 +76,7 @@ async def change_subscription_price(
 
 
 @dp.callback_query_handler(admin_subscription_callback_data.filter())
-async def navigate(query: CallbackQuery, callback_data: dict) -> None:
+async def navigate(callback_query: CallbackQuery, callback_data: dict) -> None:
     """Catches all other admin subscription callback data to navigate."""
     current_level = callback_data.get("level")
     price = int(callback_data.get("price"))
@@ -86,4 +86,4 @@ async def navigate(query: CallbackQuery, callback_data: dict) -> None:
         "1": ask_for_new_price,
     }.get(current_level)
 
-    await current_level_function(query, price)
+    await current_level_function(callback_query, price)

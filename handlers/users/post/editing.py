@@ -33,21 +33,21 @@ current_post_type = current_post_id = ""
 
 @dp.callback_query_handler(text="edit_post")
 async def get_scheduled_user_posts(
-    query: CallbackQuery, post_type: str = "None", *args
+    callback_query: CallbackQuery, post_type: str = "None", *args
 ) -> None:
     """Sends scheduled user posts to choose from to edit them."""
-    user_chat_id = query.from_user.id
+    user_chat_id = callback_query.from_user.id
     user_scheduled_post_jobs = get_user_scheduled_post_jobs_by_(user_chat_id)
     user_scheduled_post_in_queue_jobs = (
         get_user_scheduled_post_in_queue_jobs_by_(user_chat_id)
     )
     if not user_scheduled_post_jobs and not user_scheduled_post_in_queue_jobs:
-        await query.answer(
+        await callback_query.answer(
             text=_("You don't have any scheduled posts yet :("),
             show_alert=True,
         )
         return
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_("Select a post to edit it:"),
         reply_markup=get_user_posts_keyboard(
             user_scheduled_post_jobs
@@ -93,10 +93,10 @@ async def get_user_post(
 
 
 async def confirm_post_publishing(
-    query: CallbackQuery, post_type: str, post_id: str
+    callback_query: CallbackQuery, post_type: str, post_id: str
 ) -> None:
     """Sends post publishing confirmation message."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "Are you sure you want to publish this post (#{post_id}) now?"
         ).format(post_id=post_id),
@@ -105,25 +105,23 @@ async def confirm_post_publishing(
 
 
 async def publish_now(
-    query: CallbackQuery, post_type: str, post_id: str
+    callback_query: CallbackQuery, post_type: str, post_id: str
 ) -> None:
     """Publishes post now and sends success message."""
-    user = get_user_by_(query.from_user.id)
+    user = get_user_by_(callback_query.from_user.id)
     scheduler.reschedule_job(
-        job_id=_get_job_id_based_on_(
-            user.chat_id, post_type, post_id
-        ),
+        job_id=_get_job_id_based_on_(user.chat_id, post_type, post_id),
         trigger="date",
         run_date=datetime.now(timezone(user.timezone)),
     )
-    await query.answer(
+    await callback_query.answer(
         text=_("Post #{post_id} has been published!").format(post_id=post_id)
     )
-    await get_scheduled_user_posts(query)
+    await get_scheduled_user_posts(callback_query)
 
 
 async def ask_for_new_publication_time(
-    query: CallbackQuery, post_type: str, post_id: str
+    callback_query: CallbackQuery, post_type: str, post_id: str
 ) -> None:
     """
     Sends message to ask for new publication time and waits (state) for it.
@@ -131,7 +129,7 @@ async def ask_for_new_publication_time(
     global current_post_id, current_post_type
     current_post_type = post_type
     current_post_id = post_id
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "<b>Enter a new time for the scheduled post</b>\n\n"
             "Format example - 15.08.2023 13:40"
@@ -174,10 +172,10 @@ async def send_message_about_wrong_date(message: Message) -> None:
 
 
 async def confirm_post_removing(
-    query: CallbackQuery, post_type: str, post_id: str
+    callback_query: CallbackQuery, post_type: str, post_id: str
 ) -> None:
     """Sends post removing confirmation message."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "Are you sure you want to remove this post (#{post_id})?"
         ).format(post_id=post_id),
@@ -186,17 +184,17 @@ async def confirm_post_removing(
 
 
 async def remove_post(
-    query: CallbackQuery, post_type: str, post_id: str
+    callback_query: CallbackQuery, post_type: str, post_id: str
 ) -> None:
     """Removes post and sends success message."""
-    user_chat_id = query.from_user.id
+    user_chat_id = callback_query.from_user.id
     scheduler.remove_job(
         _get_job_id_based_on_(user_chat_id, post_type, post_id)
     )
-    await query.answer(
+    await callback_query.answer(
         text=_("Post #{post_id} has been removed!").format(post_id=post_id)
     )
-    await get_scheduled_user_posts(query)
+    await get_scheduled_user_posts(callback_query)
 
 
 def _get_job_id_based_on_(
@@ -214,7 +212,7 @@ def _get_job_id_based_on_(
 
 @dp.callback_query_handler(post_editing_callback_data.filter(), state="*")
 async def navigate(
-    query: CallbackQuery,
+    callback_query: CallbackQuery,
     callback_data: dict,
     state: Optional[FSMContext] = None,
 ) -> None:
@@ -232,5 +230,7 @@ async def navigate(
     }.get(callback_data.get("level"))
 
     await current_level_function(
-        query, callback_data.get("post_type"), callback_data.get("post_id")
+        callback_query,
+        callback_data.get("post_type"),
+        callback_data.get("post_id"),
     )

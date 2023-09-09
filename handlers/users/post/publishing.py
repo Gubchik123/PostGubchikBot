@@ -32,14 +32,14 @@ async def ask_about_time_to_publish_post(
     )
 
 
-async def publish_post(query: CallbackQuery, *args) -> None:
+async def publish_post(callback_query: CallbackQuery, *args) -> None:
     """Publishes the post into the selected channels."""
-    await query.message.answer(_("Publishing..."))
-    for channel in get_user_channels_by_(query.from_user.id):
+    await callback_query.message.answer(_("Publishing..."))
+    for channel in get_user_channels_by_(callback_query.from_user.id):
         if channel.title in selected_channels:
             await post_content.send_to_(channel.chat_id)
-    await query.message.answer(_("Published!"))
+    await callback_query.message.answer(_("Published!"))
     post_content.clear()
     # ! Workaround with user chat id to avoid "No channels" in the menu handler
-    query.message.from_user.id = query.from_user.id
-    await show_menu(query.message)
+    callback_query.message.from_user.id = callback_query.from_user.id
+    await show_menu(callback_query.message)

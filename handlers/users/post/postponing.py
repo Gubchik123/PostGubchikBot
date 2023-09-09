@@ -17,9 +17,9 @@ from ..commands.menu import show_menu
 from .constants import post_content, selected_channels
 
 
-async def postpone_post(query: CallbackQuery, *args) -> None:
+async def postpone_post(callback_query: CallbackQuery, *args) -> None:
     """Postpones the post to publish it later."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_(
             "Send me the time to publish the post <b>today</b>.\n"
             "Send date and time to schedule post publishing for any other day.\n\n"

@@ -13,10 +13,10 @@ from keyboards.inline.timezone import (
 
 
 @dp.callback_query_handler(text="change_timezone")
-async def get_countries(query: CallbackQuery, *args) -> None:
+async def get_countries(callback_query: CallbackQuery, *args) -> None:
     """Returns keyboard with countries to choose from."""
-    user = get_user_by_(query.from_user.id)
-    await query.message.edit_text(
+    user = get_user_by_(callback_query.from_user.id)
+    await callback_query.message.edit_text(
         text=_(
             "<b>Changing timezone.</b>\n\n"
             "Your current timezone: <i>{timezone}</i>.\n"
@@ -26,30 +26,32 @@ async def get_countries(query: CallbackQuery, *args) -> None:
     )
 
 
-async def get_cities(query: CallbackQuery, country: str, *args) -> None:
+async def get_cities(
+    callback_query: CallbackQuery, country: str, *args
+) -> None:
     """Returns keyboard with cities to choose from."""
-    await query.message.edit_text(
+    await callback_query.message.edit_text(
         text=_("Choose a city in {country}:").format(country=country),
         reply_markup=get_cities_keyboard(country),
     )
 
 
 async def change_timezone(
-    query: CallbackQuery, country: str, city: str
+    callback_query: CallbackQuery, country: str, city: str
 ) -> None:
     """Changes user's timezone."""
     timezone = f"{country}/{city}"
-    change_user_timezone_by_(query.from_user.id, timezone)
-    await query.answer(
+    change_user_timezone_by_(callback_query.from_user.id, timezone)
+    await callback_query.answer(
         text=_("Timezone successfully changed to {timezone}!").format(
             timezone=timezone
         )
     )
-    await show_menu(query)
+    await show_menu(callback_query)
 
 
 @dp.callback_query_handler(timezone_callback_data.filter())
-async def navigate(query: CallbackQuery, callback_data: dict) -> None:
+async def navigate(callback_query: CallbackQuery, callback_data: dict) -> None:
     """Catches all other timezone callback data to navigate."""
 
     current_level = callback_data.get("level")
@@ -62,4 +64,4 @@ async def navigate(query: CallbackQuery, callback_data: dict) -> None:
         "2": change_timezone,
     }.get(current_level)
 
-    await current_level_function(query, country, city)
+    await current_level_function(callback_query, country, city)

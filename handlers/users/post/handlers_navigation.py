@@ -20,7 +20,7 @@ from .postponing import postpone_post
 
 
 @dp.callback_query_handler(post_callback_data.filter(), state="*")
-async def navigate(query: CallbackQuery, callback_data: dict) -> None:
+async def navigate(callback_query: CallbackQuery, callback_data: dict) -> None:
     """Catches all other post callback data to navigate."""
     current_level_function: Callable = {
         "select_or_remove_channel": select_or_remove_channel,
@@ -33,4 +33,6 @@ async def navigate(query: CallbackQuery, callback_data: dict) -> None:
         "postpone_post": postpone_post,
     }.get(callback_data.get("level"))
 
-    await current_level_function(query, callback_data.get("channel_title"))
+    await current_level_function(
+        callback_query, callback_data.get("channel_title")
+    )

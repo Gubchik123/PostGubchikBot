@@ -110,12 +110,12 @@ async def get_subscriptions(
     )
 
 
-async def get_invoice(query: types.CallbackQuery, price: int) -> None:
+async def get_invoice(callback_query: types.CallbackQuery, price: int) -> None:
     """Sends invoice."""
     if PAYMENTS_PROVIDER_TOKEN.split(":")[1] == "TEST":
-        await query.answer(_("Test payment!"), show_alert=True)
+        await callback_query.answer(_("Test payment!"), show_alert=True)
     await bot.send_invoice(
-        query.message.chat.id,
+        callback_query.message.chat.id,
         title=_("Bot subscription"),
         description=_(
             "Bot subscription for {default_subscription_days} days"
@@ -138,19 +138,19 @@ async def get_invoice(query: types.CallbackQuery, price: int) -> None:
         start_parameter="one-month-subscription",
         payload="test-invoice-payload",
         reply_markup=get_invoice_keyboard(
-            get_user_by_(query.from_user.id).balance, price
+            get_user_by_(callback_query.from_user.id).balance, price
         ),
     )
 
 
 async def charge_from_user_balance(
-    query: types.CallbackQuery, price: int
+    callback_query: types.CallbackQuery, price: int
 ) -> None:
     """Pays for subscription with user balance."""
-    change_user_balance(query.from_user.id, -price)
-    add_subscription_for_user_with_(query.from_user.id, price)
+    change_user_balance(callback_query.from_user.id, -price)
+    add_subscription_for_user_with_(callback_query.from_user.id, price)
     await bot.send_message(
-        query.message.chat.id,
+        callback_query.message.chat.id,
         _(
             "We have successfully charged <b>{total_amount} {currency}</b> from your balance!\n\n"
             "<b>Subscription for {default_subscription_days} days is activated!</b>"
@@ -160,10 +160,10 @@ async def charge_from_user_balance(
             default_subscription_days=DEFAULT_SUBSCRIPTION_DAYS,
         ),
     )
-    await back_to_subscription(query.message)
+    await back_to_subscription(callback_query.message)
 
 
-@dp.pre_checkout_query_handler(lambda query: True)
+@dp.pre_checkout_query_handler(lambda callback_query: True)
 async def pre_checkout_query(pre_checkout_q: types.PreCheckoutQuery):
     """Answers pre checkout query (must be answered in 10 seconds)"""
     await bot.answer_pre_checkout_query(pre_checkout_q.id, ok=True)
@@ -193,7 +193,9 @@ async def successful_payment(message: types.Message):
 
 
 @dp.callback_query_handler(subscription_callback_data.filter())
-async def navigate(query: types.CallbackQuery, callback_data: dict) -> None:
+async def navigate(
+    callback_query: types.CallbackQuery, callback_data: dict
+) -> None:
     """Catches all other subscription callback data to navigate."""
     current_level = callback_data.get("level")
     price = int(callback_data.get("price"))
@@ -204,4 +206,4 @@ async def navigate(query: types.CallbackQuery, callback_data: dict) -> None:
         "2": charge_from_user_balance,
     }.get(current_level)
 
-    await current_level_function(query, price)
+    await current_level_function(callback_query, price)
