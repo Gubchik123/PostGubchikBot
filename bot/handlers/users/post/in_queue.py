@@ -342,8 +342,8 @@ def _get_times(user_datetime_now: datetime) -> List[datetime]:
     if "\n" in global_time:
         for time in global_time.split("\n"):
             hour, minute = time.split(":")
-            times += user_datetime_now.replace(
-                hour=int(hour), minute=int(minute)
+            times.append(
+                user_datetime_now.replace(hour=int(hour), minute=int(minute))
             )
     else:
         start_time, end_time = global_time.split("-")
