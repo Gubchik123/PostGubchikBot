@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-09-09 16:11+0300\n"
+"POT-Creation-Date: 2023-09-11 19:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgid ""
 "{currency_symbol}</b> for each referral."
 msgstr ""
 
-#: handlers/users/subscription.py:62
+#: handlers/users/subscription.py:64
 msgid ""
 "☺️ <b>Subscription</b>\n"
 "\n"
@@ -53,14 +53,14 @@ msgid ""
 "Your subscription will expire on <b>{expire_date}</b>."
 msgstr ""
 
-#: handlers/users/subscription.py:87
+#: handlers/users/subscription.py:89
 msgid ""
 "{subscription_text}\n"
 "<i>Maximum channels: {max_channels}</i>\n"
 "\n"
 msgstr ""
 
-#: handlers/users/subscription.py:99
+#: handlers/users/subscription.py:101
 msgid ""
 "☺️ <b>Subscription</b>\n"
 "\n"
@@ -71,23 +71,23 @@ msgid ""
 "{default_subscription_days} days</i>"
 msgstr ""
 
-#: handlers/users/subscription.py:116
+#: handlers/users/subscription.py:118
 msgid "Test payment!"
 msgstr ""
 
-#: handlers/users/subscription.py:119
+#: handlers/users/subscription.py:121
 msgid "Bot subscription"
 msgstr ""
 
-#: handlers/users/subscription.py:120
+#: handlers/users/subscription.py:122
 msgid "Bot subscription for {default_subscription_days} days"
 msgstr ""
 
-#: handlers/users/subscription.py:132
+#: handlers/users/subscription.py:134
 msgid "Subscription for {default_subscription_days} days"
 msgstr ""
 
-#: handlers/users/subscription.py:154
+#: handlers/users/subscription.py:156
 msgid ""
 "We have successfully charged <b>{total_amount} {currency}</b> from your "
 "balance!\n"
@@ -95,11 +95,11 @@ msgid ""
 "<b>Subscription for {default_subscription_days} days is activated!</b>"
 msgstr ""
 
-#: handlers/users/post/in_queue.py:229 handlers/users/subscription.py:175
+#: handlers/users/post/in_queue/time.py:157 handlers/users/subscription.py:177
 msgid "Processing..."
 msgstr ""
 
-#: handlers/users/subscription.py:183
+#: handlers/users/subscription.py:185
 msgid ""
 "Payment for <b>{total_amount} {currency}</b> is successful!\n"
 "\n"
@@ -126,7 +126,7 @@ msgstr ""
 msgid "You have reached the limit of channels!"
 msgstr ""
 
-#: handlers/users/channel/adding.py:47
+#: handlers/users/channel/adding.py:49
 msgid ""
 "Forward a message here from the channel you want to add.\n"
 "\n"
@@ -174,34 +174,34 @@ msgid ""
 "Choose one of the buttons below:"
 msgstr ""
 
-#: handlers/users/post/album.py:19 handlers/users/post/content.py:27
-#: keyboards/default/post.py:10 keyboards/inline/post/general.py:104
+#: handlers/users/post/album.py:19 handlers/users/post/content.py:28
+#: keyboards/default/post.py:10 keyboards/inline/post/general.py:106
 msgid "Cancel"
 msgstr ""
 
-#: handlers/users/post/album.py:23 handlers/users/post/content.py:32
-#: handlers/users/post/content.py:37 keyboards/default/post.py:9
-#: keyboards/inline/post/general.py:56 keyboards/inline/post/in_queue.py:55
+#: handlers/users/post/album.py:23 handlers/users/post/content.py:33
+#: handlers/users/post/content.py:38 keyboards/default/post.py:9
+#: keyboards/inline/post/general.py:58 keyboards/inline/post/in_queue.py:51
 msgid "Next"
 msgstr ""
 
-#: handlers/users/post/album.py:38
+#: handlers/users/post/album.py:41
 msgid "You can't add animation into this album!"
 msgstr ""
 
-#: handlers/users/post/album.py:49
+#: handlers/users/post/album.py:55
 msgid "You can't add document into this album!"
 msgstr ""
 
-#: handlers/users/post/album.py:58
+#: handlers/users/post/album.py:69
 msgid "You can't add audio into this album!"
 msgstr ""
 
-#: handlers/users/post/album.py:67
+#: handlers/users/post/album.py:83
 msgid "You can't add photo into this album!"
 msgstr ""
 
-#: handlers/users/post/album.py:76
+#: handlers/users/post/album.py:97
 msgid "You can't add video into this album!"
 msgstr ""
 
@@ -209,18 +209,18 @@ msgstr ""
 msgid "Select the channel(s) you want to post to:"
 msgstr ""
 
-#: handlers/users/post/channels.py:93
+#: handlers/users/post/channels.py:97
 msgid "Send me group name:"
 msgstr ""
 
-#: handlers/users/post/channels.py:130
+#: handlers/users/post/channels.py:134
 msgid ""
 "You selected the {selected_channels} channel(s) to create a post\n"
 "\n"
 "Send me post content (text, photo, video, gif...)"
 msgstr ""
 
-#: handlers/users/post/channels.py:135
+#: handlers/users/post/channels.py:139
 msgid ""
 "You selected the {selected_channels} channel(s) to create posts in queue\n"
 "\n"
@@ -232,7 +232,7 @@ msgid ""
 "are loaded and only then click the 'Next' button.</i>"
 msgstr ""
 
-#: handlers/users/post/channels.py:149
+#: handlers/users/post/channels.py:153
 msgid ""
 "You selected the {selected_channels} channel(s) to create a post\n"
 "\n"
@@ -242,36 +242,17 @@ msgid ""
 "photos)</b>"
 msgstr ""
 
-#: handlers/users/post/content.py:120
+#: handlers/users/post/content.py:131
 msgid "Content is added ✅"
 msgstr ""
 
-#: handlers/users/post/content.py:132
-msgid ""
-"Send me list of URL buttons in one message. Please, follow this format:\n"
-"\n"
-"Button text 1 - <code>https://example1.com</code>\n"
-"Button text 2 - <code>https://example2.com</code>\n"
-"\n"
-"Use separator '|' to add up to 3 buttons to one row.\n"
-"\n"
-"Example:\n"
-"\n"
-"Button text 1 - <code>https://example1.com</code> | Button text 2 - "
-"<code>https://example2.com</code>\n"
-"Button text 3 - <code>https://example3.com</code> | Button text 4 - "
-"<code>https://example4.com</code>\n"
-"\n"
-"Click the back button to cancel and return to content adding."
-msgstr ""
-
-#: handlers/users/post/content.py:159
+#: handlers/users/post/content.py:158
 msgid ""
 "URL buttons are added ✅\n"
 "You can continue sending post content."
 msgstr ""
 
-#: handlers/users/post/content.py:196
+#: handlers/users/post/content.py:195
 msgid "Content is removed ❌"
 msgstr ""
 
@@ -306,96 +287,22 @@ msgid ""
 "Format example - 15.08.2023 13:40"
 msgstr ""
 
-#: handlers/users/post/editing.py:160
+#: handlers/users/post/editing.py:162
 msgid ""
 "😌 The publication time of the post has been changed successfully!\n"
 "\n"
 "New publication time: {run_date}"
 msgstr ""
 
-#: handlers/users/post/editing.py:179
+#: handlers/users/post/editing.py:183
 msgid "Are you sure you want to remove this post (#{post_id})?"
 msgstr ""
 
-#: handlers/users/post/editing.py:195
+#: handlers/users/post/editing.py:199
 msgid "Post #{post_id} has been removed!"
 msgstr ""
 
-#: handlers/users/post/in_queue.py:41
-msgid "Select what you want to add to all posts in the queue:"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:50 handlers/users/post/in_queue.py:57
-#: handlers/users/post/in_queue.py:64 handlers/users/post/in_queue.py:71
-#: handlers/users/post/in_queue.py:78 handlers/users/post/in_queue.py:85
-#: handlers/users/post/in_queue.py:90 handlers/users/post/in_queue.py:95
-msgid "Soon..."
-msgstr ""
-
-#: handlers/users/post/in_queue.py:108
-msgid ""
-"Send the date from which to start posting messages in the format: "
-"DD.MM.YYYY (15.08.2023)"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:127
-msgid ""
-"Wrong date! Try again!\n"
-"\n"
-"Format example: 15.08.2023"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:143
-msgid ""
-"Enter the time between which posts should be published (for example "
-"09:20-21:20)\n"
-"Or send the time in this format:\n"
-"12:00\n"
-"12:40\n"
-"15:00\n"
-"\n"
-"<b>Date</b>: {date}\n"
-"<b>Channel(s)</b>: {channels}\n"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:179
-msgid ""
-"Wrong time! Try again!\n"
-"\n"
-"Format example: 09:20-21:20\n"
-"Or send the time in this format:\n"
-"12:00\n"
-"12:40\n"
-"15:00"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:198
-msgid ""
-"Send the interval between posts in minutes (for example: 15)\n"
-"\n"
-"<b>Date</b>: {date}\n"
-"<b>Time</b>: {time}\n"
-"<b>Channel(s)</b>: {channels}\n"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:223
-msgid ""
-"Wrong interval! Try again!\n"
-"\n"
-"Format example: 15"
-msgstr ""
-
-#: handlers/users/post/in_queue.py:235
-msgid ""
-"🚀 {posts_count} posts are scheduled successfully!\n"
-"\n"
-"Channel(s): {channels}\n"
-"\n"
-"Publishing times:\n"
-"{publishing_times}"
-msgstr ""
-
-#: handlers/users/post/postponing.py:23
+#: handlers/users/post/postponing.py:24
 msgid ""
 "Send me the time to publish the post <b>today</b>.\n"
 "Send date and time to schedule post publishing for any other day.\n"
@@ -403,13 +310,13 @@ msgid ""
 "Format example (today): 15.08.2023 13:40"
 msgstr ""
 
-#: handlers/users/post/postponing.py:72
+#: handlers/users/post/postponing.py:77
 msgid ""
 "Wrong date and (or) time format. Try again!\n"
 "Format example - 15.08.2023 13:40"
 msgstr ""
 
-#: handlers/users/post/postponing.py:109
+#: handlers/users/post/postponing.py:128
 msgid ""
 "🚀 Post is scheduled! #{post_id}\n"
 "\n"
@@ -426,7 +333,7 @@ msgid ""
 msgstr ""
 
 #: handlers/users/post/publishing.py:37
-#: handlers/users/post/publishing_with_deletion.py:53
+#: handlers/users/post/publishing_with_deletion.py:54
 msgid "Publishing..."
 msgstr ""
 
@@ -434,7 +341,7 @@ msgstr ""
 msgid "Published!"
 msgstr ""
 
-#: handlers/users/post/publishing_with_deletion.py:21
+#: handlers/users/post/publishing_with_deletion.py:22
 msgid ""
 "You can set a self-destruct timer for the post.\n"
 "\n"
@@ -442,15 +349,94 @@ msgid ""
 "post.\n"
 msgstr ""
 
-#: handlers/users/post/publishing_with_deletion.py:62
+#: handlers/users/post/publishing_with_deletion.py:67
 msgid ""
 "Published!\n"
 "\n"
 "Post will be deleted in {hour} hours and {minute} minutes."
 msgstr ""
 
-#: keyboards/inline/channel.py:44 keyboards/inline/post/editing.py:70
-#: keyboards/inline/post/editing.py:108
+#: handlers/users/post/in_queue/settings.py:37
+msgid "Select what you want to add to all posts in the queue:"
+msgstr ""
+
+#: handlers/users/post/in_queue/settings.py:49
+msgid "Send me new caption for all posts in the queue."
+msgstr ""
+
+#: handlers/users/post/in_queue/settings.py:90
+msgid "Soon..."
+msgstr ""
+
+#: handlers/users/post/in_queue/settings.py:132
+msgid "Posts are already shuffled."
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:31
+msgid ""
+"Send the date from which to start posting messages in the format: "
+"DD.MM.YYYY (15.08.2023)"
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:50
+msgid ""
+"Wrong date! Try again!\n"
+"\n"
+"Format example: 15.08.2023"
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:66
+msgid ""
+"Enter the time between which posts should be published (for example "
+"09:20-21:20)\n"
+"Or send the time in this format:\n"
+"12:00\n"
+"12:40\n"
+"15:00\n"
+"\n"
+"<b>Date</b>: {date}\n"
+"<b>Channel(s)</b>: {channels}\n"
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:105
+msgid ""
+"Wrong time! Try again!\n"
+"\n"
+"Format example: 09:20-21:20\n"
+"Or send the time in this format:\n"
+"12:00\n"
+"12:40\n"
+"15:00"
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:124
+msgid ""
+"Send the interval between posts in minutes (for example: 15)\n"
+"\n"
+"<b>Date</b>: {date}\n"
+"<b>Time</b>: {time}\n"
+"<b>Channel(s)</b>: {channels}\n"
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:151
+msgid ""
+"Wrong interval! Try again!\n"
+"\n"
+"Format example: 15"
+msgstr ""
+
+#: handlers/users/post/in_queue/time.py:163
+msgid ""
+"🚀 {posts_count} posts are scheduled successfully!\n"
+"\n"
+"Channel(s): {channels}\n"
+"\n"
+"Publishing times:\n"
+"{publishing_times}"
+msgstr ""
+
+#: keyboards/inline/channel.py:46 keyboards/inline/post/editing.py:72
+#: keyboards/inline/post/editing.py:110
 msgid "Remove"
 msgstr ""
 
@@ -474,7 +460,7 @@ msgstr ""
 msgid "Create post"
 msgstr ""
 
-#: keyboards/inline/menu.py:37 keyboards/inline/post/editing.py:42
+#: keyboards/inline/menu.py:37 keyboards/inline/post/editing.py:44
 msgid "Posts in queue"
 msgstr ""
 
@@ -486,39 +472,39 @@ msgstr ""
 msgid "🔙 Back"
 msgstr ""
 
-#: keyboards/inline/subscription.py:16
+#: keyboards/inline/subscription.py:18
 msgid "Start"
 msgstr ""
 
-#: keyboards/inline/subscription.py:17
+#: keyboards/inline/subscription.py:19
 msgid "Pro"
 msgstr ""
 
-#: keyboards/inline/subscription.py:18
+#: keyboards/inline/subscription.py:20
 msgid "Unlimited"
 msgstr ""
 
-#: keyboards/inline/subscription.py:32
+#: keyboards/inline/subscription.py:34
 msgid "Update subscription"
 msgstr ""
 
-#: keyboards/inline/subscription.py:66
+#: keyboards/inline/subscription.py:68
 msgid "Pay for {price} {currency_symbol}"
 msgstr ""
 
-#: keyboards/inline/subscription.py:75
+#: keyboards/inline/subscription.py:77
 msgid "Charge from balance"
 msgstr ""
 
-#: keyboards/inline/post/content.py:23 keyboards/inline/post/in_queue.py:25
+#: keyboards/inline/post/content.py:23 keyboards/inline/post/in_queue.py:29
 msgid "Add URL buttons"
 msgstr ""
 
-#: keyboards/inline/post/content.py:37 keyboards/inline/post/in_queue.py:37
+#: keyboards/inline/post/content.py:37 keyboards/inline/post/in_queue.py:38
 msgid "Disable web page preview"
 msgstr ""
 
-#: keyboards/inline/post/content.py:46 keyboards/inline/post/in_queue.py:41
+#: keyboards/inline/post/content.py:46 keyboards/inline/post/in_queue.py:43
 msgid "Disable notification"
 msgstr ""
 
@@ -526,75 +512,86 @@ msgstr ""
 msgid "Remove content"
 msgstr ""
 
-#: keyboards/inline/post/editing.py:30
+#: keyboards/inline/post/editing.py:32
 msgid "Publication time: {run_date} [{post_id}]"
 msgstr ""
 
-#: keyboards/inline/post/editing.py:58 keyboards/inline/post/editing.py:89
+#: keyboards/inline/post/editing.py:60 keyboards/inline/post/editing.py:91
 msgid "Publish now"
 msgstr ""
 
-#: keyboards/inline/post/editing.py:64
+#: keyboards/inline/post/editing.py:66
 msgid "Change publication time"
 msgstr ""
 
-#: keyboards/inline/post/general.py:47
+#: keyboards/inline/post/general.py:49
 msgid "Select all"
 msgstr ""
 
-#: keyboards/inline/post/general.py:63
+#: keyboards/inline/post/general.py:65
 msgid "Create group"
 msgstr ""
 
-#: keyboards/inline/post/general.py:70
+#: keyboards/inline/post/general.py:72
 msgid "Scheduled posts"
 msgstr ""
 
-#: keyboards/inline/post/general.py:81
+#: keyboards/inline/post/general.py:83
 msgid "Create an album"
 msgstr ""
 
-#: keyboards/inline/post/general.py:93
+#: keyboards/inline/post/general.py:95
 msgid "Publish but set a deletion timer"
 msgstr ""
 
-#: keyboards/inline/post/general.py:97
+#: keyboards/inline/post/general.py:99
 msgid "Publish"
 msgstr ""
 
-#: keyboards/inline/post/general.py:101
+#: keyboards/inline/post/general.py:103
 msgid "Postpone"
 msgstr ""
 
-#: keyboards/inline/post/in_queue.py:21
-msgid "Add a signature"
-msgstr ""
-
-#: keyboards/inline/post/in_queue.py:29
-msgid "Add watermark"
+#: keyboards/inline/post/in_queue.py:24
+msgid "Add a caption"
 msgstr ""
 
 #: keyboards/inline/post/in_queue.py:33
-msgid "Remove author text"
+msgid "Add watermark"
 msgstr ""
 
-#: keyboards/inline/post/in_queue.py:45
-msgid "Send as album"
-msgstr ""
-
-#: keyboards/inline/post/in_queue.py:51
+#: keyboards/inline/post/in_queue.py:47
 msgid "Shuffle posts"
 msgstr ""
 
-#: keyboards/inline/post/in_queue.py:66
+#: keyboards/inline/post/in_queue.py:62
 msgid "Today"
 msgstr ""
 
-#: keyboards/inline/post/in_queue.py:74
+#: keyboards/inline/post/in_queue.py:70
 msgid "Tomorrow"
 msgstr ""
 
-#: keyboards/inline/post/in_queue.py:85
+#: keyboards/inline/post/in_queue.py:81
 msgid "After tomorrow"
+msgstr ""
+
+#: messages/post.py:6
+msgid ""
+"Send me list of URL buttons in one message. Please, follow this format:\n"
+"\n"
+"Button text 1 - <code>https://example1.com</code>\n"
+"Button text 2 - <code>https://example2.com</code>\n"
+"\n"
+"Use separator '|' to add up to 3 buttons to one row.\n"
+"\n"
+"Example:\n"
+"\n"
+"Button text 1 - <code>https://example1.com</code> | Button text 2 - "
+"<code>https://example2.com</code>\n"
+"Button text 3 - <code>https://example3.com</code> | Button text 4 - "
+"<code>https://example4.com</code>\n"
+"\n"
+"Click the back button to cancel and return to content adding."
 msgstr ""
 
