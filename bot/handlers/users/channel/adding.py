@@ -29,12 +29,14 @@ def _can_user_add_channel(user_chat_id: int) -> bool:
     user = get_user_by_(user_chat_id)
     user_channels_count = len(get_user_channels_by_(user_chat_id))
     if (
-        not user.subscription_id
+        user is not None
+        and not user.subscription_id
         and user_channels_count + 1 > DEFAULT_MAX_FREE_CHANNELS
     ):
         return False
     elif (
-        user.subscription_id
+        user is not None
+        and user.subscription_id
         and user_channels_count + 1 > user.subscription.max_channels
     ):
         return False
