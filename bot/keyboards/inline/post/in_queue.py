@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from loader import _
+from utils.post.settings import PostSettings
 from keyboards.inline.callback_data import (
     posts_in_queue_callback_data,
     get_back_inline_button_by_,
@@ -13,16 +14,19 @@ def _get_new_callback_data(level: str, date: str = "None") -> str:
     return posts_in_queue_callback_data.new(level=level, date=date)
 
 
-def get_posts_in_queue_keyboard() -> InlineKeyboardMarkup:
+def get_posts_in_queue_keyboard(
+    post_settings: PostSettings,
+) -> InlineKeyboardMarkup:
     """Returns inline keyboard
     with action buttons for posts in queue and back button."""
     return InlineKeyboardMarkup(row_width=1).add(
         InlineKeyboardButton(
-            text=_("Add a signature"),
-            callback_data=_get_new_callback_data("add_signature"),
+            text=("✅ " if post_settings.caption else "") + _("Add a caption"),
+            callback_data=_get_new_callback_data("add_caption"),
         ),
         InlineKeyboardButton(
-            text=_("Add URL buttons"),
+            text=("✅ " if post_settings.reply_markup else "")
+            + _("Add URL buttons"),
             callback_data=_get_new_callback_data("add_url_buttons"),
         ),
         InlineKeyboardButton(
@@ -30,25 +34,17 @@ def get_posts_in_queue_keyboard() -> InlineKeyboardMarkup:
             callback_data=_get_new_callback_data("add_watermark"),
         ),
         InlineKeyboardButton(
-            text=_("Remove author text"),
-            callback_data=_get_new_callback_data("remove_author_text"),
-        ),
-        InlineKeyboardButton(
-            text=_("Disable web page preview"),
+            text=("✅ " if post_settings.disable_web_page_preview else "")
+            + _("Disable web page preview"),
             callback_data=_get_new_callback_data("disable_web_page_preview"),
         ),
         InlineKeyboardButton(
-            text=_("Disable notification"),
+            text=("✅ " if post_settings.disable_notification else "")
+            + _("Disable notification"),
             callback_data=_get_new_callback_data("disable_notification"),
         ),
         InlineKeyboardButton(
-            text=_("Send as album"),
-            callback_data=_get_new_callback_data(
-                "send_posts_in_queue_as_album"
-            ),
-        ),
-        InlineKeyboardButton(
-            text=_("Shuffle posts"),
+            text=("✅ " if post_settings.shuffle else "") + _("Shuffle posts"),
             callback_data=_get_new_callback_data("shuffle"),
         ),
         InlineKeyboardButton(
