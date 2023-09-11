@@ -18,9 +18,9 @@ from keyboards.inline.post.in_queue import (
 )
 
 from ..commands.menu import show_menu
+from . import constants
 from .channels import get_channels
 from .postponing import generate_random_id
-from .constants import selected_channels, post_content
 
 
 @dp.callback_query_handler(text="posts_in_queue")
@@ -148,7 +148,8 @@ async def ask_for_time_to_send_posts_in_queue(
             "<b>Date</b>: {date}\n"
             "<b>Channel(s)</b>: {channels}\n"
         ).format(
-            date=global_start_date, channels=", ".join(selected_channels)
+            date=global_start_date,
+            channels=", ".join(constants.selected_channels),
         ),
         reply_markup=get_time_keyboard(),
     )
@@ -206,7 +207,7 @@ async def ask_for_interval_to_send_posts_in_queue(
         ).format(
             date=global_start_date,
             time=time_,
-            channels=", ".join(selected_channels),
+            channels=", ".join(constants.selected_channels),
         ),
         reply_markup=get_interval_keyboard(global_start_date),
     )
@@ -243,7 +244,7 @@ async def postpone_posts_in_queue(message: Message) -> None:
             "Publishing times:\n{publishing_times}"
         ).format(
             posts_count=posts_count,
-            channels=", ".join(selected_channels),
+            channels=", ".join(constants.selected_channels),
             publishing_times=publishing_times,
         )
     )
@@ -259,12 +260,12 @@ def _postpone_posts_in_queue(
     times_count = len(times)
     publishing_times = ""
     current_time_index = 0
-    posts_count = len(post_content)
+    posts_count = len(constants.post_content)
     day, month, year = global_start_date.split(".")
     current_datetime = user_datetime_now.replace(
         year=int(year), month=int(month), day=int(day), second=0, microsecond=0
     )
-    for count, post in enumerate(post_content):
+    for count, post in enumerate(constants.post_content):
         current_time = times[current_time_index]
         current_datetime = current_datetime.replace(
             hour=current_time.hour, minute=current_time.minute
@@ -326,7 +327,7 @@ def _schedule_job_to_publish_user_post_in_queue(
             "author_chat_id": user_chat_id,
             "author_language_code": user_language_code,
             "post_content_item": post_content_item,
-            "selected_channels": selected_channels,
+            "selected_channels": constants.selected_channels,
         },
     )
 

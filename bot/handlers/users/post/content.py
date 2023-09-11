@@ -12,7 +12,7 @@ from keyboards.inline.post.content import (
     get_back_to_post_content_keyboard,
 )
 
-from .constants import post_content
+from . import constants
 from ..commands.menu import show_menu
 from .publishing import ask_about_time_to_publish_post
 from .in_queue import ask_for_what_to_add_to_posts_in_queue
@@ -25,78 +25,88 @@ global_current_content_index = None
 async def add_text_to_post(message: Message, state: FSMContext) -> None:
     """Adds text to the post content."""
     if message.text == _("Cancel"):
-        post_content.clear()
+        constants.post_content.clear()
         await state.finish()
         await show_menu(message)
     elif (
         message.text == _("Next")
-        and post_content.target_menu == "post creation"
+        and constants.post_content.target_menu == "post creation"
     ):
         await ask_about_time_to_publish_post(message, state)
     elif (
         message.text == _("Next")
-        and post_content.target_menu == "post in queue"
+        and constants.post_content.target_menu == "post in queue"
     ):
         await state.finish()
         await ask_for_what_to_add_to_posts_in_queue(message)
     else:
-        content_item = post_content.add("message", message.text)
+        content_item = constants.post_content.add("message", message.text)
         await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.AUDIO, state=Post.content)
 async def add_audio_to_post(message: Message, state: FSMContext) -> None:
     """Adds audio to the post content."""
-    content_item = post_content.add("audio", message.audio.file_id)
+    content_item = constants.post_content.add("audio", message.audio.file_id)
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.DOCUMENT, state=Post.content)
 async def add_document_to_post(message: Message, state: FSMContext) -> None:
     """Adds document to the post content."""
-    content_item = post_content.add("document", message.document.file_id)
+    content_item = constants.post_content.add(
+        "document", message.document.file_id
+    )
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.ANIMATION, state=Post.content)
 async def add_animation_to_post(message: Message, state: FSMContext) -> None:
     """Adds animation to the post content."""
-    content_item = post_content.add("animation", message.animation.file_id)
+    content_item = constants.post_content.add(
+        "animation", message.animation.file_id
+    )
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.PHOTO, state=Post.content)
 async def add_photo_to_post(message: Message, state: FSMContext) -> None:
     """Adds photo to the post content."""
-    content_item = post_content.add("photo", message.photo[-1].file_id)
+    content_item = constants.post_content.add(
+        "photo", message.photo[-1].file_id
+    )
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.STICKER, state=Post.content)
 async def add_sticker_to_post(message: Message, state: FSMContext) -> None:
     """Adds sticker to the post content."""
-    content_item = post_content.add("sticker", message.sticker.file_id)
+    content_item = constants.post_content.add(
+        "sticker", message.sticker.file_id
+    )
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.VIDEO, state=Post.content)
 async def add_video_to_post(message: Message, state: FSMContext) -> None:
     """Adds video to the post content."""
-    content_item = post_content.add("video", message.video.file_id)
+    content_item = constants.post_content.add("video", message.video.file_id)
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.VIDEO_NOTE, state=Post.content)
 async def add_video_note_to_post(message: Message, state: FSMContext) -> None:
     """Adds video_note to the post content."""
-    content_item = post_content.add("video_note", message.video_note.file_id)
+    content_item = constants.post_content.add(
+        "video_note", message.video_note.file_id
+    )
     await send_corrective_reply_to_(message, content_item)
 
 
 @dp.message_handler(content_types=ContentType.VOICE, state=Post.content)
 async def add_voice_to_post(message: Message, state: FSMContext) -> None:
     """Adds voice to the post content."""
-    content_item = post_content.add("voice", message.voice.file_id)
+    content_item = constants.post_content.add("voice", message.voice.file_id)
     await send_corrective_reply_to_(message, content_item)
 
 
@@ -107,7 +117,7 @@ async def send_corrective_reply_to_(
     content_item = (
         content_item
         if isinstance(content_item, dict)
-        else post_content.get_item_by_(
+        else constants.post_content.get_item_by_(
             content_item
         )  # content_item = content id
     )
@@ -150,7 +160,7 @@ async def ask_for_url_buttons(
 @dp.message_handler(state=Post.url_buttons)
 async def add_url_buttons(message: Message, state: FSMContext):
     """Adds URL buttons to the post content."""
-    post_content.update_kwargs(
+    constants.post_content.update_kwargs(
         global_current_content_index,
         "reply_markup",
         get_url_buttons_from_(message.text),
@@ -168,7 +178,7 @@ async def disable_web_page_preview(
     callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Disables web page preview for the content with the given index."""
-    content_item = post_content.update_kwargs(
+    content_item = constants.post_content.update_kwargs(
         content_index, "disable_web_page_preview"
     )
     await callback_query.message.edit_reply_markup(
@@ -180,7 +190,7 @@ async def disable_notification(
     callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Disables notification for the content with the given index."""
-    content_item = post_content.update_kwargs(
+    content_item = constants.post_content.update_kwargs(
         content_index, "disable_notification"
     )
     await callback_query.message.edit_reply_markup(
@@ -192,7 +202,7 @@ async def remove_content(
     callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Removes the content with the given index."""
-    post_content.remove_by_(content_index)
+    constants.post_content.remove_by_(content_index)
     await callback_query.message.edit_text(_("Content is removed ❌"))
 
 

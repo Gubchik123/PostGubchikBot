@@ -11,7 +11,7 @@ from utils.db.crud.user import get_user_channels_by_
 from keyboards.inline.post.general import get_deletion_hours_keyboard
 
 from ..commands.menu import show_menu
-from .constants import post_content, selected_channels
+from . import constants
 from .postponing import send_message_about_wrong_date_and_time
 
 
@@ -52,19 +52,19 @@ async def publish_post_with_deletion(
         message = data
     await message.answer(_("Publishing..."))
     for channel in get_user_channels_by_(message.from_user.id):
-        if channel.title in selected_channels:
-            await post_content.send_to_(channel.chat_id)
+        if channel.title in constants.selected_channels:
+            await constants.post_content.send_to_(channel.chat_id)
             _schedule_job_to_delete_post_from_channel_by_(
                 channel.chat_id, hour, minute
             )
-            post_content.clear_message_ids()
+            constants.post_content.clear_message_ids()
     await message.answer(
         text=_(
             "Published!\n\n"
             "Post will be deleted in {hour} hours and {minute} minutes."
         ).format(hour=hour, minute=minute)
     )
-    post_content.clear()
+    constants.post_content.clear()
     await show_menu(message)
 
 
@@ -80,6 +80,6 @@ def _schedule_job_to_delete_post_from_channel_by_(
         run_date=datetime.now() + timedelta(hours=hour, minutes=minute),
         kwargs={
             "channel_chat_id": channel_chat_id,
-            "message_ids": post_content.message_ids,
+            "message_ids": constants.post_content.message_ids,
         },
     )

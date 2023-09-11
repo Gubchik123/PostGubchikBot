@@ -15,7 +15,7 @@ from keyboards.inline.callback_data import (
 )
 
 from ..commands.menu import show_menu
-from .constants import post_content, selected_channels
+from . import constants
 
 
 async def postpone_post(callback_query: CallbackQuery, *args) -> None:
@@ -110,8 +110,8 @@ def _schedule_job_to_publish_user_post(
         kwargs={
             "author_chat_id": user.chat_id,
             "author_language_code": user.language_code,
-            "post_content": post_content,
-            "selected_channels": selected_channels,
+            "post_content": constants.post_content,
+            "selected_channels": constants.selected_channels,
         },
     )
     return id
@@ -131,6 +131,6 @@ def _get_postpone_success_message_by_(post_id: str, date: str) -> str:
         "Publication time: {date}"
     ).format(
         post_id=post_id,
-        selected_channels=", ".join(selected_channels),
+        selected_channels=", ".join(constants.selected_channels),
         date=date,
     )

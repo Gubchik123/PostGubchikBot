@@ -18,8 +18,8 @@ from keyboards.inline.callback_data import (
     get_keyboard_with_back_inline_button_by_,
 )
 
-from .album import post_album
-from .constants import post_content, selected_channels
+from . import constants
+from .album import global_post_album
 
 
 @dp.callback_query_handler(text="create_post", state="*")
@@ -29,10 +29,10 @@ async def get_channels(
     state: Optional[FSMContext] = None,
 ) -> None:
     """Sends a message with inline keyboard to select a channel."""
-    post_content.target_menu = target
+    constants.post_content.target_menu = target
     if state:
         await state.finish()
-    selected_channels.clear()
+    constants.selected_channels.clear()
     answer_function: Callable = (
         data.message.edit_text
         if isinstance(data, CallbackQuery)
@@ -42,8 +42,10 @@ async def get_channels(
         text=_("Select the channel(s) you want to post to:"),
         reply_markup=get_channels_keyboard(
             get_user_channels_by_(data.from_user.id),
-            get_user_groups_by_(data.from_user.id, post_content.target_menu),
-            selected_channels,
+            get_user_groups_by_(
+                data.from_user.id, constants.post_content.target_menu
+            ),
+            constants.selected_channels,
         ),
     )
 
@@ -55,21 +57,23 @@ async def select_or_remove_channel(
     by the given channel title and updates the keyboard."""
     user_channels = get_user_channels_by_(callback_query.from_user.id)
     if channel_title == "all":
-        selected_channels.clear()
-        selected_channels.extend([channel.title for channel in user_channels])
+        constants.selected_channels.clear()
+        constants.selected_channels.extend(
+            [channel.title for channel in user_channels]
+        )
     else:
-        selected_channels.remove(
+        constants.selected_channels.remove(
             channel_title
-        ) if channel_title in selected_channels else selected_channels.append(
+        ) if channel_title in constants.selected_channels else constants.selected_channels.append(
             channel_title
         )
     await callback_query.message.edit_reply_markup(
         reply_markup=get_channels_keyboard(
             user_channels,
             get_user_groups_by_(
-                callback_query.from_user.id, post_content.target_menu
+                callback_query.from_user.id, constants.post_content.target_menu
             ),
-            selected_channels,
+            constants.selected_channels,
         )
     )
 
@@ -79,8 +83,8 @@ async def select_group_channels(
     callback_query: CallbackQuery, callback_data: dict
 ) -> None:
     """Selects group channels by the group from the given callback data."""
-    selected_channels.clear()
-    selected_channels.extend(
+    constants.selected_channels.clear()
+    constants.selected_channels.extend(
         get_group_channel_titles_by_(callback_data["group_name"])
     )
     await callback_query.answer()
@@ -103,22 +107,22 @@ async def create_group(message: Message, state: FSMContext) -> None:
     create_group_by_(
         user_chat_id=message.from_user.id,
         group_name=message.text,
-        group_target_menu=post_content.target_menu,
-        selected_channel_titles=selected_channels,
+        group_target_menu=constants.post_content.target_menu,
+        selected_channel_titles=constants.selected_channels,
     )
-    await get_channels(message, post_content.target_menu)
+    await get_channels(message, constants.post_content.target_menu)
 
 
 async def ask_for_post_content(callback_query: CallbackQuery, *args) -> None:
     """Asks for post content and waits (state) for it."""
-    post_content.clear()
+    constants.post_content.clear()
     await callback_query.message.answer(
         text="🚀", reply_markup=get_post_creation_keyboard()
     )
     await callback_query.message.edit_text(
         text=_get_asking_message_depending_on_target_menu(),
         reply_markup=get_post_album_keyboard()
-        if post_content.target_menu == "post creation"
+        if constants.post_content.target_menu == "post creation"
         else None,
     )
     await Post.content.set()
@@ -130,26 +134,26 @@ def _get_asking_message_depending_on_target_menu() -> str:
         _(
             "You selected the {selected_channels} channel(s) to create a post\n\n"
             "Send me post content (text, photo, video, gif...)"
-        ).format(selected_channels=", ".join(selected_channels))
-        if post_content.target_menu == "post creation"
+        ).format(selected_channels=", ".join(constants.selected_channels))
+        if constants.post_content.target_menu == "post creation"
         else _(
             "You selected the {selected_channels} channel(s) to create posts in queue\n\n"
             "Send posts that should be added to the queue.\n\n"
             "<b>Once finished, click the 'Next' button to save your posts.</b>\n\n"
             "<i>When adding a large number of posts, wait until all the "
             "media files are loaded and only then click the 'Next' button.</i>"
-        ).format(selected_channels=", ".join(selected_channels))
+        ).format(selected_channels=", ".join(constants.selected_channels))
     )
 
 
 async def ask_for_post_album(callback_query: CallbackQuery, *args) -> None:
     """Asks for post album and waits (state) for it."""
-    post_album.clear()
+    global_post_album.clear()
     await callback_query.message.edit_text(
         text=_(
             "You selected the {selected_channels} channel(s) to create a post\n\n"
             "Send me post album (animation, document, audio, photo and video)\n\n"
             "<b>Important: album must contain content of the same type (e.g. only photos)</b>"
-        ).format(selected_channels=", ".join(selected_channels))
+        ).format(selected_channels=", ".join(constants.selected_channels))
     )
     await Post.album.set()

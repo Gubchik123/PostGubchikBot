@@ -6,7 +6,7 @@ from states.post import Post
 from utils.post.album import PostAlbum
 
 from ..commands.menu import show_menu
-from .constants import post_content
+from . import constants
 from .publishing import ask_about_time_to_publish_post
 
 
@@ -21,7 +21,7 @@ async def add_text_to_post(message: types.Message, state: FSMContext) -> None:
         await state.finish()
         await show_menu(message)
     elif message.text == _("Next"):
-        post_content.add("album", global_post_album.get_album())
+        constants.post_content.add("album", global_post_album.get_album())
         await ask_about_time_to_publish_post(message, state)
 
 
