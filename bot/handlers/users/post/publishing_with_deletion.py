@@ -1,3 +1,4 @@
+from pytz import timezone
 from typing import Union, Optional
 from datetime import datetime, timedelta
 
@@ -7,7 +8,7 @@ from aiogram.types import Message, CallbackQuery
 from states.post import Post
 from loader import dp, scheduler, _
 from utils.scheduler import delete_post
-from utils.db.crud.user import get_user_channels_by_
+from utils.db.crud.user import get_user_by_, get_user_channels_by_
 from keyboards.inline.post.general import get_deletion_hours_keyboard
 
 from ..commands.menu import show_menu
@@ -51,11 +52,15 @@ async def publish_post_with_deletion(
     else:
         message = data
     await message.answer(_("Publishing..."))
+    user = get_user_by_(message.from_user.id)
+    run_date = datetime.now(timezone(user.timezone)) + timedelta(
+        hours=hour, minutes=minute
+    )
     for channel in get_user_channels_by_(message.from_user.id):
         if channel.title in constants.selected_channels:
             await constants.post_content.send_to_(channel.chat_id)
             _schedule_job_to_delete_post_from_channel_by_(
-                channel.chat_id, hour, minute
+                channel.chat_id, run_date
             )
             constants.post_content.clear_message_ids()
     await message.answer(
@@ -69,7 +74,7 @@ async def publish_post_with_deletion(
 
 
 def _schedule_job_to_delete_post_from_channel_by_(
-    channel_chat_id: int, hour: int, minute: int
+    channel_chat_id: int, run_date: datetime
 ) -> None:
     """
     Schedules job to delete post from the channel by the given channel chat id.
@@ -77,7 +82,7 @@ def _schedule_job_to_delete_post_from_channel_by_(
     scheduler.add_job(
         delete_post,
         "date",
-        run_date=datetime.now() + timedelta(hours=hour, minutes=minute),
+        run_date=run_date,
         kwargs={
             "channel_chat_id": channel_chat_id,
             "message_ids": constants.post_content.message_ids,
