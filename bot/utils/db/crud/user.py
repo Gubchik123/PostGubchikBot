@@ -26,7 +26,7 @@ def _get_user_by_(session: Session, user_chat_id: int) -> User:
 def _is_valid_referral_(message_args: str, invited_user_chat_id: int) -> bool:
     """Checks if referral is valid
     by the given message args and invited user chat id."""
-    if len(message_args) not in (9, 10) and not message_args.isdigit():
+    if not message_args.isdigit():
         return False
     user_who_invite_chat_id = int(message_args)
     if user_who_invite_chat_id == invited_user_chat_id:
