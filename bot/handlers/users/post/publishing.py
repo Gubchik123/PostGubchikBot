@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Union, Callable
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
@@ -13,7 +13,7 @@ from .constants import post_content, selected_channels
 
 @dp.callback_query_handler(text="time_to_publish_post", state="*")
 async def ask_about_time_to_publish_post(
-    data: Message | CallbackQuery, state: FSMContext
+    data: Union[Message, CallbackQuery], state: FSMContext
 ) -> None:
     """Asks about time to publish the post."""
     if state:

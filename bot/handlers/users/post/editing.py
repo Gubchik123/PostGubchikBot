@@ -1,6 +1,6 @@
 from pytz import timezone
 from datetime import datetime
-from typing import Callable, Optional
+from typing import Union, Callable, Optional
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
@@ -59,7 +59,7 @@ async def get_scheduled_user_posts(
 
 
 async def get_user_post(
-    data: Message | CallbackQuery, post_type: str, post_id: str
+    data: Union[Message, CallbackQuery], post_type: str, post_id: str
 ) -> None:
     """
     Shows or sends post info depending on the given data (message or query).

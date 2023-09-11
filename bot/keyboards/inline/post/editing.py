@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from apscheduler.job import Job
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -19,7 +21,7 @@ def _get_new_callback_data(
 
 
 def get_user_posts_keyboard(
-    user_scheduled_post_jobs: tuple[Job], post_type: str = "None"
+    user_scheduled_post_jobs: Tuple[Job], post_type: str = "None"
 ) -> InlineKeyboardMarkup:
     """Returns inline keyboard with user posts and back button."""
     keyboard = InlineKeyboardMarkup(row_width=1)

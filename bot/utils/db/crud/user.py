@@ -1,3 +1,5 @@
+from typing import Union, List
+
 from sqlalchemy import update
 from sqlalchemy.orm import Session
 from aiogram.types import User as TelegramUser
@@ -66,7 +68,7 @@ def get_user_by_(user_chat_id: int) -> User:
         return user
 
 
-def get_user_channels_by_(user_chat_id: int) -> list[Channel]:
+def get_user_channels_by_(user_chat_id: int) -> List[Channel]:
     """Returns user channels by the given user chat id."""
     try:
         return channels[user_chat_id]
@@ -77,7 +79,7 @@ def get_user_channels_by_(user_chat_id: int) -> list[Channel]:
         return user_channels
 
 
-def get_user_groups_by_(user_chat_id: int, target_menu: str) -> list[Group]:
+def get_user_groups_by_(user_chat_id: int, target_menu: str) -> List[Group]:
     """Returns user groups by the given user chat id and target menu."""
     try:
         return groups[target_menu][user_chat_id]
@@ -95,7 +97,7 @@ def get_user_groups_by_(user_chat_id: int, target_menu: str) -> list[Group]:
         return user_groups
 
 
-def get_user_language_code_by_(user_chat_id: int) -> str | None:
+def get_user_language_code_by_(user_chat_id: int) -> Union[str, None]:
     """Returns user language code by the given user chat id."""
     user = get_user_by_(user_chat_id)
     return user.language_code if user else None

@@ -1,3 +1,5 @@
+from typing import List
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from loader import _
@@ -16,9 +18,9 @@ def _get_new_callback_data(level: str, channel_title="None") -> str:
 
 
 def get_channels_keyboard(
-    all_channels: list[Channel],
-    all_groups: list[Group],
-    selected_channels: list[str],
+    all_channels: List[Channel],
+    all_groups: List[Group],
+    selected_channels: List[str],
 ) -> InlineKeyboardMarkup:
     """Returns inline keyboard with channels, groups and back button."""
     keyboard = InlineKeyboardMarkup(row_width=2)

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Union, Optional
 from datetime import datetime, timedelta
 
 from aiogram.dispatcher import FSMContext
@@ -40,7 +40,7 @@ async def check_deletion_time(message: Message, state: FSMContext) -> None:
 
 
 async def publish_post_with_deletion(
-    data: Message | CallbackQuery, hour: str, minute: Optional[int] = 0
+    data: Union[Message, CallbackQuery], hour: str, minute: Optional[int] = 0
 ) -> None:
     """Publishes the post into the selected channels with deletion."""
     hour = int(hour)

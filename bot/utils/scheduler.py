@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from apscheduler.job import Job
 
 from loader import bot, scheduler
@@ -34,7 +36,7 @@ async def send_subscription_reminder_to_user(
     )
 
 
-def get_user_scheduled_post_jobs_by_(user_chat_id: int) -> tuple[Job]:
+def get_user_scheduled_post_jobs_by_(user_chat_id: int) -> Tuple[Job]:
     """Returns user scheduled post jobs by the given user chat id."""
     return tuple(
         job
@@ -44,7 +46,7 @@ def get_user_scheduled_post_jobs_by_(user_chat_id: int) -> tuple[Job]:
     )
 
 
-def get_user_scheduled_post_in_queue_jobs_by_(user_chat_id: int) -> tuple[Job]:
+def get_user_scheduled_post_in_queue_jobs_by_(user_chat_id: int) -> Tuple[Job]:
     """Returns user scheduled post in queue jobs by the given user chat id."""
     return tuple(
         job
@@ -86,13 +88,13 @@ async def remove_user_subscription_by_(
     )
 
 
-def _pause_(user_scheduled_post_jobs: list[Job]) -> None:
+def _pause_(user_scheduled_post_jobs: List[Job]) -> None:
     """Pauses all user scheduled post jobs."""
     for job in user_scheduled_post_jobs:
         job.pause()
 
 
-async def delete_post(channel_chat_id: int, message_ids: list[int]) -> None:
+async def delete_post(channel_chat_id: int, message_ids: List[int]) -> None:
     """Deletes post by the given channel chat id and message ids."""
     for message_id in message_ids:
         await bot.delete_message(channel_chat_id, message_id)
@@ -102,7 +104,7 @@ async def publish_user_post(
     author_chat_id: int,
     author_language_code: str,
     post_content: PostContent,
-    selected_channels: list[str],
+    selected_channels: List[str],
 ) -> None:
     """Publishes user post to the selected channels."""
     await bot.send_message(
@@ -131,7 +133,7 @@ async def publish_user_post_in_queue(
     author_chat_id: int,
     author_language_code: str,
     post_content_item: dict,
-    selected_channels: list[str],
+    selected_channels: List[str],
 ) -> None:
     """Publishes user post in queue."""
     post_content = PostContent.from_(post_content_item)

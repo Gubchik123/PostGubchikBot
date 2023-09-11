@@ -1,4 +1,4 @@
-from typing import NoReturn
+from typing import Union, NoReturn
 
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import DEFAULT_RATE_LIMIT
@@ -20,7 +20,7 @@ class ThrottlingMiddleware(BaseMiddleware):
 
     async def on_process_message(
         self, message: types.Message, data: dict
-    ) -> None | NoReturn:
+    ) -> Union[None, NoReturn]:
         """Process message."""
         handler = current_handler.get()
         dispatcher = Dispatcher.get_current()

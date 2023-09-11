@@ -1,5 +1,5 @@
-from typing import Optional, Callable
 from datetime import datetime, timedelta
+from typing import Union, Optional, List, Tuple, Callable
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
@@ -29,7 +29,7 @@ async def get_channels_(callback_query: CallbackQuery) -> None:
 
 
 async def ask_for_what_to_add_to_posts_in_queue(
-    data: Message | CallbackQuery,
+    data: Union[Message, CallbackQuery],
 ) -> None:
     """Asks for what to add to posts in queue."""
     answer_function: Callable = (
@@ -129,7 +129,7 @@ async def send_message_about_wrong_date(message: Message) -> None:
 
 
 async def ask_for_time_to_send_posts_in_queue(
-    data: Message | CallbackQuery, date_: str
+    data: Union[Message, CallbackQuery], date_: str
 ) -> None:
     """Asks for time between which posts should be published and waits (state) for it."""
     global start_date
@@ -247,7 +247,7 @@ async def postpone_posts_in_queue(message: Message) -> None:
 
 def _postpone_posts_in_queue(
     user_chat_id: int, user_language_code: str
-) -> tuple[int, str]:
+) -> Tuple[int, str]:
     """Postpones posts in queue."""
     times = _get_times()
     times_count = len(times)
@@ -276,7 +276,7 @@ def _postpone_posts_in_queue(
     return posts_count, publishing_times
 
 
-def _get_times() -> list[datetime]:
+def _get_times() -> List[datetime]:
     """Returns times between which posts should be published."""
     if "\n" in time:
         return [datetime.strptime(time, "%H:%M") for time in time.split("\n")]

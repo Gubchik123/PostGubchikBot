@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Union, Callable
 
 from aiogram import types
 
@@ -27,7 +27,7 @@ from keyboards.inline.subscription import (
 
 @dp.callback_query_handler(text="back_to_subscription")
 async def back_to_subscription(
-    data: types.Message | types.CallbackQuery,
+    data: Union[types.Message, types.CallbackQuery],
 ) -> None:
     """Workaround to get back to subscription menu
     depending on the given data (message or callback)."""
@@ -39,7 +39,9 @@ async def back_to_subscription(
 
 
 @dp.callback_query_handler(text="subscription")
-async def subscription(data: types.Message | types.CallbackQuery) -> None:
+async def subscription(
+    data: Union[types.Message, types.CallbackQuery]
+) -> None:
     """Shows or sends subscription details
     if user has subscription and shows or sends subscription menu otherwise."""
     user = get_user_by_(data.from_user.id)
@@ -49,7 +51,7 @@ async def subscription(data: types.Message | types.CallbackQuery) -> None:
 
 
 async def get_user_subscription(
-    data: types.Message | types.CallbackQuery, user: User
+    data: Union[types.Message, types.CallbackQuery], user: User
 ) -> None:
     """Shows or sends user subscription info
     depending on the given data (message or callback)."""
@@ -77,7 +79,7 @@ async def get_user_subscription(
 
 @dp.callback_query_handler(text="subscriptions")
 async def get_subscriptions(
-    data: types.Message | types.CallbackQuery, *args
+    data: Union[types.Message, types.CallbackQuery], *args
 ) -> None:
     """Shows or sends subscriptions to choose from
     depending on the given data (message or callback)."""

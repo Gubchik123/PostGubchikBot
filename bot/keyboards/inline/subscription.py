@@ -1,3 +1,5 @@
+from typing import List
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from loader import _
@@ -31,12 +33,12 @@ def get_subscription_keyboard() -> InlineKeyboardMarkup:
         InlineKeyboardButton(
             text=_("Update subscription"), callback_data="subscriptions"
         ),
-        get_back_to_menu_inline_button()
+        get_back_to_menu_inline_button(),
     )
 
 
 def get_subscriptions_keyboard(
-    all_subscriptions: list[Subscription],
+    all_subscriptions: List[Subscription],
 ) -> InlineKeyboardMarkup:
     """Returns inline keyboard with subscriptions and back button."""
     CURRENT_LEVEL = 0

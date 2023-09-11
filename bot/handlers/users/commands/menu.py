@@ -1,4 +1,4 @@
-from typing import Optional, Callable
+from typing import Union, Optional, Callable
 
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
@@ -12,7 +12,7 @@ from utils.db.crud.user import get_user_channels_by_
 @dp.message_handler(Command("menu"))
 @dp.callback_query_handler(text="menu", state="*")
 async def show_menu(
-    data: Message | CallbackQuery, state: Optional[FSMContext] = None
+    data: Union[Message, CallbackQuery], state: Optional[FSMContext] = None
 ) -> None:
     """
     Shows or sends menu depending on the given data (message or callback).

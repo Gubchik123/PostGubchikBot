@@ -1,4 +1,4 @@
-from typing import Optional, Callable
+from typing import Union, Optional, Callable
 
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
@@ -24,7 +24,7 @@ previous_price = None
 @dp.message_handler(IsAdmin(), Command("subscription"))
 @dp.callback_query_handler(IsAdmin(), text="admin_subscription", state="*")
 async def show_subscriptions(
-    data: Message | CallbackQuery, state: Optional[FSMContext] = None
+    data: Union[Message, CallbackQuery], state: Optional[FSMContext] = None
 ) -> None:
     """Shows all subscriptions to choose from to change."""
     if state:

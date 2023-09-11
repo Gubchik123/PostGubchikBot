@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Union, Callable
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentType, Message, CallbackQuery
@@ -101,7 +101,7 @@ async def add_voice_to_post(message: Message, state: FSMContext) -> None:
 
 
 async def send_corrective_reply_to_(
-    data: Message | CallbackQuery, content_item: dict | int
+    data: Union[Message, CallbackQuery], content_item: Union[dict, int]
 ) -> None:
     """Sends corrective reply to the message."""
     content_item = (

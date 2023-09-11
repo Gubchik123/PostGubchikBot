@@ -1,3 +1,4 @@
+from typing import List
 from pytz import timezone
 from datetime import datetime, timedelta
 
@@ -19,7 +20,7 @@ from ..db import MySession, commit_and_refresh
 subscriptions = []
 
 
-def get_all_subscriptions() -> list[Subscription]:
+def get_all_subscriptions() -> List[Subscription]:
     """Returns all subscriptions ordered by id."""
     if subscriptions:
         return subscriptions
@@ -89,7 +90,7 @@ def _try_to_remove_scheduler_job_with_id_(id: str) -> None:
         pass
 
 
-def _resume_(user_scheduled_post_jobs: list[Job]) -> None:
+def _resume_(user_scheduled_post_jobs: List[Job]) -> None:
     """Resumes all paused user scheduled post jobs."""
     for user_scheduled_post_job in user_scheduled_post_jobs:
         user_scheduled_post_job.resume()

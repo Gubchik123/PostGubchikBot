@@ -1,4 +1,4 @@
-from typing import Optional, Callable
+from typing import Union, Optional, Callable
 
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
@@ -24,7 +24,7 @@ from .constants import post_content, selected_channels
 
 @dp.callback_query_handler(text="create_post", state="*")
 async def get_channels(
-    data: Message | CallbackQuery,
+    data: Union[Message, CallbackQuery],
     target: str = "post creation",
     state: Optional[FSMContext] = None,
 ) -> None:
