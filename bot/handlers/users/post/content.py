@@ -18,7 +18,7 @@ from .publishing import ask_about_time_to_publish_post
 from .in_queue import ask_for_what_to_add_to_posts_in_queue
 
 
-current_content_index = None
+global_current_content_index = None
 
 
 @dp.message_handler(content_types=ContentType.TEXT, state=Post.content)
@@ -126,8 +126,8 @@ async def ask_for_url_buttons(
     callback_query: CallbackQuery, content_index: int
 ) -> None:
     """Asks for URL buttons and waits (state) for them."""
-    global current_content_index
-    current_content_index = content_index
+    global global_current_content_index
+    global_current_content_index = content_index
     await callback_query.message.edit_text(
         text=_(
             "Send me list of URL buttons in one message. "
@@ -151,7 +151,7 @@ async def ask_for_url_buttons(
 async def add_url_buttons(message: Message, state: FSMContext):
     """Adds URL buttons to the post content."""
     post_content.update_kwargs(
-        current_content_index,
+        global_current_content_index,
         "reply_markup",
         get_url_buttons_from_(message.text),
     )

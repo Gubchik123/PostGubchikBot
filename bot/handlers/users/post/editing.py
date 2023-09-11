@@ -28,7 +28,7 @@ from utils.scheduler import (
 from .postponing import send_message_about_wrong_date_and_time
 
 
-current_post_type = current_post_id = ""
+global_current_post_type = global_current_post_id = ""
 
 
 @dp.callback_query_handler(text="edit_post")
@@ -126,9 +126,9 @@ async def ask_for_new_publication_time(
     """
     Sends message to ask for new publication time and waits (state) for it.
     """
-    global current_post_id, current_post_type
-    current_post_type = post_type
-    current_post_id = post_id
+    global global_current_post_id, global_current_post_type
+    global_current_post_type = post_type
+    global_current_post_id = post_id
     await callback_query.message.edit_text(
         text=_(
             "<b>Enter a new time for the scheduled post</b>\n\n"
@@ -151,7 +151,9 @@ async def change_post_publication_time(
     await state.finish()
     scheduler.reschedule_job(
         job_id=_get_job_id_based_on_(
-            message.from_user.id, current_post_type, current_post_id
+            message.from_user.id,
+            global_current_post_type,
+            global_current_post_id,
         ),
         trigger="date",
         run_date=datetime.strptime(message.text, "%d.%m.%Y %H:%M"),
@@ -162,7 +164,9 @@ async def change_post_publication_time(
             "New publication time: {run_date}"
         ).format(run_date=message.text),
     )
-    await get_user_post(message, current_post_type, current_post_id)
+    await get_user_post(
+        message, global_current_post_type, global_current_post_id
+    )
 
 
 @dp.message_handler(state=Post.new_time)

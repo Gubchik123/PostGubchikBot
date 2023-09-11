@@ -18,7 +18,7 @@ from keyboards.inline.callback_data import (
     get_keyboard_with_back_inline_button_by_,
 )
 
-previous_price = None
+global_previous_price = None
 
 
 @dp.message_handler(IsAdmin(), Command("subscription"))
@@ -42,8 +42,8 @@ async def show_subscriptions(
 
 async def ask_for_new_price(callback_query: CallbackQuery, price: int) -> None:
     """Asks admin for new subscription price."""
-    global previous_price
-    previous_price = price
+    global global_previous_price
+    global_previous_price = price
     await callback_query.message.edit_text(
         _(
             "Enter new subscription price"
@@ -64,12 +64,12 @@ async def change_subscription_price(
 ) -> None:
     """Changes subscription price."""
     new_price = int(message.text)
-    change_subscription_price_on_(new_price, previous_price)
+    change_subscription_price_on_(new_price, global_previous_price)
     await message.answer(
         _(
             "Subscription price has been changed"
             " from {previous_price} to {new_price}!"
-        ).format(previous_price=previous_price, new_price=new_price),
+        ).format(previous_price=global_previous_price, new_price=new_price),
     )
     await state.finish()
     await show_subscriptions(message)

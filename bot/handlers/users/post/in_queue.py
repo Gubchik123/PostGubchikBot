@@ -96,9 +96,9 @@ async def shuffle_posts_in_queue(callback_query: CallbackQuery) -> None:
     await callback_query.answer(_("Soon..."))
 
 
-start_date = ""
-time = ""
-interval = ""
+global_start_date = ""
+global_time = ""
+global_interval = ""
 
 
 async def ask_for_start_date_to_send_posts_in_queue(
@@ -133,8 +133,8 @@ async def ask_for_time_to_send_posts_in_queue(
     data: Union[Message, CallbackQuery], date_: str
 ) -> None:
     """Asks for time between which posts should be published and waits (state) for it."""
-    global start_date
-    start_date = date_
+    global global_start_date
+    global_start_date = date_
     answer_function: Callable = (
         data.message.edit_text
         if isinstance(data, CallbackQuery)
@@ -147,7 +147,9 @@ async def ask_for_time_to_send_posts_in_queue(
             "12:00\n12:40\n15:00\n\n"
             "<b>Date</b>: {date}\n"
             "<b>Channel(s)</b>: {channels}\n"
-        ).format(date=start_date, channels=", ".join(selected_channels)),
+        ).format(
+            date=global_start_date, channels=", ".join(selected_channels)
+        ),
         reply_markup=get_time_keyboard(),
     )
     await PostInQueue.time.set()
@@ -158,8 +160,8 @@ async def ask_for_time_to_send_posts_in_queue(
 )
 async def get_time_to_send_posts_in_queue(message: Message) -> None:
     """Gets time to send posts-in-queue."""
-    global time
-    time = message.text
+    global global_time
+    global_time = message.text
     await ask_for_interval_to_send_posts_in_queue(message)
 
 
@@ -168,8 +170,8 @@ async def get_time_to_send_posts_in_queue(message: Message) -> None:
 )
 async def get_time_to_send_posts_in_queue(message: Message) -> None:
     """Gets times to send posts-in-queue."""
-    global time
-    time = message.text
+    global global_time
+    global_time = message.text
     await postpone_posts_in_queue(message)
 
 
@@ -191,9 +193,9 @@ async def ask_for_interval_to_send_posts_in_queue(
 ) -> None:
     """Asks for interval between posts in minutes and waits (state) for it."""
     time_ = (
-        time.split("\n")[0] + " - " + time.split("\n")[-1]
-        if "\n" in time
-        else time
+        global_time.split("\n")[0] + " - " + global_time.split("\n")[-1]
+        if "\n" in global_time
+        else global_time
     )
     await message.answer(
         text=_(
@@ -202,9 +204,11 @@ async def ask_for_interval_to_send_posts_in_queue(
             "<b>Time</b>: {time}\n"
             "<b>Channel(s)</b>: {channels}\n"
         ).format(
-            date=start_date, time=time_, channels=", ".join(selected_channels)
+            date=global_start_date,
+            time=time_,
+            channels=", ".join(selected_channels),
         ),
-        reply_markup=get_interval_keyboard(start_date),
+        reply_markup=get_interval_keyboard(global_start_date),
     )
     await PostInQueue.interval.set()
 
@@ -212,8 +216,8 @@ async def ask_for_interval_to_send_posts_in_queue(
 @dp.message_handler(regexp=r"^\d\d?$", state=PostInQueue.interval)
 async def get_interval_to_send_posts_in_queue(message: Message) -> None:
     """Gets interval to send posts-in-queue."""
-    global interval
-    interval = int(message.text)
+    global global_interval
+    global_interval = int(message.text)
     await postpone_posts_in_queue(message)
 
 
@@ -256,7 +260,7 @@ def _postpone_posts_in_queue(
     publishing_times = ""
     current_time_index = 0
     posts_count = len(post_content)
-    day, month, year = start_date.split(".")
+    day, month, year = global_start_date.split(".")
     current_datetime = user_datetime_now.replace(
         year=int(year), month=int(month), day=int(day), second=0, microsecond=0
     )
@@ -284,14 +288,14 @@ def _postpone_posts_in_queue(
 def _get_times(user_datetime_now: datetime) -> List[datetime]:
     """Returns times between which posts should be published."""
     times = []
-    if "\n" in time:
-        for hour_and_minute in time.split("\n"):
-            hour, minute = hour_and_minute.split(":")
+    if "\n" in global_time:
+        for time in global_time.split("\n"):
+            hour, minute = time.split(":")
             times += user_datetime_now.replace(
                 hour=int(hour), minute=int(minute)
             )
     else:
-        start_time, end_time = time.split("-")
+        start_time, end_time = global_time.split("-")
         start_hour, start_minute = start_time.split(":")
         start_time = user_datetime_now.replace(
             hour=int(start_hour), minute=int(start_minute)
@@ -302,7 +306,7 @@ def _get_times(user_datetime_now: datetime) -> List[datetime]:
         )
         while start_time <= end_time:
             times.append(start_time)
-            start_time += timedelta(minutes=interval)
+            start_time += timedelta(minutes=global_interval)
     return times
 
 
