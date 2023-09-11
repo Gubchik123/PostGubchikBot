@@ -31,6 +31,7 @@ scheduler = AsyncIOScheduler(
             metadata=Base.metadata,
         )
     },
+    job_defaults={"misfire_grace_time": 15 * 60},  # 15 minutes
     timezone=DEFAULT_TIMEZONE,
 )
 scheduler.start()
