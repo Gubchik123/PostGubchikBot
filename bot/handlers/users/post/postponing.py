@@ -1,5 +1,6 @@
 import string
 import random
+from pytz import timezone
 from datetime import datetime
 
 from aiogram.dispatcher import FSMContext
@@ -36,10 +37,13 @@ async def postpone_post(callback_query: CallbackQuery, *args) -> None:
 async def postpone_post_by_time(message: Message, state: FSMContext) -> None:
     """Postpones the post by the given time."""
     await state.finish()
+    user = get_user_by_(message.from_user.id)
     hour, minute = message.text.split(":")
     post_id = _schedule_job_to_publish_user_post(
         user_chat_id=message.from_user.id,
-        run_date=datetime.today().replace(hour=int(hour), minute=int(minute)),
+        run_date=datetime.now(timezone(user.timezone)).replace(
+            hour=int(hour), minute=int(minute), second=0, microsecond=0
+        ),
     )
     await message.answer(
         text=_get_postpone_success_message_by_(post_id, message.text)
@@ -55,9 +59,10 @@ async def postpone_post_by_date_and_time(
 ) -> None:
     """Postpones the post by the given date and time."""
     await state.finish()
+    user = get_user_by_(message.from_user.id)
     post_id = _schedule_job_to_publish_user_post(
         user_chat_id=message.from_user.id,
-        run_date=datetime.strptime(message.text, "%d.%m.%Y %H:%M"),
+        run_date=_get_run_date_by_(user.timezone, message.text),
     )
     await message.answer(
         text=_get_postpone_success_message_by_(post_id, message.text)
@@ -73,6 +78,20 @@ async def send_message_about_wrong_date_and_time(message: Message) -> None:
             "Wrong date and (or) time format. Try again!\n"
             "Format example - 15.08.2023 13:40"
         )
+    )
+
+
+def _get_run_date_by_(user_timezone: str, message_text: str) -> datetime:
+    """Returns run date by the given user timezone and message text."""
+    user_run_datetime = datetime.strptime(message_text, "%d.%m.%Y %H:%M")
+    return datetime.now(timezone(user_timezone)).replace(
+        year=user_run_datetime.year,
+        month=user_run_datetime.month,
+        day=user_run_datetime.day,
+        hour=user_run_datetime.hour,
+        minute=user_run_datetime.minute,
+        second=0,
+        microsecond=0,
     )
 
 

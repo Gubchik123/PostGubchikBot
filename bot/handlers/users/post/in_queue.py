@@ -1,3 +1,4 @@
+from pytz import timezone
 from datetime import datetime, timedelta
 from typing import Union, Optional, List, Tuple, Callable
 
@@ -229,7 +230,7 @@ async def postpone_posts_in_queue(message: Message) -> None:
     await message.answer(_("Processing..."))
     user = get_user_by_(message.from_user.id)
     posts_count, publishing_times = _postpone_posts_in_queue(
-        user.chat_id, user.language_code
+        user.chat_id, user.language_code, user.timezone
     )
     await message.answer(
         _(
@@ -246,15 +247,19 @@ async def postpone_posts_in_queue(message: Message) -> None:
 
 
 def _postpone_posts_in_queue(
-    user_chat_id: int, user_language_code: str
+    user_chat_id: int, user_language_code: str, user_timezone: str
 ) -> Tuple[int, str]:
     """Postpones posts in queue."""
-    times = _get_times()
+    user_datetime_now = datetime.now(timezone(user_timezone))
+    times = _get_times(user_datetime_now)
     times_count = len(times)
     publishing_times = ""
     current_time_index = 0
     posts_count = len(post_content)
-    current_datetime = datetime.strptime(start_date, "%d.%m.%Y")
+    day, month, year = start_date.split(".")
+    current_datetime = user_datetime_now.replace(
+        year=int(year), month=int(month), day=int(day), second=0, microsecond=0
+    )
     for count, post in enumerate(post_content):
         current_time = times[current_time_index]
         current_datetime = current_datetime.replace(
@@ -276,17 +281,28 @@ def _postpone_posts_in_queue(
     return posts_count, publishing_times
 
 
-def _get_times() -> List[datetime]:
+def _get_times(user_datetime_now: datetime) -> List[datetime]:
     """Returns times between which posts should be published."""
-    if "\n" in time:
-        return [datetime.strptime(time, "%H:%M") for time in time.split("\n")]
     times = []
-    start_time, end_time = time.split("-")
-    start_time = datetime.strptime(start_time, "%H:%M")
-    end_time = datetime.strptime(end_time, "%H:%M")
-    while start_time <= end_time:
-        times.append(start_time)
-        start_time += timedelta(minutes=interval)
+    if "\n" in time:
+        for hour_and_minute in time.split("\n"):
+            hour, minute = hour_and_minute.split(":")
+            times += user_datetime_now.replace(
+                hour=int(hour), minute=int(minute)
+            )
+    else:
+        start_time, end_time = time.split("-")
+        start_hour, start_minute = start_time.split(":")
+        start_time = user_datetime_now.replace(
+            hour=int(start_hour), minute=int(start_minute)
+        )
+        end_hour, end_minute = end_time.split(":")
+        end_time = user_datetime_now.replace(
+            hour=int(end_hour), minute=int(end_minute)
+        )
+        while start_time <= end_time:
+            times.append(start_time)
+            start_time += timedelta(minutes=interval)
     return times
 
 
