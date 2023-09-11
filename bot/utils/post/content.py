@@ -2,6 +2,8 @@ from typing import Any, Callable, Optional
 
 from loader import bot
 
+from .settings import PostSettings
+
 
 class PostContent:
     """Class for storing post content."""
@@ -10,6 +12,7 @@ class PostContent:
         """Initializes the post empty content."""
         self.clear()
         self.target_menu = ""
+        self.settings: Optional[PostSettings] = None
 
     def __iter__(self):
         """Iterates over the post content and yields its items."""
