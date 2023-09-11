@@ -60,7 +60,9 @@ def create_user_by_(telegram_user: TelegramUser, message_args: str) -> None:
 def get_user_by_(user_chat_id: int) -> User:
     """Returns user by the given user chat id."""
     try:
-        return users[user_chat_id]
+        if (user := users[user_chat_id]) is None:
+            raise KeyError
+        return user
     except KeyError:
         with MySession() as session:
             user = _get_user_by_(session, user_chat_id)
