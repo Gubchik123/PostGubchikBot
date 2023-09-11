@@ -71,7 +71,9 @@ def get_back_to_post_content_keyboard(
     )
 
 
-def get_url_buttons_from_(user_message_text: str) -> InlineKeyboardMarkup:
+def get_url_buttons_keyboard_from_(
+    user_message_text: str,
+) -> InlineKeyboardMarkup:
     """
     Returns inline keyboard with url buttons from the given user message text.
     """

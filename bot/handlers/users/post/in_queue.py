@@ -13,9 +13,7 @@ from states.post_in_queue import PostInQueue
 from states.post_settings import PostContentSettings
 from utils.scheduler import publish_user_post_in_queue
 from messages.post import get_asking_for_url_buttons_text
-from keyboards.inline.post.content import (
-    get_url_buttons_from_,
-)  # TODO: Rename it to the 'get_url_buttons_keyboard_from_'
+from keyboards.inline.post.content import get_url_buttons_keyboard_from_
 from keyboards.inline.callback_data import (
     posts_in_queue_callback_data,
     get_keyboard_with_back_inline_button_by_,
@@ -93,8 +91,8 @@ async def ask_for_url_buttons_to_posts_in_queue(
 @dp.message_handler(state=PostContentSettings.reply_markup)
 async def add_url_buttons_to_posts_in_queue(message: Message) -> None:
     """Adds url buttons to posts in queue."""
-    constants.post_content.settings.reply_markup = get_url_buttons_from_(
-        message.text
+    constants.post_content.settings.reply_markup = (
+        get_url_buttons_keyboard_from_(message.text)
     )
     await ask_for_what_to_add_to_posts_in_queue(message)
 

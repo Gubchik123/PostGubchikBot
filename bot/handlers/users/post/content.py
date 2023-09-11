@@ -8,7 +8,7 @@ from states.post import Post
 from messages.post import get_asking_for_url_buttons_text
 from keyboards.inline.callback_data import post_content_callback_data
 from keyboards.inline.post.content import (
-    get_url_buttons_from_,
+    get_url_buttons_keyboard_from_,
     get_post_content_keyboard,
     get_back_to_post_content_keyboard,
 )
@@ -152,7 +152,7 @@ async def add_url_buttons(message: Message, state: FSMContext):
     constants.post_content.update_kwargs(
         global_current_content_index,
         "reply_markup",
-        get_url_buttons_from_(message.text),
+        get_url_buttons_keyboard_from_(message.text),
     )
     await message.answer(
         text=_(
