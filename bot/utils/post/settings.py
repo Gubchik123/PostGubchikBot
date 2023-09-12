@@ -12,6 +12,7 @@ class PostSettings:
         """Clears the post settings."""
         self.caption = ""
         self.shuffle = False
+        self.watermark = None
         self.reply_markup = None
         self.disable_notification = False
         self.disable_web_page_preview = False
