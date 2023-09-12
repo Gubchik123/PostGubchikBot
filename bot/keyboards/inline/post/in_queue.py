@@ -30,7 +30,8 @@ def get_posts_in_queue_keyboard(
             callback_data=_get_new_callback_data("add_url_buttons"),
         ),
         InlineKeyboardButton(
-            text=_("Add watermark"),
+            text=("✅ " if post_settings.watermark else "")
+            + _("Add watermark"),
             callback_data=_get_new_callback_data("add_watermark"),
         ),
         InlineKeyboardButton(
