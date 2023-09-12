@@ -2,6 +2,7 @@ from pytz import timezone
 from datetime import datetime, timedelta
 from typing import Union, List, Tuple, Callable
 
+from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from loader import dp, scheduler, _
@@ -91,10 +92,13 @@ async def get_time_to_send_posts_in_queue(message: Message) -> None:
 @dp.message_handler(
     lambda message: "\n" in message.text, state=PostInQueue.time
 )
-async def get_time_to_send_posts_in_queue(message: Message) -> None:
+async def get_time_to_send_posts_in_queue(
+    message: Message, state: FSMContext
+) -> None:
     """Gets times to send posts-in-queue."""
     global global_time
     global_time = message.text
+    await state.finish()
     await postpone_posts_in_queue(message)
 
 
@@ -137,10 +141,13 @@ async def ask_for_interval_to_send_posts_in_queue(
 
 
 @dp.message_handler(regexp=r"^\d\d?$", state=PostInQueue.interval)
-async def get_interval_to_send_posts_in_queue(message: Message) -> None:
+async def get_interval_to_send_posts_in_queue(
+    message: Message, state: FSMContext
+) -> None:
     """Gets interval to send posts-in-queue."""
     global global_interval
     global_interval = int(message.text)
+    await state.finish()
     await postpone_posts_in_queue(message)
 
 
