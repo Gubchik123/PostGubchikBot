@@ -7,3 +7,6 @@ class PostContentSettings(StatesGroup):
     caption = State()
     reply_markup = State()
     watermark = State()
+    watermark_size = State()
+    watermark_position = State()
+    watermark_transparency = State()
