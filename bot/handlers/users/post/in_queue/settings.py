@@ -188,7 +188,7 @@ def _get_output_image_path(
 
     if watermark_text:
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype("arial.ttf", size=36)
+        font = ImageFont.load_default()
         text_length = draw.textlength(watermark_text, font)
         x = width - text_length - 10
         y = height - 50
