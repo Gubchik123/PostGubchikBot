@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-09-11 19:10+0300\n"
+"POT-Creation-Date: 2023-09-12 15:07+0300\n"
 "PO-Revision-Date: 2023-09-09 16:12+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -126,7 +126,8 @@ msgstr ""
 "\n"
 "<b>Подписка на {default_subscription_days} дней активирована!</b>"
 
-#: handlers/users/post/in_queue/time.py:157 handlers/users/subscription.py:177
+#: handlers/users/post/in_queue/settings.py:140
+#: handlers/users/post/in_queue/time.py:164 handlers/users/subscription.py:177
 msgid "Processing..."
 msgstr "Обработка..."
 
@@ -235,7 +236,7 @@ msgstr "Отмена"
 
 #: handlers/users/post/album.py:23 handlers/users/post/content.py:33
 #: handlers/users/post/content.py:38 keyboards/default/post.py:9
-#: keyboards/inline/post/general.py:58 keyboards/inline/post/in_queue.py:51
+#: keyboards/inline/post/general.py:58 keyboards/inline/post/in_queue.py:52
 msgid "Next"
 msgstr "Далее"
 
@@ -461,23 +462,36 @@ msgstr ""
 "\n"
 "Пост будет удален через {hour} часов и {minute} минут."
 
-#: handlers/users/post/in_queue/settings.py:37
+#: handlers/users/post/in_queue/settings.py:43
 msgid "Select what you want to add to all posts in the queue:"
 msgstr "Выберите, что вы хотите добавить ко всем постам в очереди:"
 
-#: handlers/users/post/in_queue/settings.py:49
+#: handlers/users/post/in_queue/settings.py:55
 msgid "Send me new caption for all posts in the queue."
-msgstr ""
+msgstr "Отправьте мне новую подпись ко всем постам в очереди."
 
-#: handlers/users/post/in_queue/settings.py:90
-msgid "Soon..."
-msgstr "Скоро..."
+#: handlers/users/post/in_queue/settings.py:99
+#, fuzzy
+msgid "You can't add watermark to posts in queue!"
+msgstr "Выберите, что вы хотите добавить ко всем постам в очереди:"
 
-#: handlers/users/post/in_queue/settings.py:132
+#: handlers/users/post/in_queue/settings.py:105
+msgid "There are no images in the queue."
+msgstr "В очереди нет изображений."
+
+#: handlers/users/post/in_queue/settings.py:118
+msgid "Pay attention that you can't edit watermark for posts in queue!"
+msgstr "Обратите внимание, что вы не сможете отредактировать водяной знак для постов в очереди!"
+
+#: handlers/users/post/in_queue/settings.py:122
+msgid "Send me new watermark (image or text) for all images in the queue."
+msgstr "Отправьте мне новый водяной знак (изображение или текст) для всех изображений в очереди."
+
+#: handlers/users/post/in_queue/settings.py:256
 msgid "Posts are already shuffled."
 msgstr "Посты уже перемешаны."
 
-#: handlers/users/post/in_queue/time.py:31
+#: handlers/users/post/in_queue/time.py:32
 msgid ""
 "Send the date from which to start posting messages in the format: "
 "DD.MM.YYYY (15.08.2023)"
@@ -485,7 +499,7 @@ msgstr ""
 "Отправьте дату, с которой начать публикацию сообщений в формате: "
 "ДД.ММ.ГГГГ (15.08.2023)"
 
-#: handlers/users/post/in_queue/time.py:50
+#: handlers/users/post/in_queue/time.py:51
 msgid ""
 "Wrong date! Try again!\n"
 "\n"
@@ -495,7 +509,7 @@ msgstr ""
 "\n"
 "Пример формата: 15.08.2023"
 
-#: handlers/users/post/in_queue/time.py:66
+#: handlers/users/post/in_queue/time.py:67
 msgid ""
 "Enter the time between which posts should be published (for example "
 "09:20-21:20)\n"
@@ -517,7 +531,7 @@ msgstr ""
 "<b>Дата</b>: {date}\n"
 "<b>Канал(ы)</b>: {channels}"
 
-#: handlers/users/post/in_queue/time.py:105
+#: handlers/users/post/in_queue/time.py:109
 msgid ""
 "Wrong time! Try again!\n"
 "\n"
@@ -535,7 +549,7 @@ msgstr ""
 "12:40\n"
 "15:00"
 
-#: handlers/users/post/in_queue/time.py:124
+#: handlers/users/post/in_queue/time.py:128
 msgid ""
 "Send the interval between posts in minutes (for example: 15)\n"
 "\n"
@@ -549,7 +563,7 @@ msgstr ""
 "<b>Время</b>: {time}\n"
 "<b>Канал(ы)</b>: {channels}"
 
-#: handlers/users/post/in_queue/time.py:151
+#: handlers/users/post/in_queue/time.py:158
 msgid ""
 "Wrong interval! Try again!\n"
 "\n"
@@ -559,7 +573,7 @@ msgstr ""
 "\n"
 "Пример формата: 15"
 
-#: handlers/users/post/in_queue/time.py:163
+#: handlers/users/post/in_queue/time.py:170
 msgid ""
 "🚀 {posts_count} posts are scheduled successfully!\n"
 "\n"
@@ -640,11 +654,11 @@ msgstr "Списать с баланса"
 msgid "Add URL buttons"
 msgstr "Добавить URL-кнопки"
 
-#: keyboards/inline/post/content.py:37 keyboards/inline/post/in_queue.py:38
+#: keyboards/inline/post/content.py:37 keyboards/inline/post/in_queue.py:39
 msgid "Disable web page preview"
 msgstr "Отключить предпросмотр веб-страницы"
 
-#: keyboards/inline/post/content.py:46 keyboards/inline/post/in_queue.py:43
+#: keyboards/inline/post/content.py:46 keyboards/inline/post/in_queue.py:44
 msgid "Disable notification"
 msgstr "Отключить уведомление"
 
@@ -696,23 +710,23 @@ msgstr "Отложить"
 msgid "Add a caption"
 msgstr "Добавить подпись"
 
-#: keyboards/inline/post/in_queue.py:33
+#: keyboards/inline/post/in_queue.py:34
 msgid "Add watermark"
 msgstr "Добавить водяной знак"
 
-#: keyboards/inline/post/in_queue.py:47
+#: keyboards/inline/post/in_queue.py:48
 msgid "Shuffle posts"
 msgstr "Перемешать посты"
 
-#: keyboards/inline/post/in_queue.py:62
+#: keyboards/inline/post/in_queue.py:63
 msgid "Today"
 msgstr "Сегодня"
 
-#: keyboards/inline/post/in_queue.py:70
+#: keyboards/inline/post/in_queue.py:71
 msgid "Tomorrow"
 msgstr "Завтра"
 
-#: keyboards/inline/post/in_queue.py:81
+#: keyboards/inline/post/in_queue.py:82
 msgid "After tomorrow"
 msgstr "Послезавтра"
 
