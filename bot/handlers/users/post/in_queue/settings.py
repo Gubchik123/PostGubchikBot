@@ -1,11 +1,13 @@
 import os
+import platform
 from io import BytesIO
 from random import shuffle
-from typing import Union, Callable, Optional, Tuple
+from typing import Union, Callable
 
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from aiogram.dispatcher import FSMContext
+from aiogram.utils.exceptions import BadRequest
 from aiogram.types import ContentType, Message, CallbackQuery
 
 from loader import bot, dp, _
@@ -130,79 +132,250 @@ async def ask_for_watermark_to_posts_in_queue(
 
 
 @dp.message_handler(
-    content_types=[ContentType.TEXT, ContentType.PHOTO],
+    content_types=ContentType.TEXT,
     state=PostContentSettings.watermark,
 )
-async def add_watermark_image_to_posts_in_queue(
+async def process_watermark_text(message: Message, state: FSMContext) -> None:
+    """Processes watermark text."""
+    await state.update_data(
+        watermark_type="text",
+        watermark_text=message.text,
+        watermark_image_path=None,
+    )
+    await ask_for_watermark_size(
+        message, message_text=_("Send me watermark font size (in px).")
+    )
+
+
+@dp.message_handler(
+    content_types=ContentType.PHOTO,
+    state=PostContentSettings.watermark,
+)
+async def process_watermark_image(message: Message, state: FSMContext) -> None:
+    """Processes watermark image."""
+    photo = message.photo[-1]
+    file_id = photo.file_id
+    file = await bot.get_file(file_id)
+    await state.update_data(
+        watermark_type="photo",
+        watermark_image_path=file.file_path,
+        watermark_text=None,
+    )
+    await ask_for_watermark_size(
+        message,
+        message_text=_(
+            "Send me watermark size (in px) "
+            "in the following format: widthxheight (for example: 100x100)."
+        ),
+    )
+
+
+async def ask_for_watermark_size(message: Message, message_text: str) -> None:
+    """Asks for watermark size to posts in queue and waits (state) for it."""
+    await message.answer(
+        message_text,
+        reply_markup=get_keyboard_with_back_inline_button_by_(
+            callback_data="posts_in_queue:ask_for_what_to_add:None"
+        ),
+    )
+    await PostContentSettings.watermark_size.set()
+
+
+@dp.message_handler(
+    lambda message: message.text.isdigit(),
+    content_types=ContentType.TEXT,
+    state=PostContentSettings.watermark_size,
+)
+async def process_watermark_font_size(
+    message: Message, state: FSMContext
+) -> None:
+    """Processes watermark font size."""
+    watermark_size = int(message.text)
+    if watermark_size < 1:
+        await message.answer(_("Font size must be greater than 0!"))
+        return
+    await state.update_data(watermark_size=watermark_size)
+    await ask_for_watermark_position(message)
+
+
+@dp.message_handler(
+    lambda message: "x" in message.text,
+    content_types=ContentType.TEXT,
+    state=PostContentSettings.watermark_size,
+)
+async def process_watermark_size(message: Message, state: FSMContext) -> None:
+    """Processes watermark size."""
+    watermark_size = message.text.split("x")
+    try:
+        watermark_size = tuple(map(int, watermark_size))
+    except ValueError:
+        await message.answer(
+            _(
+                "Watermark size must be in the following format: "
+                "widthxheight (for example: 100x100)."
+            )
+        )
+        return
+    if watermark_size[0] < 1 or watermark_size[1] < 1:
+        await message.answer(_("Watermark size must be greater than 0!"))
+        return
+    await state.update_data(watermark_size=watermark_size)
+    await ask_for_watermark_position(message)
+
+
+async def ask_for_watermark_position(message) -> None:
+    """
+    Asks for watermark position to posts in queue and waits (state) for it.
+    """
+    await message.answer(
+        _("Send me watermark position (in px) in the following format: x,y."),
+        reply_markup=get_keyboard_with_back_inline_button_by_(
+            callback_data="posts_in_queue:ask_for_what_to_add:None"
+        ),
+    )
+    await PostContentSettings.watermark_position.set()
+
+
+@dp.message_handler(
+    content_types=ContentType.TEXT,
+    state=PostContentSettings.watermark_position,
+)
+async def process_watermark_position(
+    message: Message, state: FSMContext
+) -> None:
+    """Processes watermark position."""
+    watermark_position = message.text.split(",")
+    try:
+        watermark_position = tuple(map(int, watermark_position))
+    except ValueError:
+        await message.answer(
+            _(
+                "Watermark position must be in the following format: x,y "
+                "(for example: 100,100)."
+            )
+        )
+        return
+    if watermark_position[0] < 0 or watermark_position[1] < 0:
+        await message.answer(_("Watermark position must be greater than 0!"))
+        return
+    await state.update_data(watermark_position=watermark_position)
+    await ask_for_watermark_transparency(message)
+
+
+async def ask_for_watermark_transparency(
+    message: Message,
+) -> None:
+    """
+    Asks for watermark transparency to posts in queue and waits (state) for it.
+    """
+    await message.answer(
+        _("Send me watermark transparency (in %)."),
+        reply_markup=get_keyboard_with_back_inline_button_by_(
+            callback_data="posts_in_queue:ask_for_what_to_add:None"
+        ),
+    )
+    await PostContentSettings.watermark_transparency.set()
+
+
+@dp.message_handler(
+    content_types=ContentType.TEXT,
+    state=PostContentSettings.watermark_transparency,
+)
+async def process_watermark_transparency(
+    message: Message, state: FSMContext
+) -> None:
+    """Processes watermark transparency."""
+    watermark_transparency = message.text
+    if watermark_transparency.endswith("%"):
+        watermark_transparency = watermark_transparency[:-1]
+    try:
+        watermark_transparency = int(watermark_transparency)
+    except ValueError:
+        await message.answer(
+            _(
+                "Watermark transparency must be in the following format: "
+                "number% (for example: 50%)."
+            )
+        )
+        return
+    if watermark_transparency < 0 or watermark_transparency > 100:
+        await message.answer(
+            _("Watermark transparency must be between 0 and 100!")
+        )
+        return
+    await state.update_data(watermark_transparency=watermark_transparency)
+    await add_watermark_to_posts_in_queue(message, state)
+
+
+async def add_watermark_to_posts_in_queue(
     message: Message, state: FSMContext
 ) -> None:
     """Adds watermark to images in the queue."""
     await message.answer(_("Processing..."))
-    await _add_watermark_to_posts_in_queue_by_(message)
+    async with state.proxy() as state_data:
+        await _add_watermark_to_posts_in_queue_by_(state_data)
     await state.finish()
     constants.post_content.settings.watermark = True
     await ask_for_what_to_add_to_posts_in_queue(message)
 
 
-async def _add_watermark_to_posts_in_queue_by_(message: Message) -> None:
+async def _add_watermark_to_posts_in_queue_by_(state_data: dict) -> None:
     """Adds watermark to images in the queue."""
-    (
-        watermark_text,
-        watermark_image_path,
-    ) = await _get_watermark_text_and_image_path_by_(message)
-
     for image in constants.post_content.images:
-        file = await bot.get_file(image["content"])
-        output_image_path = _get_output_image_path(
-            file.file_path, watermark_text, watermark_image_path
-        )
+        try:
+            file = await bot.get_file(image["content"])
+        except BadRequest:
+            print(image["content"])
+        output_image_path = _get_output_image_path(file.file_path, state_data)
         constants.post_content.update_by_(
             image["index"], f"Path:{output_image_path}"
         )
 
 
-async def _get_watermark_text_and_image_path_by_(
-    message: Message,
-) -> Tuple[Union[str, None], Union[str, None]]:
-    """Returns watermark text and image path by the given message."""
-    if message.content_type == ContentType.TEXT:
-        watermark_text = message.text
-        watermark_image_path = None
-    elif message.content_type == ContentType.PHOTO:
-        photo = message.photo[-1]
-        file_id = photo.file_id
-        file = await bot.get_file(file_id)
-        watermark_image_path = file.file_path
-        watermark_text = None
-    return watermark_text, watermark_image_path
-
-
-def _get_output_image_path(
-    image_path: str,
-    watermark_text: Optional[str] = None,
-    watermark_image_path: Optional[str] = None,
-):
+def _get_output_image_path(image_path: str, state_data: dict):
     """Returns output image path with watermark."""
+    watermark_text = state_data.get("watermark_text")
+    watermark_image_path = state_data.get("watermark_image_path")
+    watermark_size = state_data.get("watermark_size")
+    watermark_position = state_data.get("watermark_position")
+    watermark_transparency = state_data.get("watermark_transparency")
+
     image = Image.open(_get_image_bytes_by_(image_path))
-    width, height = image.size
+    watermarked_image = None
 
     if watermark_text:
-        draw = ImageDraw.Draw(image)
-        font = ImageFont.load_default()
-        text_length = draw.textlength(watermark_text, font)
-        x = width - text_length - 10
-        y = height - 50
-        draw.text((x, y), watermark_text, fill="white", font=font)
+        watermarked_image = Image.new("RGBA", image.size, (255, 255, 255, 0))
+        watermarked_image.paste(image, (0, 0))
+        draw = ImageDraw.Draw(watermarked_image)
+        font = ImageFont.truetype(
+            "arial.ttf" if platform.system() == "Windows" else "Ubuntu-M.ttf",
+            size=watermark_size,
+        )
+        draw.text(
+            watermark_position,
+            watermark_text,
+            fill=(255, 255, 255, watermark_transparency - 100),
+            stroke_fill=(0, 0, 0, watermark_transparency - 100),
+            font=font,
+        )
     elif watermark_image_path:
-        watermark = Image.open(_get_image_bytes_by_(watermark_image_path))
-        watermark.thumbnail((100, 100))
-        image.paste(watermark, (width - 100 - 10, height - 100 - 15))
+        watermark = Image.open(
+            _get_image_bytes_by_(watermark_image_path)
+        ).convert("RGBA")
+        watermark.thumbnail(watermark_size)
+        transparent_watermark = Image.new("RGBA", image.size, (0, 0, 0, 0))
+        watermark.putalpha(watermark_transparency + 100)
+        transparent_watermark.paste(watermark, watermark_position, watermark)
+        watermarked_image = Image.alpha_composite(
+            image.convert("RGBA"), transparent_watermark
+        )
 
+    image_path = image_path.replace(".jpg", ".png")
     try:
-        image.save(image_path)
+        watermarked_image.save(image_path)
     except FileNotFoundError:
         os.makedirs("photos")
-        image.save(image_path)
+        watermarked_image.save(image_path)
     return image_path
 
 
