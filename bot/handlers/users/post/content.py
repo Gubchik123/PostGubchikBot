@@ -16,7 +16,7 @@ from keyboards.inline.post.content import (
 from . import constants
 from ..commands.menu import show_menu
 from .publishing import ask_about_time_to_publish_post
-from .in_queue.settings import ask_for_what_to_add_to_posts_in_queue
+from .in_queue.settings.ask import ask_for_what_to_add_to_posts_in_queue
 
 
 global_current_content_index = None
