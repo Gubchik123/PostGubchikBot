@@ -23,7 +23,7 @@ async def navigate_all_other_posts_in_queue_callback_data(
         # handlers to do something with posts in queue
         "add_caption": settings.ask_for_caption_to_posts_in_queue,
         "add_url_buttons": settings.ask_for_url_buttons_to_posts_in_queue,
-        "add_watermark": settings.add_watermark_to_posts_in_queue,
+        "add_watermark": settings.ask_for_watermark_to_posts_in_queue,
         "disable_web_page_preview": settings.disable_web_page_preview_for_posts_in_queue,
         "disable_notification": settings.disable_notification_for_posts_in_queue,
         "shuffle": settings.shuffle_posts_in_queue,

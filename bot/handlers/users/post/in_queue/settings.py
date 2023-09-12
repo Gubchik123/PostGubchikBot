@@ -1,9 +1,15 @@
+import os
+from io import BytesIO
 from random import shuffle
-from typing import Union, Callable
+from typing import Union, Callable, Optional, Tuple
 
-from aiogram.types import Message, CallbackQuery
+import requests
+from PIL import Image, ImageDraw, ImageFont
+from aiogram.dispatcher import FSMContext
+from aiogram.types import ContentType, Message, CallbackQuery
 
-from loader import dp, _
+from loader import bot, dp, _
+from data.config import BOT_TOKEN
 from utils.post.settings import PostSettings
 from states.post_settings import PostContentSettings
 from messages.post import get_asking_for_url_buttons_text
@@ -83,11 +89,129 @@ async def add_url_buttons_to_posts_in_queue(message: Message) -> None:
     await ask_for_what_to_add_to_posts_in_queue(message)
 
 
-async def add_watermark_to_posts_in_queue(
+async def _can_add_watermark(callback_query: CallbackQuery) -> bool:
+    """Checks if watermark can be added to posts in queue."""
+    if constants.post_content.settings.watermark is True:
+        callback_query.answer()
+        return False
+    if constants.post_content.settings.watermark is False:
+        await callback_query.answer(
+            _("You can't add watermark to posts in queue!"), show_alert=True
+        )
+        return False
+    if not constants.post_content.is_there_images:
+        constants.post_content.settings.watermark = False
+        await callback_query.answer(
+            _("There are no images in the queue."), show_alert=True
+        )
+        return False
+    return True
+
+
+async def ask_for_watermark_to_posts_in_queue(
     callback_query: CallbackQuery,
 ) -> None:
-    """Adds watermark to posts in queue."""
-    await callback_query.answer(_("Soon..."))
+    """Asks for watermark to posts in queue and waits (state) for it."""
+    if not await _can_add_watermark(callback_query):
+        return
+    await callback_query.answer(
+        _("Pay attention that you can't edit watermark for posts in queue!"),
+        show_alert=True,
+    )
+    await callback_query.message.edit_text(
+        text=_(
+            "Send me new watermark (image or text) for all images in the queue."
+        ),
+        reply_markup=get_keyboard_with_back_inline_button_by_(
+            callback_data="posts_in_queue:ask_for_what_to_add:None"
+        ),
+    )
+    await PostContentSettings.watermark.set()
+
+
+@dp.message_handler(
+    content_types=[ContentType.TEXT, ContentType.PHOTO],
+    state=PostContentSettings.watermark,
+)
+async def add_watermark_image_to_posts_in_queue(
+    message: Message, state: FSMContext
+) -> None:
+    """Adds watermark to images in the queue."""
+    await message.answer(_("Processing..."))
+    await _add_watermark_to_posts_in_queue_by_(message)
+    await state.finish()
+    constants.post_content.settings.watermark = True
+    await ask_for_what_to_add_to_posts_in_queue(message)
+
+
+async def _add_watermark_to_posts_in_queue_by_(message: Message) -> None:
+    """Adds watermark to images in the queue."""
+    (
+        watermark_text,
+        watermark_image_path,
+    ) = await _get_watermark_text_and_image_path_by_(message)
+
+    for image in constants.post_content.images:
+        file = await bot.get_file(image["content"])
+        output_image_path = _get_output_image_path(
+            file.file_path, watermark_text, watermark_image_path
+        )
+        constants.post_content.update_by_(
+            image["index"], f"Path:{output_image_path}"
+        )
+
+
+async def _get_watermark_text_and_image_path_by_(
+    message: Message,
+) -> Tuple[Union[str, None], Union[str, None]]:
+    """Returns watermark text and image path by the given message."""
+    if message.content_type == ContentType.TEXT:
+        watermark_text = message.text
+        watermark_image_path = None
+    elif message.content_type == ContentType.PHOTO:
+        photo = message.photo[-1]
+        file_id = photo.file_id
+        file = await bot.get_file(file_id)
+        watermark_image_path = file.file_path
+        watermark_text = None
+    return watermark_text, watermark_image_path
+
+
+def _get_output_image_path(
+    image_path: str,
+    watermark_text: Optional[str] = None,
+    watermark_image_path: Optional[str] = None,
+):
+    """Returns output image path with watermark."""
+    image = Image.open(_get_image_bytes_by_(image_path))
+    width, height = image.size
+
+    if watermark_text:
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.truetype("arial.ttf", size=36)
+        text_length = draw.textlength(watermark_text, font)
+        x = width - text_length - 10
+        y = height - 50
+        draw.text((x, y), watermark_text, fill="white", font=font)
+    elif watermark_image_path:
+        watermark = Image.open(_get_image_bytes_by_(watermark_image_path))
+        watermark.thumbnail((100, 100))
+        image.paste(watermark, (width - 100 - 10, height - 100 - 15))
+
+    try:
+        image.save(image_path)
+    except FileNotFoundError:
+        os.makedirs("photos")
+        image.save(image_path)
+    return image_path
+
+
+def _get_image_bytes_by_(image_path: str) -> BytesIO:
+    """Returns image bytes by the given image path."""
+    response = requests.get(
+        f"https://api.telegram.org/file/bot{BOT_TOKEN}/{image_path}"
+    )
+    return BytesIO(response.content)
 
 
 async def disable_web_page_preview_for_posts_in_queue(
